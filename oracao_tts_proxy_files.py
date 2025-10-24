@@ -1,0 +1,5 @@
+# requirements.txt
+Flask==3.0.0
+flask-cors==4.0.0
+requests==2.32.3
+gunicorn==21.2.0
