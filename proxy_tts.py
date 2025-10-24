@@ -3,6 +3,9 @@ from flask_cors import CORS
 import os, requests
 
 app = Flask(__name__)
+from flask_cors import CORS
+CORS(app, resources={r"/tts": {"origins": "*"}})
+
 # libera CORS para o endpoint /tts (em prod, troque "*" pelo domínio do seu site)
 CORS(app, resources={r"/tts": {"origins": "*"}})
 
