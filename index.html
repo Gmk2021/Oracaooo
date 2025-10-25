@@ -1,5 +1,127 @@
-# requirements.txt
-Flask==3.0.0
-flask-cors==4.0.0
-requests==2.32.3
-gunicorn==21.2.0
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oração de Benção Divina</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+    .container {
+      background: rgba(0,0,0,0.6);
+      border-radius: 18px;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 30px rgba(255,255,255,0.1);
+    }
+    h1 { color: #a7f5e5; }
+    input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      text-align: center;
+      margin: 10px 0;
+    }
+    button {
+      background: #4cd7a9;
+      border: none;
+      color: black;
+      font-weight: bold;
+      padding: 12px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #7ef0c5;
+    }
+    audio {
+      margin-top: 25px;
+      width: 100%;
+    }
+    p { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Oração de Benção Divina</h3>
+    <p>Digite o nome de quem será abençoado e clique em <b>Ouvir a Oração</b>.</p>
+    <input id="nome" placeholder="Nome a receber a Benção!">
+    <button id="btn-ouvir">🎧 Ouvir oração</button>
+    <audio id="player" controls style="display:none;"></audio>
+    <p id="status"></p>
+    <p style="font-size: 12px; opacity: 0.6;">Backend: <a href="https://oracaooo.onrender.com" target="_blank" style="color:#7ef0c5;">oracaooo.onrender.com</a></p>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+    const elNome = document.getElementById('nome');
+    const elBtnOuvir = document.getElementById('btn-ouvir');
+    const elPlayer = document.getElementById('player');
+    const elStatus = document.getElementById('status');
+
+    const INTRO_SOUND = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
+    const audioIntro = new Audio(INTRO_SOUND);
+
+    async function tocarSinoComFade() {
+      try {
+        await audioIntro.play();
+        const fadeDuration = 1500;
+        const fadeSteps = 15;
+        const fadeStepTime = fadeDuration / fadeSteps;
+        for (let i = 0; i < fadeSteps; i++) {
+          await new Promise(r => setTimeout(r, fadeStepTime));
+          audioIntro.volume = Math.max(0, audioIntro.volume - (0.9 / fadeSteps));
+        }
+        audioIntro.pause();
+        audioIntro.currentTime = 0;
+      } catch (e) {
+        console.warn('Falha ao tocar o som de introdução:', e);
+      }
+    }
+
+    elBtnOuvir.addEventListener('click', async () => {
+      const nome = (elNome.value || '').trim();
+      if (!nome) { elStatus.textContent = 'Por favor, digite um nome.'; return; }
+
+      elStatus.textContent = '🙏 Preparando a oração...';
+      await tocarSinoComFade();
+      await new Promise(r => setTimeout(r, 500));
+
+      const texto = `{{nome}} Respire fundo... Agora, receba esta oração.
+{{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração.
+Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
+{{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`.replace(/\{\{nome\}\}/g, nome);
+
+      elStatus.textContent = 'Gerando áudio...';
+
+      try {
+        const resp = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: texto, voice_id: DEFAULT_VOICE_ID })
+        });
+        if (!resp.ok) throw new Error(`Erro ${resp.status}`);
+        const blob = await resp.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        elPlayer.src = blobUrl;
+        elPlayer.style.display = 'block';
+        elStatus.textContent = '✨ Oração gerada com sucesso!';
+        elPlayer.play();
+      } catch (err) {
+        elStatus.textContent = 'Erro: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
