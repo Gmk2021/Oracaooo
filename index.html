@@ -1,127 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oração de Benção Divina</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      text-align: center;
-      padding: 40px;
+    :root{--overlay:rgba(0,0,0,.45);--card:rgba(17,24,39,.72);--muted:#cbd5e1;--text:#f1f5f9;--primary:#a7f3d0;--accent:#93c5fd;--danger:#fca5a5}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;min-height:100dvh;color:var(--text);}
+    /* Fundo fotográfico sereno */
+    .bg{position:fixed;inset:0;background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;}
+    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));}
+    .wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:100dvh;padding:24px}
+    .card{width:min(860px,96vw);background:var(--card);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.45);overflow:hidden}
+    .header{padding:26px 26px 10px}
+    h1{margin:0 0 6px;font-size:28px;letter-spacing:.2px}
+    p.desc{margin:0;color:var(--muted)}
+    p.desc b.highlight{
+      color:#fcd34d;
+      text-shadow:0 0 8px rgba(252,211,77,0.7);
+      animation:pulsarLuz 3s ease-in-out infinite;
     }
-    .container {
-      background: rgba(0,0,0,0.6);
-      border-radius: 18px;
-      padding: 40px;
-      max-width: 600px;
-      margin: auto;
-      box-shadow: 0 0 30px rgba(255,255,255,0.1);
+    @keyframes pulsarLuz{
+      0%,100%{text-shadow:0 0 8px rgba(252,211,77,0.7);}
+      50%{text-shadow:0 0 16px rgba(252,211,77,1);}
     }
-    h1 { color: #a7f5e5; }
-    input {
-      width: 80%;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      text-align: center;
-      margin: 10px 0;
+    .content{padding:18px 22px 6px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,button{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .row>*{flex:1}
+    button.primary{
+      background:linear-gradient(135deg,var(--primary),#34d399);
+      border:none;
+      font-weight:700;
+      color:#04140f;
+      cursor:pointer;
+      position:relative;
+      transition:all 0.3s ease;
+      box-shadow:0 0 0px rgba(52,211,153,0.0);
     }
-    button {
-      background: #4cd7a9;
-      border: none;
-      color: black;
-      font-weight: bold;
-      padding: 12px 20px;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: 0.3s;
+    button.primary:hover{
+      box-shadow:0 0 25px 6px rgba(52,211,153,0.4);
+      transform:scale(1.02);
     }
-    button:hover {
-      background: #7ef0c5;
+    button.secondary{background:rgba(2,6,23,.6);border:1px solid rgba(255,255,255,.14);cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    button:disabled{opacity:.65;cursor:not-allowed}
+    .status{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;color:var(--muted)}
+    .error{color:var(--danger)}
+    .player{padding:16px 18px}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(147,197,253,.18);color:var(--accent);font-size:12px;font-weight:700}
+    footer{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
+
+    /* Botões extras (YouTube e WhatsApp) */
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+    .linkbtn{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      padding:12px 14px;
+      font-size:15px;
+      font-weight:700;
+      text-align:center;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;align-items:center;justify-content:center;
+      transition:all .25s ease;
+      color:#0b0b0b;
     }
-    audio {
-      margin-top: 25px;
-      width: 100%;
-    }
-    p { margin-top: 10px; }
+    .linkbtn.youtube{background:#ff4455;background:linear-gradient(135deg,#ff6b6b,#ff3b3b); color:#fff;}
+    .linkbtn.whatsapp{background:#23d366;background:linear-gradient(135deg,#34d399,#16a34a); color:#04140f;}
+    .linkbtn:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.25);}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h3>Oração de Benção Divina</h3>
-    <p>Digite o nome de quem será abençoado e clique em <b>Ouvir a Oração</b>.</p>
-    <input id="nome" placeholder="Nome a receber a Benção!">
-    <button id="btn-ouvir">🎧 Ouvir oração</button>
-    <audio id="player" controls style="display:none;"></audio>
-    <p id="status"></p>
-    <p style="font-size: 12px; opacity: 0.6;">Backend: <a href="https://oracaooo.onrender.com" target="_blank" style="color:#7ef0c5;">oracaooo.onrender.com</a></p>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="badge">Oração de Benção Divina</div>
+        <h1>Oração de Benção Divina</h1>
+        <p class="desc">Digite o nome de quem será abençoado e click em <b class="highlight">Ouvir a Oração</b>.</p>
+      </div>
+
+      <div class="content">
+        <label for="nome">Nome a receber a Benção!</label>
+        <input id="nome" placeholder="Ex.: Ana Clara" />
+        <div style="height:10px"></div>
+        <div class="row">
+          <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
+          <a id="btn-download" class="secondary" style="display:none" download>⬇️ Baixar último áudio (MP3)</a>
+        </div>
+
+        <!-- Botões de ação -->
+        <div class="cta-row">
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal no YouTube</a>
+          <button id="btn-whats" class="linkbtn whatsapp">🟢 Compartilhar no WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="player">
+        <audio id="player" controls style="width:100%"></audio>
+      </div>
+
+      <div class="status" id="status">Pronto. Digite o <b>nome</b> e clique em <b>Ouvir oração</b>.</div>
+    </div>
+    <footer>Backend: <code>oracaooo.onrender.com</code> • Publique este HTML em Netlify/Vercel/GitHub Pages.</footer>
   </div>
 
   <script>
-    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const ENDPOINT = "https://oracaooo.onrender.com/tts"; // backend público
     const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+
+    const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
+
+{{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
+
+{{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`;
+
     const elNome = document.getElementById('nome');
     const elBtnOuvir = document.getElementById('btn-ouvir');
+    const elBtnDownload = document.getElementById('btn-download');
     const elPlayer = document.getElementById('player');
     const elStatus = document.getElementById('status');
+    const elWhats = document.getElementById('btn-whats');
 
-    const INTRO_SOUND = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
-    const audioIntro = new Audio(INTRO_SOUND);
+    let lastBlobUrl = null;
+    let audioUnlocked = false;
 
-    async function tocarSinoComFade() {
+    async function desbloquearAudio() {
       try {
-        await audioIntro.play();
-        const fadeDuration = 1500;
-        const fadeSteps = 15;
-        const fadeStepTime = fadeDuration / fadeSteps;
-        for (let i = 0; i < fadeSteps; i++) {
-          await new Promise(r => setTimeout(r, fadeStepTime));
-          audioIntro.volume = Math.max(0, audioIntro.volume - (0.9 / fadeSteps));
-        }
-        audioIntro.pause();
-        audioIntro.currentTime = 0;
-      } catch (e) {
-        console.warn('Falha ao tocar o som de introdução:', e);
-      }
+        const silent = new Audio();
+        silent.src = "data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA";
+        silent.volume = 0; await silent.play(); silent.pause();
+        audioUnlocked = true;
+      } catch (e) { console.warn('Desbloqueio de áudio falhou.', e); }
     }
 
-    elBtnOuvir.addEventListener('click', async () => {
-      const nome = (elNome.value || '').trim();
-      if (!nome) { elStatus.textContent = 'Por favor, digite um nome.'; return; }
+    const INTRO_SOUND = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
+    const audioIntro = new Audio(INTRO_SOUND); audioIntro.preload = "auto"; audioIntro.volume = 1.0;
+    async function tocarSinoComFade(){
+      try { await audioIntro.play();
+        const fadeDuration=1500, steps=15, step=fadeDuration/steps;
+        for(let i=0;i<steps;i++){ await new Promise(r=>setTimeout(r,step)); audioIntro.volume=Math.max(0,audioIntro.volume-(1/steps)); }
+        audioIntro.pause(); audioIntro.currentTime=0; audioIntro.volume=1.0;
+      } catch(e){ console.warn('Sino bloqueado pelo navegador.'); }
+    }
 
+    function renderizarTexto(base, nome){ return base.replace(/\\{\\{\\s*nome\\s*\\}\\}/gi, nome||''); }
+
+    async function gerarAudio(){
+      const nome = (elNome.value||'').trim();
+      const texto = renderizarTexto(DEFAULT_PRAYER_TEXT, nome);
+      if(!audioUnlocked){ await desbloquearAudio(); }
       elStatus.textContent = '🙏 Preparando a oração...';
       await tocarSinoComFade();
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r=>setTimeout(r,500));
 
-      const texto = `{{nome}} Respire fundo... Agora, receba esta oração.
-{{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração.
-Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
-{{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`.replace(/\{\{nome\}\}/g, nome);
-
-      elStatus.textContent = 'Gerando áudio...';
-
-      try {
-        const resp = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: texto, voice_id: DEFAULT_VOICE_ID })
-        });
-        if (!resp.ok) throw new Error(`Erro ${resp.status}`);
-        const blob = await resp.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        elPlayer.src = blobUrl;
-        elPlayer.style.display = 'block';
+      elStatus.textContent = 'Gerando áudio da oração...';
+      try{
+        const res = await fetch(ENDPOINT,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })});
+        if(!res.ok){ const t=await res.text(); throw new Error(`Erro ${res.status}: ${t}`); }
+        const blob = await res.blob();
+        if(lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
+        lastBlobUrl = URL.createObjectURL(blob);
+        elPlayer.src = lastBlobUrl; try{ await elPlayer.play(); }catch(_){}
+        elBtnDownload.href = lastBlobUrl; elBtnDownload.style.display='inline-flex'; elBtnDownload.download = `${(nome||'oracao').replace(/\\s+/g,'_')}.mp3`;
         elStatus.textContent = '✨ Oração gerada com sucesso!';
-        elPlayer.play();
-      } catch (err) {
-        elStatus.textContent = 'Erro: ' + err.message;
-      }
-    });
-  </script>
-</body>
-</html>
+      }catch(e){ elStatus.innerHTML = `<span class="error">Falha ao gerar: ${e.mess
