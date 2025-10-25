@@ -67,39 +67,80 @@
   </div>
 
   <script>
-    const ENDPOINT = "https://oracaooo.onrender.com/tts";
-    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+  const ENDPOINT = "https://oracaooo.onrender.com/tts";
+  const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
 
-    const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
+  const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
 
 {{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
 
 {{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`;
 
-    async function gerarAudio(){
-      const nome=(nomeInput.value||'').trim();
-      const texto=DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi,nome||'');
-      statusEl.textContent='🙏 Preparando a oração...';
-      await new Promise(r=>setTimeout(r,500));
-      statusEl.textContent='Gerando áudio da oração...';
-      try{
-        const r=await fetch(ENDPOINT,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({text: texto, voiceId: DEFAULT_VOICE_ID})
-        });
-        if(!r.ok){throw new Error(`Erro ${r.status}`);}
-        const b=await r.blob();
-        player.src=URL.createObjectURL(b);
-        await player.play();
-        statusEl.textContent='✨ Oração gerada com sucesso!';
-      }catch(e){statusEl.innerHTML=`<span class='error'>Falha ao gerar: ${e.message}</span>`;}
+  // --- elementos
+  const nomeInput = document.getElementById('nome');
+  const statusEl  = document.getElementById('status');
+  const player    = document.getElementById('player');
+  const btnOuvir  = document.getElementById('btn-ouvir');
+  const btnWhats  = document.getElementById('btn-whats');
+  const btnTg     = document.getElementById('btn-telegram');
+
+  // --- helpers
+  const SITE_URL = window.location.href.split('#')[0];
+  function montarMsg(nome) {
+    const s = nome ? `${nome}, ` : '';
+    return `${s}receba esta Oração de Benção Divina 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;
+  }
+
+  // --- gerar áudio
+  async function gerarAudio(){
+    const nome  = (nomeInput.value||'').trim();
+    const texto = DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
+
+    statusEl.textContent = '🙏 Preparando a oração...';
+    await new Promise(r=>setTimeout(r,500));
+
+    statusEl.textContent = 'Gerando áudio da oração...';
+    try{
+      const r = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
+      });
+      if(!r.ok){ throw new Error(`Erro ${r.status}`); }
+
+      const b = await r.blob();
+      player.src = URL.createObjectURL(b);
+      await player.play();
+      statusEl.textContent = '✨ Oração gerada com sucesso!';
+    }catch(e){
+      statusEl.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`;
+    }
+  }
+
+  // --- compartilhar WhatsApp
+  btnWhats?.addEventListener('click', () => {
+    const msg = montarMsg((nomeInput.value||'').trim());
+
+    // Usa o compart. nativo quando possível (mobile)
+    if (navigator.share) {
+      navigator.share({ text: msg, url: SITE_URL, title: 'Oração de Benção Divina' })
+        .catch(()=>{ /* cancelado pelo usuário */ });
+      return;
     }
 
-    const nomeInput=document.getElementById('nome');
-    const statusEl=document.getElementById('status');
-    const player=document.getElementById('player');
-    document.getElementById('btn-ouvir').addEventListener('click',gerarAudio);
-  </script>
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    window.open(wa, '_blank', 'noopener');
+  });
+
+  // --- compartilhar Telegram
+  btnTg?.addEventListener('click', () => {
+    const msg = montarMsg((nomeInput.value||'').trim());
+    const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+    window.open(tg, '_blank', 'noopener');
+  });
+
+  // --- ouvir
+  btnOuvir.addEventListener('click', gerarAudio);
+</script>
 </body>
 </html>
