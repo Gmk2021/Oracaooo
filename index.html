@@ -8,7 +8,7 @@
     :root{--overlay:rgba(0,0,0,.45);--card:rgba(17,24,39,.72);--muted:#cbd5e1;--text:#f1f5f9;--primary:#a7f3d0;--accent:#93c5fd;--danger:#fca5a5}
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;min-height:100dvh;color:var(--text);}
-    /* Fundo fotográfico sereno */
+    /* Fundo */
     .bg{position:fixed;inset:0;background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;}
     .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));}
     .wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:100dvh;padding:24px}
@@ -16,47 +16,35 @@
     .header{padding:26px 26px 10px}
     h1{margin:0 0 6px;font-size:28px;letter-spacing:.2px}
     p.desc{margin:0;color:var(--muted)}
-    p.desc b.highlight{
-      color:#fcd34d;
-      text-shadow:0 0 8px rgba(252,211,77,0.7);
-      animation:pulsarLuz 3s ease-in-out infinite;
-    }
-    @keyframes pulsarLuz{
-      0%,100%{text-shadow:0 0 8px rgba(252,211,77,0.7);}
-      50%{text-shadow:0 0 16px rgba(252,211,77,1);}
-    }
+    p.desc b.highlight{color:#fcd34d;text-shadow:0 0 8px rgba(252,211,77,0.7);animation:pulsarLuz 3s ease-in-out infinite;}
+    @keyframes pulsarLuz{0%,100%{text-shadow:0 0 8px rgba(252,211,77,0.7);}50%{text-shadow:0 0 16px rgba(252,211,77,1);}}
     .content{padding:18px 22px 6px}
     label{display:block;font-weight:600;margin-bottom:6px}
     input,button{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px}
     .row{display:flex;gap:12px;flex-wrap:wrap}
     .row>*{flex:1}
-    button.primary{
-      background:linear-gradient(135deg,var(--primary),#34d399);
-      border:none;
-      font-weight:700;
-      color:#04140f;
-      cursor:pointer;
-      position:relative;
-      transition:all 0.3s ease;
-      box-shadow:0 0 0px rgba(52,211,153,0.0);
-    }
-    button.primary:hover{
-      box-shadow:0 0 25px 6px rgba(52,211,153,0.4);
-      transform:scale(1.02);
-    }
+    button.primary{background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;color:#04140f;cursor:pointer;transition:all .3s ease;box-shadow:0 0 0px rgba(52,211,153,0);}
+    button.primary:hover{box-shadow:0 0 25px 6px rgba(52,211,153,0.4);transform:scale(1.02);}
     button.secondary{background:rgba(2,6,23,.6);border:1px solid rgba(255,255,255,.14);cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-    button:disabled{opacity:.65;cursor:not-allowed}
     .status{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;color:var(--muted)}
     .error{color:var(--danger)}
     .player{padding:16px 18px}
     .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(147,197,253,.18);color:var(--accent);font-size:12px;font-weight:700}
     footer{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
-      .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c); color:#fff;}
-    .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9); color:#fff;}
+
+    /* GRID DOS BOTÕES */
+    .cta-grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(2,1fr);}
+    @media(max-width:560px){.cta-grid{grid-template-columns:1fr;}}
+    .linkbtn{border-radius:12px;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all .25s ease;width:100%;min-height:48px;}
+    .linkbtn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.25);}
+    .linkbtn.youtube{background:linear-gradient(135deg,#ff6b6b,#ff3b3b);color:#fff;}
+    .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f;}
+    .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff;}
+    .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff;}
   </style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
+  <div class="bg"></div>
   <div class="wrap">
     <div class="card">
       <div class="header">
@@ -69,16 +57,19 @@
         <label for="nome">Nome a receber a Benção!</label>
         <input id="nome" placeholder="Ex.: Ana Clara" />
         <div style="height:10px"></div>
+
         <div class="row">
           <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
           <a id="btn-download" class="secondary" style="display:none" download>⬇️ Baixar último áudio (MP3)</a>
         </div>
-        <div class="cta-row">
-          <!-- Troque a URL pelo seu Instagram -->
-          <a class="linkbtn instagram" href="https://instagram.com/SEU_PERFIL" target="_blank" rel="noopener">📸 Instagram</a>
+
+        <!-- BOTÕES EXTERNOS -->
+        <div class="cta-grid">
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal no YouTube</a>
+          <button id="btn-whats" class="linkbtn whatsapp">🟢 Compartilhar no WhatsApp</button>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Compartilhar no Telegram</button>
         </div>
-
       </div>
 
       <div class="player">
@@ -91,88 +82,58 @@
   </div>
 
   <script>
-    const ENDPOINT = "https://oracaooo.onrender.com/tts"; // backend público
-    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb"; // Voice ID fixo
+    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
 
-    // Texto padrão (sem textarea visível)
     const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
 
 {{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
 
 {{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`;
 
-    const elNome = document.getElementById('nome');
-    const elBtnOuvir = document.getElementById('btn-ouvir');
-    const elBtnDownload = document.getElementById('btn-download');
-    const elPlayer = document.getElementById('player');
-    const elStatus = document.getElementById('status');
+    const elNome=document.getElementById('nome');
+    const elBtnOuvir=document.getElementById('btn-ouvir');
+    const elBtnDownload=document.getElementById('btn-download');
+    const elPlayer=document.getElementById('player');
+    const elStatus=document.getElementById('status');
+    const elWhats=document.getElementById('btn-whats');
+    const elTelegram=document.getElementById('btn-telegram');
+    let lastBlobUrl=null;let audioUnlocked=false;
 
-    let lastBlobUrl = null;
+    async function desbloquearAudio(){try{const s=new Audio();s.src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA";s.volume=0;await s.play();s.pause();audioUnlocked=true;}catch(e){console.warn('Desbloqueio de áudio falhou.',e);}}
 
-    // === AUDIO UNLOCK: garante permissão de áudio no 1º clique ===
-    let audioUnlocked = false;
-    async function desbloquearAudio() {
-      try {
-        const silent = new Audio();
-        silent.src = "data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA"; // frame vazio
-        silent.volume = 0; await silent.play(); silent.pause();
-        audioUnlocked = true;
-      } catch (e) { console.warn('Desbloqueio de áudio falhou.', e); }
-    }
+    const INTRO_SOUND="https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
+    const audioIntro=new Audio(INTRO_SOUND);audioIntro.preload="auto";audioIntro.volume=1.0;
+    async function tocarSinoComFade(){try{await audioIntro.play();const d=1500,s=15,t=d/s;for(let i=0;i<s;i++){await new Promise(r=>setTimeout(r,t));audioIntro.volume=Math.max(0,audioIntro.volume-(1/s));}audioIntro.pause();audioIntro.currentTime=0;audioIntro.volume=1.0;}catch(e){console.warn('Sino bloqueado.');}}
 
-    // Sino com fade-out
-    const INTRO_SOUND = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
-    const audioIntro = new Audio(INTRO_SOUND); audioIntro.preload = "auto"; audioIntro.volume = 1.0;
-    async function tocarSinoComFade(){
-      try { await audioIntro.play();
-        const fadeDuration=1500, steps=15, step=fadeDuration/steps;
-        for(let i=0;i<steps;i++){ await new Promise(r=>setTimeout(r,step)); audioIntro.volume=Math.max(0,audioIntro.volume-(1/steps)); }
-        audioIntro.pause(); audioIntro.currentTime=0; audioIntro.volume=1.0;
-      } catch(e){ console.warn('Sino bloqueado pelo navegador.'); }
-    }
-
-    function renderizarTexto(base, nome){ return base.replace(/\{\{\s*nome\s*\}\}/gi, nome||''); }
+    function renderizarTexto(b,n){return b.replace(/\{\{\s*nome\s*\}\}/gi,n||'');}
 
     async function gerarAudio(){
-      const nome = (elNome.value||'').trim();
-      const texto = renderizarTexto(DEFAULT_PRAYER_TEXT, nome);
-      if(!audioUnlocked){ await desbloquearAudio(); }
-      elStatus.textContent = '🙏 Preparando a oração...';
+      const nome=(elNome.value||'').trim();
+      const texto=renderizarTexto(DEFAULT_PRAYER_TEXT,nome);
+      if(!audioUnlocked){await desbloquearAudio();}
+      elStatus.textContent='🙏 Preparando a oração...';
       await tocarSinoComFade();
       await new Promise(r=>setTimeout(r,500));
-
-      elStatus.textContent = 'Gerando áudio da oração...';
+      elStatus.textContent='Gerando áudio da oração...';
       try{
-        const res = await fetch(ENDPOINT,{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })});
-        if(!res.ok){ const t=await res.text(); throw new Error(`Erro ${res.status}: ${t}`); }
-        const blob = await res.blob();
-        if(lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
-        lastBlobUrl = URL.createObjectURL(blob);
-        elPlayer.src = lastBlobUrl; try{ await elPlayer.play(); }catch(_){ }
-        elBtnDownload.href = lastBlobUrl; elBtnDownload.style.display='inline-flex'; elBtnDownload.download = `${(nome||'oracao').replace(/\s+/g,'_')}.mp3`;
-        elStatus.textContent = 'Pronto! Áudio gerado.';
-      }catch(e){ elStatus.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`; }
+        const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text,voiceId:DEFAULT_VOICE_ID})});
+        if(!r.ok){const t=await r.text();throw new Error(`Erro ${r.status}: ${t}`);}
+        const b=await r.blob();
+        if(lastBlobUrl)URL.revokeObjectURL(lastBlobUrl);
+        lastBlobUrl=URL.createObjectURL(b);
+        elPlayer.src=lastBlobUrl;try{await elPlayer.play();}catch(_){}
+        elBtnDownload.href=lastBlobUrl;elBtnDownload.style.display='inline-flex';elBtnDownload.download=`${(nome||'oracao').replace(/\s+/g,'_')}.mp3`;
+        elStatus.textContent='✨ Oração gerada com sucesso!';
+      }catch(e){elStatus.innerHTML=`<span class="error">Falha ao gerar: ${e.message}</span>`;}
     }
 
-    // Compartilhar no Telegram
-const elTelegram = document.getElementById('btn-telegram');
-function montarMensagemTelegram(){
-  const nome = (elNome?.value || '').trim();
-  const saud = nome ? `${nome}, ` : '';
-  return `${saud}receba esta Oração de Benção Divina 🙏
+    const SITE_URL=window.location.href.split('#')[0];
+    function montarMsg(nome){const s=nome?`${nome}, `:'';return `${s}receba esta Oração de Benção Divina 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;}
 
-Ouça sua oração aqui:
-${SITE_URL}
-
-Que Deus ilumine seus passos hoje e sempre. Amém.`;
-}
-elTelegram?.addEventListener('click', () => {
-  const text = montarMensagemTelegram();
-  const url = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(text)}`;
-  window.open(url, '_blank');
-});
-
-elBtnOuvir.addEventListener('click', gerarAudio);
+    elWhats?.addEventListener('click',()=>{const m=montarMsg((elNome?.value||'').trim());if(navigator.share){navigator.share({text:m,url:SITE_URL,title:'Oração de Benção Divina'}).catch(()=>{});}else{window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');}});
+    elTelegram?.addEventListener('click',()=>{const t=montarMsg((elNome?.value||'').trim());window.open(`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(t)}`,'_blank');});
+    elBtnOuvir.addEventListener('click',gerarAudio);
   </script>
 </body>
 </html>
