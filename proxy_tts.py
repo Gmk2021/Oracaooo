@@ -1,61 +1,61 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
-import os, requests
+import requests
+import os
 
 app = Flask(__name__)
-from flask_cors import CORS
-CORS(app, resources={r"/tts": {"origins": "*"}})
 
-# libera CORS para o endpoint /tts (em prod, troque "*" pelo domínio do seu site)
-CORS(app, resources={r"/tts": {"origins": "*"}})
+# CORS liberado para qualquer origem (frontend Netlify incluso)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
 
-ELEVEN_API_KEY = os.getenv("ELEVEN_API_KEY")
+ELEVEN_API_KEY = os.getenv("ELEVEN_API_KEY", "").strip()
+ELEVEN_TTS_URL_TMPL = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
 
-@app.get("/health")
+@app.after_request
+def add_cors_headers(resp):
+    resp.headers["Access-Control-Allow-Origin"]  = "*"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    resp.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    return resp
+
+@app.route("/health", methods=["GET"])
 def health():
     return "ok", 200
 
-@app.post("/tts")
+@app.route("/tts", methods=["POST", "OPTIONS"])
 def tts():
-    try:
-        data = request.get_json(force=True)
-        text = (data.get("text") or "").strip()
-        voice_id = (data.get("voiceId") or "").strip()
+    # Preflight do navegador (CORS)
+    if request.method == "OPTIONS":
+        return ("", 204)
 
-        if not ELEVEN_API_KEY:
-            return ("API key ausente (defina ELEVEN_API_KEY).", 500)
-        if not text or not voice_id:
-            return ("Parâmetros 'text' e 'voiceId' são obrigatórios.", 400)
+    if not ELEVEN_API_KEY:
+        return jsonify(error="ELEVEN_API_KEY ausente no servidor"), 401
 
-        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-        headers = {
-            "xi-api-key": ELEVEN_API_KEY,
-            "Accept": "audio/mpeg",
-            "Content-Type": "application/json",
-        }
-        payload = {
-            "text": text,
-            "model_id": "eleven_multilingual_v2",
-            "output_format": "mp3_44100_128"
-        }
+    data = request.get_json(silent=True) or {}
+    text     = data.get("text") or ""
+    # aceita voiceId OU voice_id
+    voice_id = data.get("voiceId") or data.get("voice_id") or "4YYIPFl9wE5c4L2eu2Gb"
+    model_id = data.get("model_id") or "eleven_multilingual_v2"
+    out_fmt  = data.get("output_format") or "mp3_44100_128"
 
-        r = requests.post(url, headers=headers, json=payload, stream=True, timeout=60)
-        if not r.ok:
-            return (r.text, r.status_code)
+    if not text.strip():
+        return jsonify(error="campo 'text' obrigatório"), 400
 
-        def gen():
-            for chunk in r.iter_content(8192):
-                if chunk:
-                    yield chunk
+    url = ELEVEN_TTS_URL_TMPL.format(voice_id=voice_id)
+    headers = {
+        "xi-api-key": ELEVEN_API_KEY,
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "text": text,
+        "model_id": model_id,
+        "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
+        "output_format": out_fmt,
+    }
 
-        resp = Response(gen(), content_type="audio/mpeg")
-        # CORS explícito (além do flask-cors)
-        resp.headers["Access-Control-Allow-Origin"] = "*"
-        return resp
-    except Exception as e:
-        return (str(e), 500)
+    r = requests.post(url, headers=headers, json=payload, timeout=60)
+    if r.status_code >= 400:
+        return (r.text or f"Upstream error {r.status_code}", r.status_code)
 
-if __name__ == "__main__":
-    # Render injeta PORT; local usa 5001
-    port = int(os.environ.get("PORT", "5001"))
-    app.run(host="0.0.0.0", port=port)
+    return Response(r.content, status=200, mimetype="audio/mpeg")
