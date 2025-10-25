@@ -51,26 +51,8 @@
     .player{padding:16px 18px}
     .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(147,197,253,.18);color:var(--accent);font-size:12px;font-weight:700}
     footer{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
-
-    /* Botões extras (YouTube e WhatsApp) */
-    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-    .linkbtn{
-      width:100%;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      padding:12px 14px;
-      font-size:15px;
-      font-weight:700;
-      text-align:center;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;align-items:center;justify-content:center;
-      transition:all .25s ease;
-      color:#0b0b0b;
-    }
-    .linkbtn.youtube{background:#ff4455;background:linear-gradient(135deg,#ff6b6b,#ff3b3b); color:#fff;}
-    .linkbtn.whatsapp{background:#23d366;background:linear-gradient(135deg,#34d399,#16a34a); color:#04140f;}
-    .linkbtn:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.25);}
+      .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c); color:#fff;}
+    .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9); color:#fff;}
   </style>
 </head>
 <body>
@@ -91,12 +73,12 @@
           <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
           <a id="btn-download" class="secondary" style="display:none" download>⬇️ Baixar último áudio (MP3)</a>
         </div>
-
-        <!-- Botões de ação -->
         <div class="cta-row">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal no YouTube</a>
-          <button id="btn-whats" class="linkbtn whatsapp">🟢 Compartilhar no WhatsApp</button>
+          <!-- Troque a URL pelo seu Instagram -->
+          <a class="linkbtn instagram" href="https://instagram.com/SEU_PERFIL" target="_blank" rel="noopener">📸 Instagram</a>
+          <button id="btn-telegram" class="linkbtn telegram">✈️ Compartilhar no Telegram</button>
         </div>
+
       </div>
 
       <div class="player">
@@ -110,8 +92,9 @@
 
   <script>
     const ENDPOINT = "https://oracaooo.onrender.com/tts"; // backend público
-    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb"; // Voice ID fixo
 
+    // Texto padrão (sem textarea visível)
     const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
 
 {{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
@@ -123,20 +106,21 @@
     const elBtnDownload = document.getElementById('btn-download');
     const elPlayer = document.getElementById('player');
     const elStatus = document.getElementById('status');
-    const elWhats = document.getElementById('btn-whats');
 
     let lastBlobUrl = null;
-    let audioUnlocked = false;
 
+    // === AUDIO UNLOCK: garante permissão de áudio no 1º clique ===
+    let audioUnlocked = false;
     async function desbloquearAudio() {
       try {
         const silent = new Audio();
-        silent.src = "data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA";
+        silent.src = "data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA"; // frame vazio
         silent.volume = 0; await silent.play(); silent.pause();
         audioUnlocked = true;
       } catch (e) { console.warn('Desbloqueio de áudio falhou.', e); }
     }
 
+    // Sino com fade-out
     const INTRO_SOUND = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_efb52b632a.mp3?filename=soft-bell-tone-6133.mp3";
     const audioIntro = new Audio(INTRO_SOUND); audioIntro.preload = "auto"; audioIntro.volume = 1.0;
     async function tocarSinoComFade(){
@@ -147,7 +131,7 @@
       } catch(e){ console.warn('Sino bloqueado pelo navegador.'); }
     }
 
-    function renderizarTexto(base, nome){ return base.replace(/\\{\\{\\s*nome\\s*\\}\\}/gi, nome||''); }
+    function renderizarTexto(base, nome){ return base.replace(/\{\{\s*nome\s*\}\}/gi, nome||''); }
 
     async function gerarAudio(){
       const nome = (elNome.value||'').trim();
@@ -164,7 +148,31 @@
         const blob = await res.blob();
         if(lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
         lastBlobUrl = URL.createObjectURL(blob);
-        elPlayer.src = lastBlobUrl; try{ await elPlayer.play(); }catch(_){}
-        elBtnDownload.href = lastBlobUrl; elBtnDownload.style.display='inline-flex'; elBtnDownload.download = `${(nome||'oracao').replace(/\\s+/g,'_')}.mp3`;
-        elStatus.textContent = '✨ Oração gerada com sucesso!';
-      }catch(e){ elStatus.innerHTML = `<span class="error">Falha ao gerar: ${e.mess
+        elPlayer.src = lastBlobUrl; try{ await elPlayer.play(); }catch(_){ }
+        elBtnDownload.href = lastBlobUrl; elBtnDownload.style.display='inline-flex'; elBtnDownload.download = `${(nome||'oracao').replace(/\s+/g,'_')}.mp3`;
+        elStatus.textContent = 'Pronto! Áudio gerado.';
+      }catch(e){ elStatus.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`; }
+    }
+
+    // Compartilhar no Telegram
+const elTelegram = document.getElementById('btn-telegram');
+function montarMensagemTelegram(){
+  const nome = (elNome?.value || '').trim();
+  const saud = nome ? `${nome}, ` : '';
+  return `${saud}receba esta Oração de Benção Divina 🙏
+
+Ouça sua oração aqui:
+${SITE_URL}
+
+Que Deus ilumine seus passos hoje e sempre. Amém.`;
+}
+elTelegram?.addEventListener('click', () => {
+  const text = montarMensagemTelegram();
+  const url = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+});
+
+elBtnOuvir.addEventListener('click', gerarAudio);
+  </script>
+</body>
+</html>
