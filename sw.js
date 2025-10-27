@@ -14,18 +14,15 @@ const APP_SHELL = [
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    // tenta um por um (não usa addAll que falha o lote inteiro)
-    await Promise.allSettled(
-      APP_SHELL.map(async (url) => {
-        try {
-          const resp = await fetch(url, {cache: 'no-cache'});
-          if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
-          await cache.put(url, resp);
-        } catch (err) {
-          console.warn('[SW] Falhou ao cachear:', url, err.message);
-        }
-      })
-    );
+    await Promise.allSettled(APP_SHELL.map(async (url) => {
+      try {
+        const resp = await fetch(url, { cache: 'no-cache' });
+        if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
+        await cache.put(url, resp);
+      } catch (err) {
+        console.warn('[SW] Falhou ao cachear:', url, err.message);
+      }
+    }));
   })());
   self.skipWaiting();
 });
@@ -44,7 +41,6 @@ self.addEventListener('fetch', (event) => {
   event.respondWith((async () => {
     const cached = await caches.match(event.request);
     if (cached) {
-      // atualiza em segundo plano
       fetch(event.request).then(r => {
         if (r && r.ok) caches.open(CACHE_NAME).then(c => c.put(event.request, r));
       }).catch(()=>{});
@@ -52,13 +48,9 @@ self.addEventListener('fetch', (event) => {
     }
     try {
       const net = await fetch(event.request);
-      if (net && net.ok) {
-        const copy = net.clone();
-        caches.open(CACHE_NAME).then(c => c.put(event.request, copy));
-      }
+      if (net && net.ok) caches.open(CACHE_NAME).then(c => c.put(event.request, net.clone()));
       return net;
     } catch {
-      // fallback básico
       return caches.match('./index.html');
     }
   })());
