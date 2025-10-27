@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oração de Bênção Divina</title>
   <meta name="theme-color" content="#0b1020" />
-
   <style>
     :root {
       --overlay: rgba(0,0,0,.45);
@@ -17,138 +16,94 @@
       --accent: #fcd34d;
       --gold: #facc15;
       --deepgold: #ca8a04;
+      --emerald: #34d399;
     }
-
     * { box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color: var(--text);
-      background: #0b1020;
-      min-height: 100vh;
+      margin: 0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color: var(--text); background: #0b1020; min-height: 100vh;
     }
-
     .bg {
       position: fixed; inset: 0;
       background: #0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
     }
-    .bg::after {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(2,6,23,.4), rgba(2,6,23,.75));
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      padding: 24px;
-    }
-
+    .bg::after { content:""; position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(2,6,23,.4), rgba(2,6,23,.75)); }
+    .wrap { position: relative; z-index: 1; display:grid; place-items:center; min-height:100vh; padding:24px; }
     .card {
-      width: min(860px, 96vw);
-      background: var(--card);
-      backdrop-filter: blur(8px);
-      border-radius: 18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.08);
-      overflow: hidden;
+      width:min(860px,96vw); background:var(--card); backdrop-filter:blur(8px);
+      border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.08); overflow:hidden;
+    }
+    .header { padding:26px 26px 10px; }
+    h1 { margin:0 0 6px; font-size:28px; }
+    p.desc { margin:0; color:var(--muted); }
+    p.desc b.highlight { color:var(--accent); text-shadow:0 0 8px rgba(252,211,77,0.7); }
+    .header-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .badge { font-weight:700; color:#e2e8f0; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:10px; }
+    .channel-icon { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); padding:6px 10px; border-radius:12px; text-decoration:none; color:#e2e8f0; font-weight:600; transition:all .25s ease; }
+    .channel-icon:hover { border-color:rgba(255,255,255,.25); transform:translateY(-1px); }
+    .channel-icon img { width:48px; height:48px; border-radius:10px; }
+    .content { padding:18px 22px 6px; }
+    label { display:block; margin-bottom:6px; font-weight:600; }
+    input,select,button {
+      width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.1);
+      background:rgba(4,6,16,.75); color:var(--text); padding:12px 14px; font-size:15px;
     }
 
-    .header { padding: 26px 26px 10px; }
-    h1 { margin: 0 0 6px; font-size: 28px; }
-    p.desc { margin: 0; color: var(--muted); }
-    p.desc b.highlight { color: var(--accent); text-shadow: 0 0 8px rgba(252,211,77,0.7); }
-
-    .header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .badge {
-      font-weight: 700;
-      color: #e2e8f0;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 8px 12px;
-      border-radius: 10px;
-    }
-
-    .channel-icon {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 6px 10px;
-      border-radius: 12px;
-      text-decoration: none;
-      color: #e2e8f0;
-      font-weight: 600;
-      transition: all .25s ease;
-    }
-
-    .channel-icon:hover { border-color: rgba(255,255,255,.25); transform: translateY(-1px); }
-    .channel-icon img { width: 48px; height: 48px; border-radius: 10px; }
-
-    .content { padding: 18px 22px 6px; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; }
-
-    input, select, button {
-      width: 100%;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(4,6,16,.75);
-      color: var(--text);
-      padding: 12px 14px;
-      font-size: 15px;
-    }
-
+    /* Botão principal */
     button.primary {
-      background: linear-gradient(135deg, var(--primary), #34d399);
-      border: none; font-weight: 700;
-      color: #04140f; cursor: pointer;
-      transition: all .3s ease;
+      background:linear-gradient(135deg,var(--primary),var(--emerald)); border:none; font-weight:700;
+      color:#04140f; cursor:pointer; transition:all .3s ease;
+      position: relative;
     }
-    button.primary:hover { box-shadow: 0 0 25px 6px rgba(52,211,153,0.4); transform: scale(1.02); }
+    button.primary:hover { box-shadow:0 0 25px 6px rgba(52,211,153,0.4); transform:scale(1.02); }
+
+    /* Aura dourada quando gerando/tocando */
+    @keyframes aura {
+      0% { box-shadow: 0 0 0 rgba(250,204,21,0.0); }
+      50% { box-shadow: 0 0 32px 10px rgba(250,204,21,0.45); }
+      100% { box-shadow: 0 0 0 rgba(250,204,21,0.0); }
+    }
+    .primary.active {
+      animation: aura 1.6s ease-out infinite;
+    }
 
     .linkbtn {
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 15px;
-      font-weight: 700;
-      text-align: center;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all .25s ease;
-      width: 100%;
-      min-height: 48px;
+      border-radius:12px; padding:12px 14px; font-size:15px; font-weight:700; text-align:center;
+      cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+      transition:all .25s ease; width:100%; min-height:48px;
     }
+    .linkbtn.youtube { background:linear-gradient(135deg,#ff6b6b,#ff3b3b); color:#fff; }
+    .linkbtn.whatsapp { background:linear-gradient(135deg,#34d399,#16a34a); color:#04140f; }
+    .linkbtn.instagram { background:linear-gradient(135deg,#ff6db3,#e1306c); color:#fff; }
+    .linkbtn.telegram { background:linear-gradient(135deg,#2AABEE,#229ED9); color:#fff; }
+    .linkbtn.copy { background:linear-gradient(135deg,#fef08a,#eab308); color:#1f2937; font-weight:800; gap:8px; }
 
-    .linkbtn.youtube { background: linear-gradient(135deg,#ff6b6b,#ff3b3b); color:#fff; }
-    .linkbtn.whatsapp { background: linear-gradient(135deg,#34d399,#16a34a); color:#04140f; }
-    .linkbtn.instagram { background: linear-gradient(135deg,#ff6db3,#e1306c); color:#fff; }
-    .linkbtn.telegram { background: linear-gradient(135deg,#2AABEE,#229ED9); color:#fff; }
     .linkbtn.download {
-      background: linear-gradient(135deg, var(--gold), var(--deepgold));
-      color:#1f1f1f;
-      box-shadow: 0 0 15px rgba(250,204,21,.35);
-      border:none; font-weight:800; gap:10px;
+      background:linear-gradient(135deg,var(--gold),var(--deepgold)); color:#1f1f1f;
+      box-shadow:0 0 15px rgba(250,204,21,.35); border:none; font-weight:800; gap:10px;
     }
-    .linkbtn.download:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(250,204,21,.55); }
+    .linkbtn.download:hover { transform: translateY(-1px); box-shadow:0 0 25px rgba(250,204,21,.55); }
 
-    .cta-grid {
-      display:grid; gap:12px; margin-top:12px; grid-template-columns:repeat(2,1fr);
+    .cta-grid { display:grid; gap:12px; margin-top:12px; grid-template-columns:repeat(2,1fr); }
+    @media(max-width:560px){ .cta-grid{grid-template-columns:1fr;} }
+
+    .toast {
+      position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
+      background:rgba(234,179,8,.95); color:#1f2937; padding:10px 18px; border-radius:12px;
+      font-weight:700; box-shadow:0 4px 20px rgba(0,0,0,.4); opacity:0;
+      transition:opacity .4s ease; z-index:9999;
     }
-    @media (max-width:560px){ .cta-grid{grid-template-columns:1fr;} }
+    .toast.show{opacity:1;}
+
+    /* Halo do botão copiar ao clicar */
+    @keyframes halo {
+      0% { box-shadow: 0 0 0 rgba(250,204,21,0.0); }
+      50% { box-shadow: 0 0 30px 10px rgba(250,204,21,0.6); }
+      100% { box-shadow: 0 0 0 rgba(250,204,21,0.0); }
+    }
+    .linkbtn.copy.active { animation: halo 1.2s ease-out; }
   </style>
 </head>
 
@@ -159,7 +114,7 @@
       <div class="header">
         <div class="header-top">
           <div class="badge">Sua Jornada Seu Destino</div>
-          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">
+          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
             <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
           </a>
         </div>
@@ -189,10 +144,11 @@
         </div>
 
         <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal Sua Jornada</a>
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal Sua Jornada</a>
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram</a>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
+          <button id="btn-copy" class="linkbtn copy">📋 Copiar link</button>
         </div>
       </div>
 
@@ -201,26 +157,36 @@
     </div>
   </div>
 
-  <script>
-  const ENDPOINT = "https://oracaooo.onrender.com/tts";
-  const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
-  const SITE_URL = window.location.href.split('#')[0];
-  const nomeInput = document.getElementById('nome');
-  const statusEl = document.getElementById('status');
-  const player = document.getElementById('player');
-  const btnOuvir = document.getElementById('btn-ouvir');
-  const btnDownload = document.getElementById('btn-download');
-  const btnWhats = document.getElementById('btn-whats');
-  const btnTg = document.getElementById('btn-telegram');
+  <div id="toast" class="toast">✅ Link copiado!</div>
+  <!-- ping leve embutido -->
+  <audio id="ping" preload="auto" src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCAAWGluZwAAAA8AAAACAAACcQCAAgAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFh"></audio>
 
-  const ORACOES = {
-    bencao: `{{nome}} Respire fundo... Agora, receba esta oração.
+  <script>
+    // Constantes e elementos
+    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+    const SITE_URL = window.location.href.split('#')[0];
+
+    const nomeInput = document.getElementById('nome');
+    const statusEl  = document.getElementById('status');
+    const player    = document.getElementById('player');
+    const btnOuvir  = document.getElementById('btn-ouvir');
+    const btnDownload = document.getElementById('btn-download');
+    const btnWhats  = document.getElementById('btn-whats');
+    const btnTg     = document.getElementById('btn-telegram');
+    const btnCopy   = document.getElementById('btn-copy');
+    const toast     = document.getElementById('toast');
+    const ping      = document.getElementById('ping');
+
+    // Textos das orações
+    const ORACOES = {
+      bencao: `{{nome}} Respire fundo... Agora, receba esta oração.
 
 {{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
 
 {{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`,
 
-    gratidao: `{{nome}}, hoje levantamos a nossa voz em gratidão.
+      gratidao: `{{nome}}, hoje levantamos a nossa voz em gratidão.
 Pelo dom da vida, pelas pequenas alegrias, pelos livramentos que nem vimos.
 
 Que teu coração se encha de reconhecimento, e que a gratidão abra portas de favor.
@@ -228,7 +194,7 @@ Onde houver murmúrio, que nasça louvor; onde houver falta, que floresça provi
 
 Obrigado, Senhor, por tudo que já fez e pelo que ainda fará na vida de {{nome}}. Amém.`,
 
-    aniversario: `Hoje, Senhor, agradecemos pela vida de {{nome}}.
+      aniversario: `Hoje, Senhor, agradecemos pela vida de {{nome}}.
 Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e no amor.
 
 Abençoa os caminhos de {{nome}}, trazendo saúde, alegria e realizações.
@@ -236,89 +202,116 @@ Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz te guie
 
 Parabéns, {{nome}}! Que a graça divina te envolva hoje e sempre. Amém.`,
 
-    manha: `{{nome}}, ao despertar, acolhe a luz de Deus.
+      manha: `{{nome}}, ao despertar, acolhe a luz de Deus.
 Que teus pensamentos sejam guiados pela sabedoria, tuas decisões, pela paz.
 
 Onde houver ansiedade, que reine calma; onde houver cansaço, que venha ânimo.
 Abençoa, Senhor, o caminho de {{nome}} neste dia. Amém.`,
 
-    noite: `{{nome}}, que o descanso desta noite seja guardado pelo Altíssimo.
+      noite: `{{nome}}, que o descanso desta noite seja guardado pelo Altíssimo.
 Que os anjos acampem ao teu redor, e toda inquietação se transforme em serenidade.
 
 O que foi dor, seja cura; o que foi peso, aprendizado.
 Dorme em paz, {{nome}}, Deus vela por ti. Amém.`,
 
-    protecao: `{{nome}}, que o Senhor seja teu escudo e fortaleza.
+      protecao: `{{nome}}, que o Senhor seja teu escudo e fortaleza.
 Que nenhum mal alcance tua morada e teus passos sejam firmados na luz.
 
 Que a presença de Deus afaste toda sombra e te revista de coragem.
 Cobre, Senhor, a vida de {{nome}} com proteção. Amém.`
-  };
+    };
 
-  // --- Gerar áudio ---
-  async function gerarAudio() {
-    const tipo = document.getElementById('tipo').value;
-    const nome = (nomeInput.value || '').trim();
-    const texto = ORACOES[tipo].replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
-    statusEl.textContent = '🙏 Preparando a oração...';
-    btnOuvir.disabled = true;
+    // Geração de áudio + aura no botão
+    async function gerarAudio() {
+      const tipo = document.getElementById('tipo').value;
+      const nome = (nomeInput.value || '').trim();
+      const texto = ORACOES[tipo].replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
+      statusEl.textContent = '🙏 Preparando a oração...';
+      btnOuvir.disabled = true;
+      btnOuvir.classList.add('active'); // aura on
 
-    try {
-      const r = await fetch(ENDPOINT, {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
-      });
-      const blob = await r.blob();
-      const url = URL.createObjectURL(blob);
+      try {
+        const r = await fetch(ENDPOINT, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
+        });
 
-      player.src = url;
-      player.play().catch(()=>{});
-      btnDownload.href = url;
-      btnDownload.download = `oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.mp3`;
-      btnDownload.style.display = 'inline-flex';
+        if (!r.ok) throw new Error('Falha na geração do áudio');
 
-      statusEl.textContent = '✨ Oração gerada com sucesso!';
-    } catch (e) {
-      statusEl.textContent = '❌ Erro ao gerar áudio.';
-    } finally {
-      btnOuvir.disabled = false;
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+
+        player.src = url;
+        player.play().catch(()=>{});
+        btnDownload.href = url;
+        btnDownload.download = `oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.mp3`;
+        btnDownload.style.display = 'inline-flex';
+
+        statusEl.textContent = '✨ Oração gerada com sucesso!';
+      } catch (e) {
+        statusEl.textContent = '❌ Erro ao gerar áudio.';
+      } finally {
+        // manter a aura enquanto está tocando; se não tocar, remove após pequeno atraso
+        setTimeout(() => {
+          if (player.paused) btnOuvir.classList.remove('active');
+          btnOuvir.disabled = false;
+        }, 600);
+      }
     }
-  }
 
-  btnOuvir.addEventListener('click', gerarAudio);
+    // Mantém/remover aura conforme o player
+    player.addEventListener('play',  () => btnOuvir.classList.add('active'));
+    player.addEventListener('pause', () => btnOuvir.classList.remove('active'));
+    player.addEventListener('ended', () => btnOuvir.classList.remove('active'));
 
-  // --- Compartilhamento ---
-  function montarMsg(nome) {
-    const s = nome ? `${nome}, ` : '';
-    return `${s}receba esta Oração de Bênção Divina 🙏
+    document.getElementById('btn-ouvir').addEventListener('click', gerarAudio);
+
+    // Compartilhamento
+    function montarMsg(nome) {
+      const s = nome ? `${nome}, ` : '';
+      return `${s}receba esta Oração de Bênção Divina 🙏
 
 Ouça sua oração aqui:
 ${SITE_URL}
 
 Que Deus ilumine seus passos hoje e sempre. Amém.`;
-  }
-
-  btnWhats?.addEventListener('click', () => {
-    const msg = montarMsg((nomeInput.value || '').trim());
-    if (navigator.share) {
-      navigator.share({
-        title: 'Oração de Bênção Divina',
-        text: msg,
-        url: SITE_URL
-      }).catch(()=>{});
-      return;
     }
-    const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-    window.open(wa, '_blank', 'noopener');
-  });
 
-  btnTg?.addEventListener('click', () => {
-    const msg = montarMsg((nomeInput.value || '').trim());
-    const tg = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-    window.open(tg, '_blank', 'noopener');
-  });
-</script>
+    btnWhats?.addEventListener('click', () => {
+      const msg = montarMsg((nomeInput.value || '').trim());
+      if (navigator.share) {
+        navigator.share({ title:'Oração de Bênção Divina', text: msg, url: SITE_URL }).catch(()=>{});
+        return;
+      }
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+    });
+
+    btnTg?.addEventListener('click', () => {
+      const msg = montarMsg((nomeInput.value || '').trim());
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    });
+
+    // Copiar link + som + halo
+    btnCopy?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(SITE_URL);
+        ping.play().catch(()=>{});
+        btnCopy.classList.add('active');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1500);
+        setTimeout(() => btnCopy.classList.remove('active'), 1200);
+      } catch {
+        // fallback visual
+        toast.textContent = '⚠️ Não foi possível copiar';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = '✅ Link copiado!';
+        }, 1500);
+      }
+    });
+  </script>
 </body>
 </html>
