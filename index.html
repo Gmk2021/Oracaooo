@@ -145,28 +145,79 @@
     });
 
     btnOuvir.addEventListener('click', gerarAudio);
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").then((reg) => {
+    reg.addEventListener("updatefound", () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener("statechange", () => {
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          // Cria o cartão visual flutuante
+          const box = document.createElement("div");
+          box.innerHTML = `
+            <div id="update-card" style="
+              position: fixed;
+              bottom: 20px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+              color: #fff;
+              padding: 16px 22px;
+              border-radius: 16px;
+              box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              cursor: pointer;
+              opacity: 0;
+              z-index: 9999;
+              transition: all 0.4s ease;
+              animation: fadeInUp 0.8s ease forwards;
+            ">
+              <span style="font-size: 20px;">✨</span>
+              <span>Nova versão disponível</span>
+              <button id="refresh-btn" style="
+                margin-left: 12px;
+                background: #fff;
+                color: #0ea5e9;
+                border: none;
+                border-radius: 8px;
+                padding: 8px 14px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+              ">Atualizar</button>
+            </div>
 
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(console.error);
-    }
+            <style>
+              @keyframes fadeInUp {
+                0% {opacity: 0; transform: translate(-50%, 40px);}
+                100% {opacity: 1; transform: translate(-50%, 0);}
+              }
+              #refresh-btn:hover {
+                background: #f0f9ff;
+                transform: scale(1.05);
+              }
+            </style>
+          `;
+          document.body.appendChild(box);
 
-    let deferredPrompt = null;
-    const btnInstall = document.getElementById("btn-install");
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (btnInstall) btnInstall.style.display = "inline-flex";
+          const card = document.getElementById("update-card");
+          const btn = document.getElementById("refresh-btn");
+          btn.onclick = () => {
+            newWorker.postMessage({ type: "CHECK_VERSION" });
+            card.style.opacity = "0";
+            setTimeout(() => window.location.reload(), 500);
+          };
+        }
+      });
     });
+  });
+}
+</script>
 
-    btnInstall?.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      btnInstall.disabled = true;
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      btnInstall.style.display = "none";
-    });
+ 
 
   </script>
 </body>
