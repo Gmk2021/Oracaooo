@@ -155,6 +155,33 @@
 
   // --- ouvir
   btnOuvir.addEventListener('click', gerarAudio);
+    // --- Registrar Service Worker (PWA)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").catch(console.error);
+}
+
+// --- Botão "Adicionar à tela inicial" (Android/Chromium)
+let deferredPrompt = null;
+const btnInstall = document.getElementById("btn-install");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();           // intercepta prompt automático
+  deferredPrompt = e;
+  if (btnInstall) btnInstall.style.display = "inline-flex"; // mostra o botão
+});
+
+btnInstall?.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  btnInstall.disabled = true;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  // outcome: "accepted" | "dismissed"
+  deferredPrompt = null;
+  btnInstall.style.display = "none";
+});
+
+// iOS: não possui beforeinstallprompt. O caminho é: compartilhar → "Adicionar à Tela de Início".
+
 </script>
 </body>
 </html>
