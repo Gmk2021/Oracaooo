@@ -33,13 +33,9 @@
     .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f}
     .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff}
     .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff}
-
-    /* Botão de download (azul) no padrão visual */
     .linkbtn.dlbtn{background:linear-gradient(135deg,#93c5fd,#60a5fa);color:#0b1220;border:none;font-weight:800;gap:10px;box-shadow:0 0 15px rgba(96,165,250,.25)}
     .linkbtn.dlbtn:hover{transform:translateY(-1px);box-shadow:0 0 25px rgba(96,165,250,.45)}
     .linkbtn.dlbtn svg{width:20px;height:20px;display:block}
-
-    /* Topo com nome do canal + ícone */
     .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .badge{font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px}
     .channel-icon{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:12px;transition:transform .2s ease,border-color .2s ease}
@@ -51,11 +47,7 @@
 
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#0b1020">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
 </head>
-
 <body>
   <div class="bg"></div>
   <div class="wrap">
@@ -73,11 +65,11 @@
       </div>
 
       <div class="content">
-        <!-- novo seletor de tipo de oração -->
         <label for="tipo">Escolha a oração:</label>
         <select id="tipo">
           <option value="bencao">Oração de Bênção Divina</option>
           <option value="gratidao">Oração de Gratidão</option>
+          <option value="aniversario">Oração de Bênção de Aniversário</option>
           <option value="manha">Oração da Manhã</option>
           <option value="noite">Oração da Noite</option>
           <option value="protecao">Oração de Proteção</option>
@@ -91,16 +83,9 @@
         <div class="row">
           <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
           <a id="btn-download" class="linkbtn dlbtn" href="#" download style="display:none" aria-label="Baixar último áudio (MP3)">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4.007 4.007a1.25 1.25 0 0 1-1.772 0L6.92 11.707a1 1 0 1 1 1.414-1.414L10.6 12.56V4a1 1 0 0 1 1-1zM5 19a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2H5z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4.007 4.007a1.25 1.25 0 0 1-1.772 0L6.92 11.707a1 1 0 1 1 1.414-1.414L10.6 12.56V4a1 1 0 0 1 1-1zM5 19a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2H5z"/></svg>
             Baixar último áudio (MP3)
           </a>
-        </div>
-
-        <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal Sua Jornada</a>
-          <button id="btn-whats" class="linkbtn whatsapp">🟢 Compartilhar no WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram Sua Jornada</a>
-          <button id="btn-telegram" class="linkbtn telegram">✈️ Compartilhar no Telegram</button>
         </div>
       </div>
 
@@ -128,6 +113,14 @@ Onde houver murmúrio, que nasça louvor; onde houver falta, que floresça provi
 
 Obrigado, Senhor, por tudo que já fez e pelo que ainda fará na vida de {{nome}}. Amém.`,
 
+      aniversario: `Hoje, Senhor, agradecemos pela vida de {{nome}}.
+Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e no amor.
+
+Abençoa os caminhos de {{nome}}, trazendo saúde, alegria e realizações.
+Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz o(a) guie em todos os dias que virão.
+
+Parabéns, {{nome}}! Que a graça divina te envolva hoje e sempre. Amém.`,
+
       manha: `{{nome}}, ao despertar, acolhe a luz de Deus.
 Que teus pensamentos sejam guiados pela sabedoria, tuas decisões, pela paz.
 
@@ -148,108 +141,60 @@ Cobre, Senhor, a vida de {{nome}} com proteção. Amém.`
     };
 
     const TITULOS = {
-      bencao:  "Oração de Bênção Divina",
-      gratidao:"Oração de Gratidão",
-      manha:   "Oração da Manhã",
-      noite:   "Oração da Noite",
-      protecao:"Oração de Proteção"
+      bencao: "Oração de Bênção Divina",
+      gratidao: "Oração de Gratidão",
+      aniversario: "Oração de Bênção de Aniversário",
+      manha: "Oração da Manhã",
+      noite: "Oração da Noite",
+      protecao: "Oração de Proteção"
     };
 
     const nomeInput = document.getElementById('nome');
     const statusEl  = document.getElementById('status');
     const player    = document.getElementById('player');
     const btnOuvir  = document.getElementById('btn-ouvir');
-    const btnWhats  = document.getElementById('btn-whats');
-    const btnTg     = document.getElementById('btn-telegram');
     const SITE_URL  = window.location.href.split('#')[0];
 
-    function montarMsg(nome, tipo){
-      const s = nome ? `${nome}, ` : '';
-      const titulo = TITULOS[tipo] || TITULOS.bencao;
-      return `${s}receba esta ${titulo} 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;
+    async function fetchTTSAudio({ text, voiceId }) {
+      const r = await fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voiceId })
+      });
+      if (!r.ok) throw new Error(`Erro ${r.status}`);
+      const blob = await r.blob();
+      return new Blob([blob], { type: 'audio/mpeg' });
     }
 
-    async function fetchTTSAudio({ text, voiceId, tries = 4, timeoutMs = 15000 }){
-      const controller = new AbortController();
-      const t = setTimeout(() => controller.abort(), timeoutMs);
-      try{
-        const r = await fetch(ENDPOINT + `?t=${Date.now()}`, {
-          method:'POST', mode:'cors', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ text, voiceId }), signal: controller.signal
-        });
-        clearTimeout(t);
-        if(!r.ok) throw new Error(`Erro ${r.status}`);
-        const blob = await r.blob();
-        if(!blob || !blob.size) throw new Error('Resposta vazia do servidor TTS');
-        return new Blob([blob], { type:'audio/mpeg' });
-      }catch(e){
-        if(tries>1){
-          const wait = Math.pow(2,4-tries)*500; // 500ms, 1s, 2s...
-          await new Promise(res=>setTimeout(res,wait));
-          return fetchTTSAudio({ text, voiceId, tries: tries-1, timeoutMs });
-        }
-        throw e;
-      }
-    }
-
-    async function gerarAudio(){
-      const tipoSel = (document.getElementById('tipo')?.value) || 'bencao';
-      const nome    = (nomeInput.value||'').trim();
-
-      const textoBase = ORACOES[tipoSel] || ORACOES.bencao;
-      const texto = textoBase.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
+    async function gerarAudio() {
+      const tipo = document.getElementById('tipo').value;
+      const nome = (nomeInput.value || '').trim();
+      const texto = ORACOES[tipo].replace(/\\{\\{\\s*nome\\s*\\}\\}/gi, nome || '');
 
       statusEl.textContent = '🙏 Preparando a oração...';
       btnOuvir.disabled = true;
-      btnOuvir.textContent = '⏳ Gerando...';
 
-      try{
+      try {
         const audioBlob = await fetchTTSAudio({ text: texto, voiceId: DEFAULT_VOICE_ID });
         const url = URL.createObjectURL(audioBlob);
-
         player.src = url;
-        try{ await player.play(); }catch{}
+        player.play();
 
         const btnDownload = document.getElementById('btn-download');
-        if(btnDownload){
-          if(btnDownload.dataset.blobUrl){ URL.revokeObjectURL(btnDownload.dataset.blobUrl); }
-          const slugTipo = (TITULOS[tipoSel]||'oracao').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-+|-+$/g,'');
-          const nomeArquivo = `${slugTipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
-          btnDownload.href = url;
-          btnDownload.dataset.blobUrl = url;
-          btnDownload.download = nomeArquivo;
-          btnDownload.title = `Baixar: ${nomeArquivo}`;
-          btnDownload.style.display = 'inline-flex';
-        }
-
+        btnDownload.href = url;
+        btnDownload.download = `oracao-${tipo}-${nome || 'bencao'}.mp3`;
+        btnDownload.style.display = 'inline-flex';
         statusEl.textContent = '✨ Oração gerada com sucesso!';
-      }catch(err){
-        console.error('[TTS] Falha:', err);
-        const msg = (err.name==='AbortError') ? 'Tempo esgotado ao gerar o áudio. Tente novamente.' : (String(err.message||'').includes('CORS') ? 'Bloqueado por CORS no servidor TTS.' : `Falha ao gerar: ${err.message}`);
-        statusEl.innerHTML = `<span class="error">${msg}</span>`;
-      }finally{
+      } catch (err) {
+        statusEl.textContent = `Erro: ${err.message}`;
+      } finally {
         btnOuvir.disabled = false;
-        btnOuvir.textContent = '🎧 Ouvir oração';
       }
     }
 
-    btnOuvir?.addEventListener('click', gerarAudio);
-
-    btnWhats?.addEventListener('click', () => {
-      const tipoSel = (document.getElementById('tipo')?.value) || 'bencao';
-      const msg = montarMsg((nomeInput.value||'').trim(), tipoSel);
-      if(navigator.share){ navigator.share({ text: msg, url: SITE_URL, title: TITULOS[tipoSel] }).catch(()=>{}); return; }
-      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener');
-    });
-
-    btnTg?.addEventListener('click', () => {
-      const tipoSel = (document.getElementById('tipo')?.value) || 'bencao';
-      const msg = montarMsg((nomeInput.value||'').trim(), tipoSel);
-      const tg = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-      window.open(tg, '_blank', 'noopener');
-    });
-
-    if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(console.error); }
+    btnOuvir.addEventListener('click', gerarAudio);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
   </script>
 </body>
 </html>
