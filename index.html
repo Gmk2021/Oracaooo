@@ -135,6 +135,35 @@
     .channel-icon img { width:48px;height:48px;border-radius:10px;display:block; }
     .channel-icon span { color:#e2e8f0;font-weight:700;white-space:nowrap; }
     @media (max-width:480px){ .channel-icon span { display:none; } }
+    /* === Botão de Download — estilo igual aos outros, com brilho azul === */
+.linkbtn.dlbtn {
+  background: linear-gradient(135deg, #93c5fd, #60a5fa);
+  color: #0b1220;
+  border: none;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  border-radius: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: 0 0 15px rgba(96,165,250,0.25);
+}
+
+.linkbtn.dlbtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 25px rgba(96,165,250,0.45);
+}
+
+.linkbtn.dlbtn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
   </style>
 
   <link rel="manifest" href="./manifest.webmanifest">
@@ -165,8 +194,16 @@
         <input id="nome" placeholder="Ex.: Ana Clara" />
         <div style="height:10px"></div>
         <div class="row">
-          <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
-          <a id="btn-download" class="secondary" style="display:none" download>⬇️ Baixar último áudio (MP3)</a>
+         <div class="row">
+  <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
+  <a id="btn-download" class="linkbtn dlbtn" href="#" download style="display:none">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4.007 4.007a1.25 1.25 0 0 1-1.772 0L6.92 11.707a1 1 0 1 1 1.414-1.414L10.6 12.56V4a1 1 0 0 1 1-1zM5 19a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2H5z"/>
+    </svg>
+    Baixar último áudio (MP3)
+  </a>
+</div>
+ 
         </div>
         <div class="cta-grid">
           <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal Sua Jornada</a>
@@ -239,13 +276,21 @@
         const url = URL.createObjectURL(audioBlob);
         player.src = url;
         try { await player.play(); } catch {}
-        const btnDownload = document.getElementById('btn-download');
-        if (btnDownload) {
-          const nomeArquivo = `oracao-${(nome || 'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
-          btnDownload.href = url;
-          btnDownload.download = nomeArquivo;
-          btnDownload.style.display = 'inline-block';
-        }
+       const btnDownload = document.getElementById('btn-download');
+if (btnDownload) {
+  // revoga o URL anterior se houver
+  if (btnDownload.dataset.blobUrl) {
+    URL.revokeObjectURL(btnDownload.dataset.blobUrl);
+  }
+
+  const nomeArquivo = `oracao-${(nome || 'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
+  btnDownload.href = url;
+  btnDownload.dataset.blobUrl = url;
+  btnDownload.download = nomeArquivo;
+  btnDownload.title = `Baixar: ${nomeArquivo}`;
+  btnDownload.style.display = 'inline-flex';
+}
+
         statusEl.textContent = '✨ Oração gerada com sucesso!';
       } catch (err) {
         console.error('[TTS] Falha:', err);
