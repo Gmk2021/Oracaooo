@@ -144,47 +144,82 @@
     }
 
     async function gerarAudio(){
-      const nome  = (nomeInput.value||'').trim();
-      const texto = DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
+    <script>
+async function fetchTTSAudio({ text, voiceId, tries = 4, timeoutMs = 15000 }) {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
 
-      statusEl.textContent = '🙏 Preparando a oração...';
-      await new Promise(r=>setTimeout(r,500));
+  try {
+    const r = await fetch(ENDPOINT + `?t=${Date.now()}`, {
+      method: 'POST',
+      mode: 'cors', // garante CORS
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voiceId }),
+      signal: controller.signal
+    });
 
-      statusEl.textContent = 'Gerando áudio da oração...';
-      try{
-        const r = await fetch(ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
-        });
-        if(!r.ok){ throw new Error(`Erro ${r.status}`); }
+    clearTimeout(t);
 
-        const b = await r.blob();
-        player.src = URL.createObjectURL(b);
-        await player.play();
-        statusEl.textContent = '✨ Oração gerada com sucesso!';
-      }catch(e){
-        statusEl.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`;
-      }
+    if (!r.ok) {
+      // Tenta extrair mensagem do backend (se vier JSON)
+      let msg = `Erro ${r.status}`;
+      try { const j = await r.json(); if (j?.error) msg += ` — ${j.error}`; } catch {}
+      throw new Error(msg);
     }
 
-    btnWhats?.addEventListener('click', () => {
-      const msg = montarMsg((nomeInput.value||'').trim());
-      if (navigator.share) {
-        navigator.share({ text: msg, url: SITE_URL, title: 'Oração de Bênção Divina' }).catch(()=>{});
-        return;
-      }
-      const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-      window.open(wa, '_blank', 'noopener');
-    });
+    const blob = await r.blob();
+    if (!blob || blob.size === 0) throw new Error('Resposta vazia do servidor TTS');
 
-    btnTg?.addEventListener('click', () => {
-      const msg = montarMsg((nomeInput.value||'').trim());
-      const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-      window.open(tg, '_blank', 'noopener');
-    });
+    return new Blob([blob], { type: 'audio/mpeg' }); // força o tipo
+  } catch (e) {
+    if (tries > 1) {
+      // backoff exponencial
+      const wait = Math.pow(2, 4 - tries) * 500; // 500ms, 1s, 2s...
+      await new Promise(res => setTimeout(res, wait));
+      return fetchTTSAudio({ text, voiceId, tries: tries - 1, timeoutMs });
+    }
+    throw e;
+  }
+}
 
-    btnOuvir.addEventListener('click', gerarAudio);
+async function gerarAudio() {
+  const nome  = (nomeInput.value || '').trim();
+  const texto = DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
+
+  statusEl.textContent = '🙏 Preparando a oração...';
+  btnOuvir.disabled = true;
+
+  try {
+    const audioBlob = await fetchTTSAudio({ text: texto, voiceId: DEFAULT_VOICE_ID });
+    const url = URL.createObjectURL(audioBlob);
+
+    // Toca no player
+    player.src = url;
+    try { await player.play(); } catch { /* autoplay pode exigir um segundo clique */ }
+
+    // Habilita download
+    const btnDownload = document.getElementById('btn-download');
+    if (btnDownload) {
+      const nomeArquivo = `oracao-${(nome || 'benção').toLowerCase().replace(/\\s+/g,'-')}.mp3`;
+      btnDownload.href = url;
+      btnDownload.download = nomeArquivo;
+      btnDownload.style.display = 'inline-block';
+    }
+
+    statusEl.textContent = '✨ Oração gerada com sucesso!';
+  } catch (err) {
+    console.error('[TTS] Falha:', err);
+    // mensagens amigáveis por tipo de erro
+    const msg = (err.name === 'AbortError')
+      ? 'Tempo esgotado ao gerar o áudio. Tente novamente.'
+      : (String(err.message || '').includes('CORS') ? 'Bloqueado por CORS no servidor TTS.' : `Falha ao gerar: ${err.message}`);
+    statusEl.innerHTML = `<span class="error">${msg}</span>`;
+  } finally {
+    btnOuvir.disabled = false;
+  }
+}
+</script>
+
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js").then((reg) => {
