@@ -31,6 +31,35 @@
     .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f;}
     .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff;}
     .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff;}
+    /* barra do topo dentro do .header */
+.header-top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+
+/* nome do canal (a sua badge atual) */
+.badge{
+  font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px;
+}
+
+/* ícone do canal */
+.channel-icon{
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  padding:6px 10px;border-radius:12px; transition:transform .2s ease, border-color .2s ease;
+}
+.channel-icon:hover{ transform:translateY(-1px); border-color:rgba(255,255,255,.25); }
+
+.channel-icon img{
+  width:48px;height:48px;border-radius:10px;display:block;
+}
+
+/* rótulo opcional ao lado do ícone (pode remover se quiser só o ícone) */
+.channel-icon span{ color:#e2e8f0;font-weight:700;white-space:nowrap; }
+@media (max-width:480px){
+  .channel-icon span{ display:none; } /* em telas pequenas, mostra só o ícone */
+}
+
   </style>
 
   <link rel="manifest" href="./manifest.webmanifest">
@@ -47,9 +76,20 @@
   <div class="wrap">
     <div class="card">
       <div class="header">
-        <div class="badge">Sua Jornada Seu Destino</div>
-        <h1>Oração de Bênção Divina</h1>
-        <p class="desc">Digite o nome de quem será abençoado e clique em <b class="highlight">Ouvir Oração</b>.</p>
+  <!-- TOPO: nome do canal à esquerda e ícone à direita -->
+  <div class="header-top">
+    <div class="badge">Sua Jornada Seu Destino</div>
+
+    <!-- Ícone do canal (clique leva ao canal/instagram; ajuste o href que preferir) -->
+    <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
+      <img src="./icons/canal.png" alt="Ícone do Canal">
+      <span>Canal</span>
+    </a>
+  </div>
+  <!-- Título e descrição: permanecem logo abaixo, acima do campo de nome -->
+  <h1>Oração de Bênção Divina</h1>
+  <p class="desc">Digite o nome de quem será abençoado e clique em <b class="highlight">Ouvir Oração</b>.</p>
+
       </div>
 
       <div class="content">
