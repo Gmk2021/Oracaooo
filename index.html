@@ -218,7 +218,7 @@ async function gerarAudio() {
   }
 }
 </script>
-
+btnOuvir?.addEventListener('click', gerarAudio);
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js").then((reg) => {
