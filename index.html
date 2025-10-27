@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oração de Benção Divina</title>
+  <title>Oração de Bênção Divina</title>
   <style>
     :root{--overlay:rgba(0,0,0,.45);--card:rgba(17,24,39,.72);--muted:#cbd5e1;--text:#f1f5f9;--primary:#a7f3d0;--accent:#93c5fd;--danger:#fca5a5}
     *{box-sizing:border-box}
@@ -32,13 +32,14 @@
     .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff;}
     .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff;}
   </style>
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#0b1020">
 
-<!-- iOS (Add to Home Screen manual) -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#0b1020">
+
+  <!-- iOS (Add to Home Screen manual) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
 </head>
 <body>
@@ -47,8 +48,8 @@
     <div class="card">
       <div class="header">
         <div class="badge">Sua Jornada Seu Destino</div>
-        <h1>Oração de Benção Divina</h1>
-        <p class="desc">Digite o nome de quem será abençoado e click em <b class="highlight">Ouvir  Oração</b>.</p>
+        <h1>Oração de Bênção Divina</h1>
+        <p class="desc">Digite o nome de quem será abençoado e clique em <b class="highlight">Ouvir Oração</b>.</p>
       </div>
 
       <div class="content">
@@ -66,11 +67,10 @@
           <button id="btn-telegram" class="linkbtn telegram">✈️ Compartilhar no Telegram</button>
         </div>
         <div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap;">
-  <button id="btn-install" class="linkbtn" style="background:linear-gradient(135deg,#fde68a,#f59e0b); color:#1f2937; display:none;">
-    ⭐ Adicionar à tela inicial
-  </button>
-</div>
-
+          <button id="btn-install" class="linkbtn" style="background:linear-gradient(135deg,#fde68a,#f59e0b); color:#1f2937; display:none;">
+            ⭐ Adicionar à tela inicial
+          </button>
+        </div>
       </div>
 
       <div class="player">
@@ -81,107 +81,93 @@
   </div>
 
   <script>
-  const ENDPOINT = "https://oracaooo.onrender.com/tts";
-  const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
-
-  const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
+    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+    const DEFAULT_PRAYER_TEXT = `{{nome}} Respire fundo... Agora, receba esta oração.
 
 {{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração. Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.
 
 {{nome}}, que a luz de Deus ilumine teus passos hoje e sempre. Amém.`;
 
-  // --- elementos
-  const nomeInput = document.getElementById('nome');
-  const statusEl  = document.getElementById('status');
-  const player    = document.getElementById('player');
-  const btnOuvir  = document.getElementById('btn-ouvir');
-  const btnWhats  = document.getElementById('btn-whats');
-  const btnTg     = document.getElementById('btn-telegram');
+    const nomeInput = document.getElementById('nome');
+    const statusEl  = document.getElementById('status');
+    const player    = document.getElementById('player');
+    const btnOuvir  = document.getElementById('btn-ouvir');
+    const btnWhats  = document.getElementById('btn-whats');
+    const btnTg     = document.getElementById('btn-telegram');
 
-  // --- helpers
-  const SITE_URL = window.location.href.split('#')[0];
-  function montarMsg(nome) {
-    const s = nome ? `${nome}, ` : '';
-    return `${s}receba esta Oração de Benção Divina 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;
-  }
+    const SITE_URL = window.location.href.split('#')[0];
 
-  // --- gerar áudio
-  async function gerarAudio(){
-    const nome  = (nomeInput.value||'').trim();
-    const texto = DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
-
-    statusEl.textContent = '🙏 Preparando a oração...';
-    await new Promise(r=>setTimeout(r,500));
-
-    statusEl.textContent = 'Gerando áudio da oração...';
-    try{
-      const r = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
-      });
-      if(!r.ok){ throw new Error(`Erro ${r.status}`); }
-
-      const b = await r.blob();
-      player.src = URL.createObjectURL(b);
-      await player.play();
-      statusEl.textContent = '✨ Oração gerada com sucesso!';
-    }catch(e){
-      statusEl.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`;
-    }
-  }
-
-  // --- compartilhar WhatsApp
-  btnWhats?.addEventListener('click', () => {
-    const msg = montarMsg((nomeInput.value||'').trim());
-
-    // Usa o compart. nativo quando possível (mobile)
-    if (navigator.share) {
-      navigator.share({ text: msg, url: SITE_URL, title: 'Oração de Benção Divina' })
-        .catch(()=>{ /* cancelado pelo usuário */ });
-      return;
+    function montarMsg(nome) {
+      const s = nome ? `${nome}, ` : '';
+      return `${s}receba esta Oração de Bênção Divina 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;
     }
 
-    const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-    window.open(wa, '_blank', 'noopener');
-  });
+    async function gerarAudio(){
+      const nome  = (nomeInput.value||'').trim();
+      const texto = DEFAULT_PRAYER_TEXT.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
 
-  // --- compartilhar Telegram
-  btnTg?.addEventListener('click', () => {
-    const msg = montarMsg((nomeInput.value||'').trim());
-    const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-    window.open(tg, '_blank', 'noopener');
-  });
+      statusEl.textContent = '🙏 Preparando a oração...';
+      await new Promise(r=>setTimeout(r,500));
 
-  // --- ouvir
-  btnOuvir.addEventListener('click', gerarAudio);
-    // --- Registrar Service Worker (PWA)
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js").catch(console.error);
-}
+      statusEl.textContent = 'Gerando áudio da oração...';
+      try{
+        const r = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
+        });
+        if(!r.ok){ throw new Error(`Erro ${r.status}`); }
 
-// --- Botão "Adicionar à tela inicial" (Android/Chromium)
-let deferredPrompt = null;
-const btnInstall = document.getElementById("btn-install");
+        const b = await r.blob();
+        player.src = URL.createObjectURL(b);
+        await player.play();
+        statusEl.textContent = '✨ Oração gerada com sucesso!';
+      }catch(e){
+        statusEl.innerHTML = `<span class="error">Falha ao gerar: ${e.message}</span>`;
+      }
+    }
 
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();           // intercepta prompt automático
-  deferredPrompt = e;
-  if (btnInstall) btnInstall.style.display = "inline-flex"; // mostra o botão
-});
+    btnWhats?.addEventListener('click', () => {
+      const msg = montarMsg((nomeInput.value||'').trim());
+      if (navigator.share) {
+        navigator.share({ text: msg, url: SITE_URL, title: 'Oração de Bênção Divina' }).catch(()=>{});
+        return;
+      }
+      const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+      window.open(wa, '_blank', 'noopener');
+    });
 
-btnInstall?.addEventListener("click", async () => {
-  if (!deferredPrompt) return;
-  btnInstall.disabled = true;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  // outcome: "accepted" | "dismissed"
-  deferredPrompt = null;
-  btnInstall.style.display = "none";
-});
+    btnTg?.addEventListener('click', () => {
+      const msg = montarMsg((nomeInput.value||'').trim());
+      const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+      window.open(tg, '_blank', 'noopener');
+    });
 
-// iOS: não possui beforeinstallprompt. O caminho é: compartilhar → "Adicionar à Tela de Início".
+    btnOuvir.addEventListener('click', gerarAudio);
 
-</script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(console.error);
+    }
+
+    let deferredPrompt = null;
+    const btnInstall = document.getElementById("btn-install");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (btnInstall) btnInstall.style.display = "inline-flex";
+    });
+
+    btnInstall?.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      btnInstall.disabled = true;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      btnInstall.style.display = "none";
+    });
+
+  </script>
 </body>
 </html>
