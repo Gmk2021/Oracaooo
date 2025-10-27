@@ -285,6 +285,49 @@ Cobre, Senhor, a vida de {{nome}} com proteção. Amém.`
     }
 
     document.getElementById('btn-ouvir').addEventListener('click', gerarAudio);
+    <script>
+  // --- helpers de compartilhamento
+  const btnWhats = document.getElementById('btn-whats');
+  const btnTg    = document.getElementById('btn-telegram');
+  const SITE_URL = location.origin + location.pathname;
+
+  function montarMsg(nome) {
+    const s = nome ? `${nome}, ` : '';
+    return `${s}receba esta Oração de Bênção Divina 🙏
+
+Ouça sua oração aqui:
+${SITE_URL}
+
+Que Deus ilumine seus passos hoje e sempre. Amém.`;
+  }
+
+  // WhatsApp
+  btnWhats?.addEventListener('click', () => {
+    const msg = montarMsg((document.getElementById('nome').value || '').trim());
+
+    // Se o navegador suportar compartilhamento nativo (Android/Chrome)
+    if (navigator.share) {
+      navigator.share({
+        title: 'Oração de Bênção Divina',
+        text: msg,
+        url: SITE_URL
+      }).catch(() => {});
+      return;
+    }
+
+    // Link web padrão
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    window.open(wa, '_blank', 'noopener');
+  });
+
+  // Telegram
+  btnTg?.addEventListener('click', () => {
+    const msg = montarMsg((document.getElementById('nome').value || '').trim());
+    const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+    window.open(tg, '_blank', 'noopener');
+  });
+</script>
+
   </script>
 </body>
 </html>
