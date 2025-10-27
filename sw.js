@@ -1,5 +1,5 @@
 // SERVICE WORKER – resiliente
-const CACHE_VERSION = 'v1.0.3';
+const CACHE_VERSION = 'v1.0.4';
 const CACHE_NAME = `oracao-cache-${CACHE_VERSION}`;
 
 const APP_SHELL = [
@@ -54,4 +54,11 @@ self.addEventListener('fetch', (event) => {
       return caches.match('./index.html');
     }
   })());
+});
+// ... (fetch, install, activate)
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CHECK_VERSION') {
+    self.skipWaiting();
+  }
 });
