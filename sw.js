@@ -1,4 +1,3 @@
-// SERVICE WORKER — simples e resiliente
 const CACHE_VERSION = 'v1.0.5';
 const CACHE_NAME = `oracao-cache-${CACHE_VERSION}`;
 
