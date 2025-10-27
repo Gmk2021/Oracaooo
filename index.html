@@ -1,3 +1,4 @@
+<!-- 🕊️ Sua Jornada Seu Destino - Oração Interativa -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -5,42 +6,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oração de Bênção Divina</title>
   <meta name="theme-color" content="#0b1020" />
-  <link rel="manifest" href="./manifest.webmanifest" />
 
   <style>
-    :root{--overlay:rgba(0,0,0,.45);--card:rgba(17,24,39,.72);--muted:#cbd5e1;--text:#f1f5f9;--primary:#a7f3d0;--accent:#93c5fd}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:#0b1020;min-height:100vh}
-    .bg{position:fixed;inset:0;background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat}
-    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75))}
-    .wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:100vh;padding:24px}
-    .card{width:min(860px,96vw);background:var(--card);backdrop-filter:blur(8px);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08);overflow:hidden}
-    .header{padding:26px 26px 10px}
-    h1{margin:0 0 6px;font-size:28px}
-    p.desc{margin:0;color:var(--muted)}
-    p.desc b.highlight{color:#fcd34d;text-shadow:0 0 8px rgba(252,211,77,.7)}
-    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
-    .badge{font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px}
-    .channel-icon{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:12px;text-decoration:none;color:#e2e8f0;font-weight:600;transition:.25s}
-    .channel-icon:hover{border-color:rgba(255,255,255,.25);transform:translateY(-1px)}
-    .channel-icon img{width:48px;height:48px;border-radius:10px}
-    .content{padding:18px 22px 6px}
-    label{display:block;margin-bottom:6px;font-weight:600}
-    input,select,button{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px}
-    button.primary{background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;color:#04140f;cursor:pointer;transition:.3s}
-    button.primary:hover{box-shadow:0 0 25px 6px rgba(52,211,153,.4);transform:scale(1.02)}
-    .row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1}
-    .cta-grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(2,1fr)}
-    @media(max-width:560px){.cta-grid{grid-template-columns:1fr}}
-    .linkbtn{border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.25s;width:100%;min-height:48px}
-    .linkbtn.youtube{background:linear-gradient(135deg,#ff6b6b,#ff3b3b);color:#fff}
-    .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f}
-    .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff}
-    .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff}
-    /* botão de download */
-    .linkbtn.dlbtn{background:linear-gradient(135deg,#93c5fd,#60a5fa);color:#0b1220;border:none;font-weight:800;gap:10px;box-shadow:0 0 15px rgba(96,165,250,.25)}
-    .linkbtn.dlbtn:hover{transform:translateY(-1px);box-shadow:0 0 25px rgba(96,165,250,.45)}
-    .linkbtn.dlbtn svg{width:20px;height:20px;display:block}
+    :root {
+      --overlay: rgba(0,0,0,.45);
+      --card: rgba(17,24,39,.72);
+      --muted: #cbd5e1;
+      --text: #f1f5f9;
+      --primary: #a7f3d0;
+      --accent: #fcd34d;
+      --gold: #facc15;
+      --deepgold: #ca8a04;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background: #0b1020;
+      min-height: 100vh;
+    }
+
+    .bg {
+      position: fixed; inset: 0;
+      background: #0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+    }
+    .bg::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(2,6,23,.4), rgba(2,6,23,.75));
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(860px, 96vw);
+      background: var(--card);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+
+    .header { padding: 26px 26px 10px; }
+    h1 { margin: 0 0 6px; font-size: 28px; }
+    p.desc { margin: 0; color: var(--muted); }
+    p.desc b.highlight { color: var(--accent); text-shadow: 0 0 8px rgba(252,211,77,0.7); }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      font-weight: 700;
+      color: #e2e8f0;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    .channel-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 6px 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #e2e8f0;
+      font-weight: 600;
+      transition: all .25s ease;
+    }
+
+    .channel-icon:hover { border-color: rgba(255,255,255,.25); transform: translateY(-1px); }
+    .channel-icon img { width: 48px; height: 48px; border-radius: 10px; }
+
+    .content { padding: 18px 22px 6px; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+
+    input, select, button {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(4,6,16,.75);
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 15px;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, var(--primary), #34d399);
+      border: none; font-weight: 700;
+      color: #04140f; cursor: pointer;
+      transition: all .3s ease;
+    }
+    button.primary:hover { box-shadow: 0 0 25px 6px rgba(52,211,153,0.4); transform: scale(1.02); }
+
+    .linkbtn {
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .25s ease;
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .linkbtn.youtube { background: linear-gradient(135deg,#ff6b6b,#ff3b3b); color:#fff; }
+    .linkbtn.whatsapp { background: linear-gradient(135deg,#34d399,#16a34a); color:#04140f; }
+    .linkbtn.instagram { background: linear-gradient(135deg,#ff6db3,#e1306c); color:#fff; }
+    .linkbtn.telegram { background: linear-gradient(135deg,#2AABEE,#229ED9); color:#fff; }
+    .linkbtn.download {
+      background: linear-gradient(135deg, var(--gold), var(--deepgold));
+      color:#1f1f1f;
+      box-shadow: 0 0 15px rgba(250,204,21,.35);
+      border:none; font-weight:800; gap:10px;
+    }
+    .linkbtn.download:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(250,204,21,.55); }
+
+    .cta-grid {
+      display:grid; gap:12px; margin-top:12px; grid-template-columns:repeat(2,1fr);
+    }
+    @media (max-width:560px){ .cta-grid{grid-template-columns:1fr;} }
   </style>
 </head>
 
@@ -51,8 +159,8 @@
       <div class="header">
         <div class="header-top">
           <div class="badge">Sua Jornada Seu Destino</div>
-          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
-            <img src="./icons/canal.png" alt="Ícone do Canal"><span>Canal</span>
+          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">
+            <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
           </a>
         </div>
         <h1>Oração de Bênção Divina</h1>
@@ -77,18 +185,14 @@
         <div style="height:10px"></div>
         <div class="row">
           <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
-          <!-- novo botão de download -->
-          <a id="btn-download" class="linkbtn dlbtn" href="#" download style="display:none" aria-label="Baixar último áudio (MP3)">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4.007 4.007a1.25 1.25 0 0 1-1.772 0L6.92 11.707a1 1 0 1 1 1.414-1.414L10.6 12.56V4a1 1 0 0 1 1-1zM5 19a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2H5z"/></svg>
-            Baixar último áudio (MP3)
-          </a>
+          <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
         </div>
 
         <div class="cta-grid">
           <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal Sua Jornada</a>
-          <button id="btn-whats" class="linkbtn whatsapp">🟢 Compartilhar no WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram Sua Jornada</a>
-          <button id="btn-telegram" class="linkbtn telegram">✈️ Compartilhar no Telegram</button>
+          <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram</a>
+          <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
       </div>
 
@@ -101,6 +205,11 @@
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
     const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
     const SITE_URL = window.location.href.split('#')[0];
+    const nomeInput = document.getElementById('nome');
+    const statusEl = document.getElementById('status');
+    const player = document.getElementById('player');
+    const btnOuvir = document.getElementById('btn-ouvir');
+    const btnDownload = document.getElementById('btn-download');
 
     const ORACOES = {
       bencao: `{{nome}} Respire fundo... Agora, receba esta oração.
@@ -121,7 +230,7 @@ Obrigado, Senhor, por tudo que já fez e pelo que ainda fará na vida de {{nome}
 Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e no amor.
 
 Abençoa os caminhos de {{nome}}, trazendo saúde, alegria e realizações.
-Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz o(a) guie em todos os dias que virão.
+Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz te guie em todos os dias que virão.
 
 Parabéns, {{nome}}! Que a graça divina te envolva hoje e sempre. Amém.`,
 
@@ -144,19 +253,6 @@ Que a presença de Deus afaste toda sombra e te revista de coragem.
 Cobre, Senhor, a vida de {{nome}} com proteção. Amém.`
     };
 
-    const nomeInput = document.getElementById('nome');
-    const statusEl  = document.getElementById('status');
-    const player    = document.getElementById('player');
-    const btnOuvir  = document.getElementById('btn-ouvir');
-    const btnWhats  = document.getElementById('btn-whats');
-    const btnTg     = document.getElementById('btn-telegram');
-    const btnDownload = document.getElementById('btn-download');
-
-    function montarMsg(nome) {
-      const s = nome ? `${nome}, ` : '';
-      return `${s}receba esta Oração de Bênção Divina 🙏\n\nOuça sua oração aqui:\n${SITE_URL}\n\nQue Deus ilumine seus passos hoje e sempre. Amém.`;
-    }
-
     async function gerarAudio() {
       const tipo = document.getElementById('tipo').value;
       const nome = (nomeInput.value || '').trim();
@@ -171,46 +267,24 @@ Cobre, Senhor, a vida de {{nome}} com proteção. Amém.`
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: texto, voiceId: DEFAULT_VOICE_ID })
         });
-        if (!r.ok) throw new Error(`Erro ${r.status}`);
         const blob = await r.blob();
         const url = URL.createObjectURL(blob);
 
         player.src = url;
-        try { await player.play(); } catch {}
-
-        // habilita o botão de download já com nome do arquivo
-        const safe = (nome || 'bencao').toLowerCase().replace(/\s+/g,'-');
+        player.play().catch(()=>{});
         btnDownload.href = url;
-        btnDownload.download = `oracao-${tipo}-${safe}.mp3`;
+        btnDownload.download = `oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.mp3`;
         btnDownload.style.display = 'inline-flex';
 
         statusEl.textContent = '✨ Oração gerada com sucesso!';
       } catch (e) {
-        statusEl.textContent = '❌ Erro ao gerar áudio. Tente novamente.';
+        statusEl.textContent = '❌ Erro ao gerar áudio.';
       } finally {
         btnOuvir.disabled = false;
       }
     }
 
-    btnOuvir.addEventListener('click', gerarAudio);
-
-    btnWhats.addEventListener('click', () => {
-      const msg = montarMsg((nomeInput.value||'').trim());
-      if (navigator.share) {
-        navigator.share({ text: msg, url: SITE_URL, title: 'Oração de Bênção Divina' }).catch(()=>{});
-        return;
-      }
-      const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-      window.open(wa, '_blank', 'noopener');
-    });
-
-    btnTg.addEventListener('click', () => {
-      const msg = montarMsg((nomeInput.value||'').trim());
-      const tg  = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-      window.open(tg, '_blank', 'noopener');
-    });
-
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+    document.getElementById('btn-ouvir').addEventListener('click', gerarAudio);
   </script>
 </body>
 </html>
