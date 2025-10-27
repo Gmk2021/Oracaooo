@@ -32,13 +32,13 @@
     .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff;}
     .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff;}
   </style>
-<link rel="manifest" href="/manifest.webmanifest">
+<link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#0b1020">
 
 <!-- iOS (Add to Home Screen manual) -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
 
 </head>
 <body>
@@ -157,7 +157,7 @@
   btnOuvir.addEventListener('click', gerarAudio);
     // --- Registrar Service Worker (PWA)
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js").catch(console.error);
+  navigator.serviceWorker.register("./sw.js").catch(console.error);
 }
 
 // --- Botão "Adicionar à tela inicial" (Android/Chromium)
