@@ -1,44 +1,65 @@
-const CACHE_NAME = "oracao-pwa-v1";
-const ASSETS = [
-  "/",              // index
-  "/manifest.webmanifest",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+// SERVICE WORKER – resiliente
+const CACHE_VERSION = 'v1.0.3';
+const CACHE_NAME = `oracao-cache-${CACHE_VERSION}`;
+
+const APP_SHELL = [
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-maskable.png'
 ];
 
-// Instala e pré-cacheia
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    // tenta um por um (não usa addAll que falha o lote inteiro)
+    await Promise.allSettled(
+      APP_SHELL.map(async (url) => {
+        try {
+          const resp = await fetch(url, {cache: 'no-cache'});
+          if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
+          await cache.put(url, resp);
+        } catch (err) {
+          console.warn('[SW] Falhou ao cachear:', url, err.message);
+        }
+      })
+    );
+  })());
   self.skipWaiting();
 });
 
-// Ativa e limpa caches antigos
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)))
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
-// Estratégia: cache-first com fallback à rede
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  e.respondWith(
-    caches.match(req).then((cached) => {
-      return (
-        cached ||
-        fetch(req).then((res) => {
-          // cacheia GET do mesmo domínio
-          const url = new URL(req.url);
-          if (req.method === "GET" && url.origin === location.origin) {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-          }
-          return res;
-        }).catch(() => cached) // offline: devolve o que tiver
-      );
-    })
-  );
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+  event.respondWith((async () => {
+    const cached = await caches.match(event.request);
+    if (cached) {
+      // atualiza em segundo plano
+      fetch(event.request).then(r => {
+        if (r && r.ok) caches.open(CACHE_NAME).then(c => c.put(event.request, r));
+      }).catch(()=>{});
+      return cached;
+    }
+    try {
+      const net = await fetch(event.request);
+      if (net && net.ok) {
+        const copy = net.clone();
+        caches.open(CACHE_NAME).then(c => c.put(event.request, copy));
+      }
+      return net;
+    } catch {
+      // fallback básico
+      return caches.match('./index.html');
+    }
+  })());
 });
