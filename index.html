@@ -1,4 +1,4 @@
-<!-- 🕊️ Sua Jornada Seu Destino - Oração Interativa com Harpa, Cache, PWA e Progresso -->
+<!-- 🕊️ Sua Jornada Seu Destino - Oração Interativa (TTS em Blocos + Concat WAV) -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -91,7 +91,7 @@
       <div class="header">
         <div class="header-top">
           <div class="badge">Sua Jornada Seu Destino</div>
-          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">
+          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
             <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
           </a>
         </div>
@@ -123,9 +123,9 @@
         <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
 
         <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal</a>
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal</a>
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram</a>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
@@ -145,122 +145,320 @@
   </audio>
 
   <script>
-    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    // === Config/Elementos ===
+    const ENDPOINT = "https://oracaooo.onrender.com/tts"; // ou seu proxy /api/tts
     const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
-    const SITE_URL = window.location.href.split('#')[0];
-    const nomeInput = document.getElementById('nome');
-    const statusEl = document.getElementById('status');
-    const player = document.getElementById('player');
-    const btnOuvir = document.getElementById('btn-ouvir');
+
+    const nomeInput   = document.getElementById('nome');
+    const statusEl    = document.getElementById('status');
+    const player      = document.getElementById('player');
+    const btnOuvir    = document.getElementById('btn-ouvir');
     const btnDownload = document.getElementById('btn-download');
-    const progress = document.getElementById('progress');
-    const bar = document.getElementById('progress-bar');
-    const harpa = document.getElementById('harpa');
-    const chkMute = document.getElementById('mute-sounds');
+    const progress    = document.getElementById('progress');
+    const bar         = document.getElementById('progress-bar');
+    const harpa       = document.getElementById('harpa');
+    const chkMute     = document.getElementById('mute-sounds');
 
+    // volume harpa
     if (harpa) harpa.volume = 0.35;
-    const setMuted = (m)=>{harpa.muted=m;localStorage.setItem('oracao.muted',m?'1':'0');};
+    const setMuted = (m)=>{ if (harpa) harpa.muted = m; localStorage.setItem('oracao.muted', m ? '1' : '0'); };
     chkMute.addEventListener('change',()=>setMuted(chkMute.checked));
-    (()=>{const m=localStorage.getItem('oracao.muted')==='1';chkMute.checked=m;setMuted(m);})();
+    (()=>{ const m = localStorage.getItem('oracao.muted')==='1'; chkMute.checked=m; setMuted(m); })();
 
+    // === Textos longos (personaliza {{nome}}) ===
     const ORACOES = {
-      bencao:`{{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha teu coração.`,
-      gratidao:`{{nome}}, agradeça hoje pelas pequenas alegrias e por tudo que Deus já fez.`,
-      aniversario:`{{nome}}, parabéns! Que Deus abençoe teus dias com saúde, fé e amor.`,
-      manha:`{{nome}}, que tua manhã seja guiada pela luz divina.`,
-      noite:`{{nome}}, durma em paz, Deus vela por ti.`,
-      protecao:`{{nome}}, que o Senhor seja teu escudo e tua fortaleza.`
+      bencao: [
+`{{nome}}, respire fundo... Agora, receba esta oração.
+
+O Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o teu coração.
+Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.`,
+`Que a luz de Deus ilumine teus passos hoje e sempre.
+Que Ele te cubra com favor diante dos homens e te guie com sabedoria em cada decisão.`,
+`Seja abençoado(a), {{nome}}. Que a graça do Altíssimo te envolva agora e para sempre. Amém.`
+      ],
+      gratidao: [
+`{{nome}}, hoje levantamos a nossa voz em gratidão.
+Pelo dom da vida, pelas pequenas alegrias, pelos livramentos que nem vimos.`,
+`Que teu coração se encha de reconhecimento, e que a gratidão abra portas de favor.
+Onde houver murmúrio, que nasça louvor; onde houver falta, que floresça provisão.`,
+`Obrigado, Senhor, por tudo que já fizeste e pelo que ainda farás na vida de {{nome}}. Amém.`
+      ],
+      aniversario: [
+`Hoje, Senhor, agradecemos pela vida de {{nome}}.
+Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e no amor.`,
+`Abençoa os caminhos de {{nome}}, trazendo saúde, alegria e realizações.
+Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz o(a) conduza em cada passo.`,
+`Parabéns, {{nome}}! Que a graça divina te envolva hoje e sempre. Amém.`
+      ],
+      manha: [
+`{{nome}}, ao despertar, acolhe a luz de Deus.
+Que teus pensamentos sejam guiados pela sabedoria, e tuas decisões, pela paz.`,
+`Onde houver ansiedade, que reine calma; onde houver cansaço, que venha ânimo.
+Senhor, abençoa o caminho de {{nome}} neste dia, e firma seus passos.`,
+`Que a Tua presença acompanhe {{nome}} desde agora e para sempre. Amém.`
+      ],
+      noite: [
+`{{nome}}, que o descanso desta noite seja guardado pelo Altíssimo.
+Que os anjos acampem ao teu redor, e toda inquietação se transforme em serenidade.`,
+`O que foi dor, seja cura; o que foi peso, aprendizado.
+Derrama, Senhor, Tua paz sobre o coração de {{nome}}.`,
+`Dorme em paz, {{nome}}. Deus vela por ti. Amém.`
+      ],
+      protecao: [
+`{{nome}}, que o Senhor seja teu escudo e a tua fortaleza.
+Que nenhum mal alcance tua morada e teus passos sejam firmados na luz.`,
+`Que a presença de Deus afaste toda sombra e te revista de coragem.
+Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
+`Cobre, Senhor, a vida de {{nome}} com proteção hoje e sempre. Amém.`
+      ]
     };
 
-    async function sha256Hex(s){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-    const TTS_CACHE_NAME='tts-audios-v1';
-    async function getFromCache(key){const c=await caches.open(TTS_CACHE_NAME);const r=await c.match(new Request(key));return r?await r.blob():null;}
-    async function putInCache(key,b){const c=await caches.open(TTS_CACHE_NAME);await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));}
-    async function getOrGenerateAudio({text,voiceId}){
-      const key='/tts-cache/'+await sha256Hex(voiceId+'::'+text);
-      const cached=await getFromCache(key);
-      if(cached&&cached.size>0)return{blob:cached,fromCache:true};
-      const r=await fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},body:JSON.stringify({text,voiceId})});
-      if(!r.ok)throw new Error(r.status);
-      const blob=await r.blob();putInCache(key,blob).catch(()=>{});
-      return{blob,fromCache:false};
+    // === Util: substituir {{nome}} ===
+    function personalize(text, nome) {
+      return text.replace(/\{\{\s*nome\s*\}\}/gi, nome || '');
     }
 
+    // === Split em blocos seguros p/ TTS (por parágrafo + limite) ===
+    function splitIntoChunks(paragraphs, nome, maxChars = 280) {
+      const chunks = [];
+      for (const pRaw of paragraphs) {
+        const p = personalize(pRaw, nome).trim();
+        if (p.length <= maxChars) { chunks.push(p); continue; }
+        // quebra por frases
+        const parts = p.split(/(?<=[\.\!\?])\s+/);
+        let acc = '';
+        for (const s of parts) {
+          if ((acc + ' ' + s).trim().length <= maxChars) {
+            acc = (acc ? acc + ' ' : '') + s;
+          } else {
+            if (acc) chunks.push(acc);
+            if (s.length <= maxChars) {
+              acc = s;
+            } else {
+              // frase gigante: quebra “forçada”
+              for (let i=0;i<s.length;i+=maxChars) {
+                const slice = s.slice(i, i+maxChars);
+                if (slice.length) chunks.push(slice);
+              }
+              acc = '';
+            }
+          }
+        }
+        if (acc) chunks.push(acc);
+      }
+      return chunks;
+    }
+
+    // === TTS fetch (1 chunk) ===
+    async function fetchTTSBlob(text, voiceId = DEFAULT_VOICE_ID, timeoutMs = 20000) {
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const r = await fetch(ENDPOINT, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'audio/mpeg' },
+          body: JSON.stringify({ text, voiceId }),
+          signal: ctrl.signal
+        });
+        if (!r.ok) {
+          const body = await r.text().catch(()=> '');
+          throw new Error(`HTTP ${r.status} ${body}`);
+        }
+        const b = await r.blob();
+        if (!b || b.size === 0) throw new Error('TTS vazio');
+        return b;
+      } finally { clearTimeout(to); }
+    }
+
+    // === Decode MP3 blob -> AudioBuffer ===
+    async function decodeToBuffer(blob, audioCtx) {
+      const ab = await blob.arrayBuffer();
+      return await audioCtx.decodeAudioData(ab);
+    }
+
+    // === Concat buffers (resample p/ sampleRate alvo e renderiza WAV) ===
+    async function concatToWav(buffers, sampleRate = 44100) {
+      if (!buffers.length) throw new Error('Sem buffers');
+
+      // Total length (em amostras) após reamostragem
+      let totalLength = 0;
+      const resampled = [];
+      for (const buf of buffers) {
+        const srcRate = buf.sampleRate;
+        const lengthInSeconds = buf.length / srcRate;
+        const targetLength = Math.ceil(lengthInSeconds * sampleRate);
+        // offline para resample
+        const off = new OfflineAudioContext(1, targetLength, sampleRate);
+        const src = off.createBufferSource();
+        // mix down p/ mono
+        const mono = off.createBuffer(1, buf.length, buf.sampleRate);
+        // se for estéreo, faz média dos canais
+        if (buf.numberOfChannels > 1) {
+          const ch0 = buf.getChannelData(0);
+          const ch1 = buf.getChannelData(1);
+          const m = mono.getChannelData(0);
+          for (let i=0;i<m.length;i++) m[i] = ((ch0[i]||0)+(ch1[i]||0))/2;
+        } else {
+          mono.copyToChannel(buf.getChannelData(0), 0);
+        }
+        src.buffer = mono;
+        src.connect(off.destination);
+        src.start();
+        const rendered = await off.startRendering();
+        resampled.push(rendered);
+        totalLength += rendered.length;
+      }
+
+      // concatena
+      const finalOff = new OfflineAudioContext(1, totalLength, sampleRate);
+      let offset = 0;
+      for (const b of resampled) {
+        const src = finalOff.createBufferSource();
+        src.buffer = b;
+        src.connect(finalOff.destination);
+        src.start(offset / sampleRate);
+        offset += b.length;
+      }
+      const finalBuf = await finalOff.startRendering();
+
+      // exporta WAV PCM 16-bit
+      return audioBufferToWav(finalBuf);
+    }
+
+    // === PCM16 WAV encoder ===
+    function audioBufferToWav(buffer) {
+      const numOfChan = 1;
+      const sampleRate = buffer.sampleRate;
+      const samples = buffer.getChannelData(0);
+      const bytesPerSample = 2; // 16-bit
+      const blockAlign = numOfChan * bytesPerSample;
+      const bufferLength = 44 + samples.length * bytesPerSample;
+      const ab = new ArrayBuffer(bufferLength);
+      const view = new DataView(ab);
+
+      // RIFF header
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + samples.length * bytesPerSample, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true); // chunk size
+      view.setUint16(20, 1, true);  // PCM
+      view.setUint16(22, numOfChan, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, sampleRate * blockAlign, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, 16, true); // bits
+      writeString(view, 36, 'data');
+      view.setUint32(40, samples.length * bytesPerSample, true);
+
+      // PCM samples
+      floatTo16BitPCM(view, 44, samples);
+
+      return new Blob([view], { type: 'audio/wav' });
+
+      function writeString(dv, offset, str) {
+        for (let i=0;i<str.length;i++) dv.setUint8(offset+i, str.charCodeAt(i));
+      }
+      function floatTo16BitPCM(dv, offset, input) {
+        let pos = offset;
+        for (let i=0;i<input.length;i++, pos+=2) {
+          let s = Math.max(-1, Math.min(1, input[i]));
+          dv.setInt16(pos, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        }
+      }
+    }
+
+    // === Geração principal (em blocos) ===
     async function gerarAudio(){
-      const tipo=document.getElementById('tipo').value;
-      const nome=(nomeInput.value||'').trim();
-      const texto=ORACOES[tipo].replace(/\{\{\s*nome\s*\}\}/gi,nome||'');
-      statusEl.textContent='🙏 Preparando a oração...';
-      progress.style.display='block';
-      bar.style.width='0%';
-      btnOuvir.disabled=true;
+      const tipo = document.getElementById('tipo').value;
+      const nome = (nomeInput.value || '').trim();
+      const paragraphs = ORACOES[tipo];
+      const chunks = splitIntoChunks(paragraphs, nome, 320); // máx ~320 chars por requisição
 
-      let pct=0;
-      const loader=setInterval(()=>{pct=Math.min(pct+Math.random()*15,95);bar.style.width=pct+'%';},400);
+      statusEl.textContent = '🙏 Preparando a oração...';
+      progress.style.display = 'block';
+      bar.style.width = '0%';
+      btnOuvir.disabled = true;
 
-      try{
-        const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});
-        clearInterval(loader);bar.style.width='100%';setTimeout(()=>progress.style.display='none',800);
-        const url=URL.createObjectURL(blob);
-        player.src=url;player.play().catch(()=>{});
-        btnDownload.href=url;btnDownload.download=`oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.mp3`;
-        btnDownload.style.display='inline-flex';
-        statusEl.textContent=fromCache?'⚡ Oração carregada instantaneamente!':'✨ Oração gerada com sucesso!';
-        harpa?.pause();try{harpa.currentTime=0;}catch{};harpa?.play().catch(()=>{});
-      }catch(e){
-        clearInterval(loader);progress.style.display='none';statusEl.textContent='❌ Erro ao gerar áudio.';
-      }finally{btnOuvir.disabled=false;}
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      try {
+        const buffers = [];
+        for (let i=0; i<chunks.length; i++) {
+          const part = chunks[i];
+          statusEl.textContent = `🎙️ Gerando parte ${i+1}/${chunks.length}...`;
+          const blob = await fetchTTSBlob(part, DEFAULT_VOICE_ID);
+          const buf  = await decodeToBuffer(blob, audioCtx);
+          buffers.push(buf);
+          const pct = Math.round(((i+1) / chunks.length) * 95);
+          bar.style.width = pct + '%';
+        }
+
+        statusEl.textContent = '🔊 Unindo partes...';
+        const wavBlob = await concatToWav(buffers, 44100);
+        bar.style.width = '100%';
+        setTimeout(()=>progress.style.display='none',800);
+
+        const url = URL.createObjectURL(wavBlob);
+        player.src = url;
+        player.play().catch(()=>{});
+
+        btnDownload.href = url;
+        btnDownload.download = `oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.wav`;
+        btnDownload.style.display = 'inline-flex';
+
+        statusEl.textContent = '✨ Oração gerada com sucesso!';
+        // harpa de conclusão
+        harpa?.pause(); try{ harpa.currentTime = 0; }catch{}; harpa?.play().catch(()=>{});
+      } catch (e) {
+        console.error(e);
+        progress.style.display = 'none';
+        statusEl.textContent = '❌ Erro ao gerar áudio. ' + (e?.message || '');
+      } finally {
+        btnOuvir.disabled = false;
+        audioCtx.close().catch(()=>{});
+      }
     }
-    btnOuvir.addEventListener('click',gerarAudio);
-    <script>
-// --- Compartilhamento (WhatsApp e Telegram)
-const btnWhats = document.getElementById('btn-whats');
-const btnTg    = document.getElementById('btn-telegram');
 
-// usa a URL canônica da página (sem hash)
-const SHARE_URL = location.origin + location.pathname;
+    btnOuvir.addEventListener('click', gerarAudio);
 
-function montarMsgShare(nome) {
-  const s = nome ? `${nome}, ` : '';
-  return `${s}receba esta Oração de Bênção Divina 🙏
+    // === Compartilhamento (WhatsApp / Telegram) ===
+    const btnWhats = document.getElementById('btn-whats');
+    const btnTg    = document.getElementById('btn-telegram');
+    const SHARE_URL = location.origin + location.pathname;
+
+    function montarMsgShare(nome) {
+      const s = nome ? `${nome}, ` : '';
+      return `${s}receba esta Oração de Bênção Divina 🙏
 
 Ouça sua oração aqui:
 ${SHARE_URL}
 
 Que Deus ilumine seus passos hoje e sempre. Amém.`;
-}
-
-// tente abrir pop-up; se bloqueado, faz fallback navegando direto
-function openShare(url) {
-  const w = window.open(url, '_blank', 'noopener,noreferrer');
-  if (!w) location.href = url;
-}
-
-btnWhats?.addEventListener('click', (e) => {
-  e.preventDefault();
-  const nome = (document.getElementById('nome').value || '').trim();
-  const msg  = montarMsgShare(nome);
-
-  // Compartilhamento nativo (Android/iOS/Chromium)
-  if (navigator.share) {
-    navigator.share({ title: 'Oração de Bênção Divina', text: msg, url: SHARE_URL })
-      .catch(() => {});
-    return;
     }
-
-  // Link Web padrão
-  const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  openShare(wa);
-});
-
-btnTg?.addEventListener('click', (e) => {
-  e.preventDefault();
-  const nome = (document.getElementById('nome').value || '').trim();
-  const msg  = montarMsgShare(nome);
-
-  const tg = `https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(msg)}`;
-  openShare(tg);
-});
-</script>
+    function openShare(url) {
+      const w = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!w) location.href = url;
+    }
+    btnWhats?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nome = (nomeInput.value || '').trim();
+      const msg = montarMsgShare(nome);
+      if (navigator.share) {
+        navigator.share({ title: 'Oração de Bênção Divina', text: msg, url: SHARE_URL }).catch(()=>{});
+        return;
+      }
+      const wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+      openShare(wa);
+    });
+    btnTg?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nome = (nomeInput.value || '').trim();
+      const msg = montarMsgShare(nome);
+      const tg = `https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(msg)}`;
+      openShare(tg);
+    });
+  </script>
 </body>
 </html>
