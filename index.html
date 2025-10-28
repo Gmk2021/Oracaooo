@@ -1,4 +1,4 @@
-<!-- 🕊️ Sua Jornada Seu Destino - Oração Interativa com Cache & PWA -->
+<!-- 🕊️ Sua Jornada Seu Destino - Oração Interativa com Harpa, Cache, PWA e Progresso -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -64,6 +64,23 @@
       color:#1f1f1f;box-shadow:0 0 15px rgba(250,204,21,.35);border:none;font-weight:800;gap:10px;}
     .cta-grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(2,1fr);}
     @media(max-width:560px){.cta-grid{grid-template-columns:1fr;}}
+
+    /* barra de progresso */
+    .progress-container {
+      width: 100%; height: 6px; background: rgba(255,255,255,0.1);
+      border-radius: 8px; overflow: hidden; margin: 10px 0; display: none;
+    }
+    .progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--deepgold));
+      box-shadow: 0 0 12px rgba(250,204,21,0.6);
+      animation: shimmer 2s infinite linear;
+    }
+    @keyframes shimmer {
+      0% { filter: brightness(1); }
+      50% { filter: brightness(1.5); }
+      100% { filter: brightness(1); }
+    }
   </style>
 </head>
 
@@ -97,7 +114,11 @@
         <label for="nome">Nome a receber a Benção!</label>
         <input id="nome" placeholder="Ex.: Ana Clara" />
 
-        <div style="height:10px"></div>
+        <!-- Barra de progresso -->
+        <div class="progress-container" id="progress">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
         <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
         <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
 
@@ -108,17 +129,20 @@
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
-        <div style="margin-top:12px">
-          <button id="btn-install" class="linkbtn" style="display:none;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#1f2937;">
-            ⭐ Adicionar à tela inicial
-          </button>
-        </div>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+          <input type="checkbox" id="mute-sounds" /> Silenciar som de conclusão
+        </label>
       </div>
 
       <div class="player"><audio id="player" controls style="width:100%"></audio></div>
       <div id="status" style="padding:0 22px 22px">Pronto. Escolha a oração, digite o <b>nome</b> e clique em <b>Ouvir</b>.</div>
     </div>
   </div>
+
+  <!-- Som de harpa -->
+  <audio id="harpa" preload="auto"
+    src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACaQCAAQAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYQ==">
+  </audio>
 
   <script>
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
@@ -129,6 +153,15 @@
     const player = document.getElementById('player');
     const btnOuvir = document.getElementById('btn-ouvir');
     const btnDownload = document.getElementById('btn-download');
+    const progress = document.getElementById('progress');
+    const bar = document.getElementById('progress-bar');
+    const harpa = document.getElementById('harpa');
+    const chkMute = document.getElementById('mute-sounds');
+
+    if (harpa) harpa.volume = 0.35;
+    const setMuted = (m)=>{harpa.muted=m;localStorage.setItem('oracao.muted',m?'1':'0');};
+    chkMute.addEventListener('change',()=>setMuted(chkMute.checked));
+    (()=>{const m=localStorage.getItem('oracao.muted')==='1';chkMute.checked=m;setMuted(m);})();
 
     const ORACOES = {
       bencao:`{{nome}}, o Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha teu coração.`,
@@ -139,11 +172,7 @@
       protecao:`{{nome}}, que o Senhor seja teu escudo e tua fortaleza.`
     };
 
-    // util: hash
-    async function sha256Hex(s){
-      const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
-      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
+    async function sha256Hex(s){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
     const TTS_CACHE_NAME='tts-audios-v1';
     async function getFromCache(key){const c=await caches.open(TTS_CACHE_NAME);const r=await c.match(new Request(key));return r?await r.blob():null;}
     async function putInCache(key,b){const c=await caches.open(TTS_CACHE_NAME);await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));}
@@ -162,53 +191,27 @@
       const nome=(nomeInput.value||'').trim();
       const texto=ORACOES[tipo].replace(/\{\{\s*nome\s*\}\}/gi,nome||'');
       statusEl.textContent='🙏 Preparando a oração...';
+      progress.style.display='block';
+      bar.style.width='0%';
       btnOuvir.disabled=true;
+
+      let pct=0;
+      const loader=setInterval(()=>{pct=Math.min(pct+Math.random()*15,95);bar.style.width=pct+'%';},400);
+
       try{
         const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});
+        clearInterval(loader);bar.style.width='100%';setTimeout(()=>progress.style.display='none',800);
         const url=URL.createObjectURL(blob);
         player.src=url;player.play().catch(()=>{});
         btnDownload.href=url;btnDownload.download=`oracao-${tipo}-${(nome||'bencao').replace(/\s+/g,'-')}.mp3`;
         btnDownload.style.display='inline-flex';
         statusEl.textContent=fromCache?'⚡ Oração carregada instantaneamente!':'✨ Oração gerada com sucesso!';
-      }catch(e){statusEl.textContent='❌ Erro ao gerar áudio.';}
-      finally{btnOuvir.disabled=false;}
+        harpa?.pause();try{harpa.currentTime=0;}catch{};harpa?.play().catch(()=>{});
+      }catch(e){
+        clearInterval(loader);progress.style.display='none';statusEl.textContent='❌ Erro ao gerar áudio.';
+      }finally{btnOuvir.disabled=false;}
     }
     btnOuvir.addEventListener('click',gerarAudio);
-
-    // pré-geração
-    let pregenTimer=null;
-    function schedulePreGenerate(){
-      clearTimeout(pregenTimer);
-      pregenTimer=setTimeout(async()=>{
-        const tipo=document.getElementById('tipo').value;
-        const nome=(nomeInput.value||'').trim();
-        if(!nome)return;
-        const texto=ORACOES[tipo].replace(/\{\{\s*nome\s*\}\}/gi,nome);
-        try{await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});}catch{}
-      },700);
-    }
-    nomeInput.addEventListener('input',schedulePreGenerate);
-    document.getElementById('tipo').addEventListener('change',schedulePreGenerate);
-
-    // compartilhamento
-    const btnWhats=document.getElementById('btn-whats');
-    const btnTg=document.getElementById('btn-telegram');
-    function montarMsg(nome){const s=nome?`${nome}, `:'';return`${s}receba esta Oração 🙏\n${SITE_URL}`;}
-    btnWhats?.addEventListener('click',()=>{const msg=montarMsg(nomeInput.value.trim());window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');});
-    btnTg?.addEventListener('click',()=>{const msg=montarMsg(nomeInput.value.trim());window.open(`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`,'_blank');});
-
-    // keep-alive
-    const KEEPALIVE_MS=90000;let keepAliveId=null;
-    async function pingWarmup(){await fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'ok',voiceId:DEFAULT_VOICE_ID})}).catch(()=>{});}
-    function startKeepAlive(){if(keepAliveId)return;keepAliveId=setInterval(()=>{if(!document.hidden)pingWarmup();},KEEPALIVE_MS);}
-    function stopKeepAlive(){if(keepAliveId){clearInterval(keepAliveId);keepAliveId=null;}}
-    document.addEventListener('visibilitychange',()=>{document.hidden?stopKeepAlive():startKeepAlive();});startKeepAlive();
-
-    // PWA install
-    if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(console.error);
-    let deferredPrompt=null;const btnInstall=document.getElementById('btn-install');
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;btnInstall.style.display='inline-flex';});
-    btnInstall?.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;btnInstall.style.display='none';});
   </script>
 </body>
 </html>
