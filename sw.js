@@ -1,112 +1,82 @@
-// SERVICE WORKER — v1.0.7
-const CACHE_VERSION = 'v1.0.7';
+// SERVICE WORKER – PWA estável + atualização suave
+// 👉 sempre que alterar qualquer arquivo do app, mude a versão abaixo
+const CACHE_VERSION = 'v1.1.0';
 const CACHE_NAME = `oracao-cache-${CACHE_VERSION}`;
 
+// arquivos essenciais do app (app shell)
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  // ícones e imagens usadas na UI
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/icon-maskable.png',
   './icons/canal.png'
 ];
 
-// ——— Instalação: pré-cache do app shell (não falha se algum asset faltar)
+// instala e pré-cacheia o app shell (ignora falhas individuais)
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
     await Promise.allSettled(APP_SHELL.map(async (url) => {
       try {
         const resp = await fetch(url, { cache: 'no-cache' });
-        if (!resp.ok) throw new Error(`${resp.status}`);
+        if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
         await cache.put(url, resp);
       } catch (err) {
-        console.warn('[SW] Falhou ao cachear:', url, err.message);
+        console.warn('[SW] Falha ao cachear:', url, err.message);
       }
     }));
   })());
   self.skipWaiting();
 });
 
-// ——— Ativação: limpa caches antigos e habilita navigation preload (quando houver)
+// ativa nova versão e limpa caches antigos
 self.addEventListener('activate', (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : Promise.resolve())));
-    if (self.registration.navigationPreload) {
-      try { await self.registration.navigationPreload.enable(); } catch {}
-    }
-  })());
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
   self.clients.claim();
 });
 
-// ——— Estratégias de fetch:
-// • Páginas (document): network-first com fallback para cache e depois index (offline)
-// • Demais GET: stale-while-revalidate
+// estratégia: Stale-While-Revalidate (rápido + atualiza ao fundo)
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
+  // só GET
+  if (event.request.method !== 'GET') return;
 
-  // não interferir em POST/PUT/etc. (ex.: TTS)
-  if (request.method !== 'GET') return;
-
-  const isDocument = request.mode === 'navigate' || request.destination === 'document';
-
-  if (isDocument) {
-    event.respondWith((async () => {
-      try {
-        // tenta usar o navigation preload quando disponível
-        const preload = await event.preloadResponse;
-        if (preload) return preload;
-
-        const net = await fetch(request, { cache: 'no-store' });
-        // atualiza cópia do index para fallback
-        const cache = await caches.open(CACHE_NAME);
-        cache.put('./', net.clone());
-        return net;
-      } catch {
-        // offline → tenta cache
-        const cache = await caches.open(CACHE_NAME);
-        const cached = await cache.match(request) || await cache.match('./') || await cache.match('./index.html');
-        if (cached) return cached;
-        // último recurso: resposta vazia básica
-        return new Response('<h1>Offline</h1><p>Tente novamente quando voltar a conexão.</p>', {
-          headers: { 'Content-Type': 'text/html; charset=UTF-8' }, status: 503
-        });
-      }
-    })());
-    return;
-  }
-
-  // assets estáticos → stale-while-revalidate
   event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(request);
-    const netPromise = fetch(request).then((netRes) => {
-      if (netRes && netRes.ok) cache.put(request, netRes.clone());
-      return netRes;
-    }).catch(() => null);
-
-    // prioriza cache (rápido) e atualiza em segundo plano
+    // tenta cache primeiro
+    const cached = await caches.match(event.request);
     if (cached) {
-      netPromise.catch(() => {});
+      // atualiza ao fundo (não bloqueia a resposta)
+      fetch(event.request).then((fresh) => {
+        if (fresh && fresh.ok) {
+          caches.open(CACHE_NAME).then(c => c.put(event.request, fresh.clone()));
+        }
+      }).catch(() => {});
       return cached;
     }
-    // sem cache: tenta rede
-    const net = await netPromise;
-    if (net) return net;
 
-    // fallback genérico
-    return new Response('', { status: 504 });
+    // se não tem no cache, tenta rede e salva
+    try {
+      const net = await fetch(event.request);
+      if (net && net.ok) {
+        (await caches.open(CACHE_NAME)).put(event.request, net.clone());
+      }
+      return net;
+    } catch {
+      // fallback simples: devolve index para navegação offline
+      return caches.match('./index.html');
+    }
   })());
 });
 
-// ——— Mensagens do cliente (página) para controlar atualização
+// recebe mensagens da página para forçar atualização imediata
 self.addEventListener('message', (event) => {
   const { type } = event.data || {};
-  if (type === 'SKIP_WAITING' || type === 'CHECK_VERSION') {
+  if (type === 'CHECK_VERSION' || type === 'SKIP_WAITING') {
     self.skipWaiting();
-    // opcional: responder com a versão atual
-    event.source?.postMessage?.({ type: 'SW_VERSION', version: CACHE_VERSION });
   }
 });
