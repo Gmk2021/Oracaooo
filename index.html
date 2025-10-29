@@ -1,3 +1,4 @@
+<!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (PWA + Share + Cache TTS) -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -7,102 +8,197 @@
   <meta name="theme-color" content="#0b1020" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+
   <style>
-    :root{--card:rgba(17,24,39,.72);--text:#f1f5f9;--primary:#a7f3d0;--accent:#fcd34d;--gold:#facc15;--deepgold:#ca8a04}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:#0b1020;min-height:100vh}
-    .wrap{display:grid;place-items:center;min-height:100vh;padding:24px}
-    .card{width:min(860px,96vw);background:var(--card);backdrop-filter:blur(8px);border-radius:18px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.45)}
-    .header{padding:26px}
-    .badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px;font-weight:700}
-    .channel-icon{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:12px;color:#e2e8f0;font-weight:600;float:right}
+    :root{
+      --overlay: rgba(0,0,0,.45);
+      --card: rgba(17,24,39,.72);
+      --muted:#cbd5e1; --text:#f1f5f9;
+      --primary:#a7f3d0; --accent:#fcd34d;
+      --gold:#facc15; --deepgold:#ca8a04;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text); background:#0b1020; min-height:100vh;
+    }
+    .bg{position:fixed;inset:0;background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;}
+    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));}
+    .wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:100vh;padding:24px}
+    .card{
+      width:min(860px,96vw); background:var(--card); backdrop-filter:blur(8px);
+      border-radius:18px; border:1px solid rgba(255,255,255,.08); overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,.45);
+    }
+    .header{padding:26px 26px 10px}
+    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .badge{
+      font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px
+    }
+    .channel-icon{
+      display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;border-radius:12px;color:#e2e8f0;font-weight:600;transition:.25s ease
+    }
+    .channel-icon:hover{border-color:rgba(255,255,255,.25);transform:translateY(-1px)}
+    .channel-icon img{width:48px;height:48px;border-radius:10px;display:block}
     h1{margin:0 0 6px;font-size:28px}
-    p.desc{margin:0;color:#cbd5e1}
-    input,select,button{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px}
-    button.primary{background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;color:#04140f;cursor:pointer}
-    button.primary:hover{transform:scale(1.02)}
-    .progress-container{width:100%;height:10px;background:rgba(255,255,255,.10);border-radius:10px;overflow:hidden;display:none}
-    .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--deepgold));box-shadow:0 0 12px rgba(250,204,21,.6)}
-    .status-pill{margin:10px 0;padding:12px 14px;border-radius:12px;font-weight:700;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06)}
-    .status-pill.ok{background:linear-gradient(135deg,#34d399,#10b981);color:#062e28}
-    .status-pill.err{background:linear-gradient(135deg,#fca5a5,#ef4444);color:#3b0a0a}
-    .status-pill.loading{background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#1f2937}
+    p.desc{margin:0;color:var(--muted)}
+    p.desc b.highlight{color:var(--accent)}
+    .content{padding:18px 22px 6px}
+    label{display:block;margin-bottom:6px;font-weight:600}
+    input,select,button{
+      width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px
+    }
+    button.primary{
+      background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;
+      color:#04140f;cursor:pointer;transition:.3s ease
+    }
+    button.primary:hover{box-shadow:0 0 25px 6px rgba(52,211,153,.4);transform:scale(1.02)}
+    .linkbtn{
+      border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;
+      text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.25s ease;
+      width:100%;min-height:48px
+    }
+    .linkbtn.youtube{background:linear-gradient(135deg,#ff6b6b,#ff3b3b);color:#fff}
+    .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f}
+    .linkbtn.instagram{background:linear-gradient(135deg,#ff6db3,#e1306c);color:#fff}
+    .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff}
+    .linkbtn.download{
+      background:linear-gradient(135deg,var(--gold),var(--deepgold));
+      color:#1f1f1f;border:none;font-weight:800;gap:10px;box-shadow:0 0 15px rgba(250,204,21,.35)
+    }
+    .cta-grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(2,1fr)}
+    @media(max-width:560px){.cta-grid{grid-template-columns:1fr}}
+
+    /* Barra de progresso larga */
+    .progress-wrap{margin:10px 0 4px}
+    .progress-container{
+      width:100%;height:10px;background:rgba(255,255,255,.10);border-radius:10px;overflow:hidden;display:none
+    }
+    .progress-bar{
+      height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--deepgold));
+      box-shadow:0 0 12px rgba(250,204,21,.6);animation:shimmer 2s infinite linear
+    }
+    @keyframes shimmer{0%{filter:brightness(1)}50%{filter:brightness(1.5)}100%{filter:brightness(1)}}
+
+    /* Status entre nome e botão */
+    .status-pill{
+      margin:10px 0 10px;padding:12px 14px;border-radius:12px;font-weight:700;letter-spacing:.2px;
+      display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);color:#e2e8f0;box-shadow:0 8px 28px rgba(0,0,0,.25)
+    }
+    .status-pill.ok{
+      background:linear-gradient(135deg,#34d399,#10b981);color:#062e28;border-color:rgba(16,185,129,.35)
+    }
+    .status-pill.err{
+      background:linear-gradient(135deg,#fca5a5,#ef4444);color:#3b0a0a;border-color:rgba(239,68,68,.35)
+    }
+    .status-pill.loading{
+      background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#1f2937;border-color:rgba(245,158,11,.35)
+    }
+    .status-pill.loading::before{content:"⏳"} .status-pill.ok::before{content:"✨"} .status-pill.err::before{content:"❌"}
   </style>
 </head>
+
 <body>
+  <div class="bg"></div>
   <div class="wrap">
     <div class="card">
       <div class="header">
-        <div class="badge">Sua Jornada Seu Destino</div>
-        <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">
-          <img src="./icons/canal.png" width="40"> Canal
-        </a>
+        <div class="header-top">
+          <div class="badge">Sua Jornada Seu Destino</div>
+          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
+            <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
+          </a>
+        </div>
         <h1>Oração de Bênção Divina</h1>
-        <p class="desc">Escolha o tipo, digite o nome e clique em <b>Ouvir Oração</b>.</p>
+        <p class="desc">Escolha o tipo, digite o nome e clique em <b class="highlight">Ouvir Oração</b>.</p>
       </div>
-      <div style="padding:20px">
-        <label>Tipo de oração:</label>
+
+      <div class="content">
+        <label for="tipo">Escolha a oração:</label>
         <select id="tipo">
-          <option value="bencao">Bênção Divina</option>
-          <option value="gratidao">Gratidão</option>
-          <option value="aniversario">Aniversário</option>
-          <option value="manha">Manhã</option>
-          <option value="noite">Noite</option>
-          <option value="protecao">Proteção</option>
+          <option value="bencao">Oração de Bênção Divina</option>
+          <option value="gratidao">Oração de Gratidão</option>
+          <option value="aniversario">Oração de Aniversário</option>
+          <option value="manha">Oração da Manhã</option>
+          <option value="noite">Oração da Noite</option>
+          <option value="protecao">Oração de Proteção</option>
         </select>
-        <br><br>
-        <label>Nome:</label>
-        <input id="nome" placeholder="Ex: Ana Clara">
-        <div id="status" class="status-pill">Pronto para gerar oração 🙏</div>
-        <div class="progress-container" id="progress"><div class="progress-bar" id="progress-bar"></div></div>
-        <button id="btn-ouvir" class="primary">🎧 Ouvir Oração</button>
-        <a id="btn-download" class="primary" style="display:none;margin-top:10px;text-align:center;text-decoration:none;">🔊 Baixar Áudio</a>
-        <audio id="player" controls style="width:100%;margin-top:10px"></audio>
+
+        <div style="height:10px"></div>
+        <label for="nome">Nome a receber a Benção!</label>
+        <input id="nome" placeholder="Ex.: Ana Clara" />
+
+        <!-- STATUS (entre o nome e o botão) -->
+        <div id="status" class="status-pill" aria-live="polite" role="status">
+          Pronto. Escolha a oração, digite o <b>nome</b> e clique em <b>Ouvir</b>.
+        </div>
+
+        <!-- Progresso largo -->
+        <div class="progress-wrap">
+          <div class="progress-container" id="progress">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+
+        <button id="btn-ouvir" type="button" class="primary">🎧 Ouvir oração</button>
+        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
+
+        <div class="cta-grid">
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal</a>
+          <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
+          <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
+        </div>
+
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+          <input type="checkbox" id="mute-sounds" /> Silenciar som de conclusão
+        </label>
       </div>
+
+      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
     </div>
   </div>
 
-  <!-- áudio embutido -->
+  <!-- Som de harpa (curtinho) -->
   <audio id="harpa" preload="auto"
     src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACaQCAAQAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYQ==">
   </audio>
 
   <script>
+    /* ====== Config ====== */
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
     const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+
+    /* ====== Elos ====== */
     const nomeInput = document.getElementById('nome');
-    const tipoSel = document.getElementById('tipo');
-    const statusEl = document.getElementById('status');
-    const player = document.getElementById('player');
-    const btnOuvir = document.getElementById('btn-ouvir');
+    const statusEl  = document.getElementById('status');
+    const player    = document.getElementById('player');
+    const btnOuvir  = document.getElementById('btn-ouvir');
     const btnDownload = document.getElementById('btn-download');
-    const progress = document.getElementById('progress');
-    const bar = document.getElementById('progress-bar');
+    const progress  = document.getElementById('progress');
+    const bar       = document.getElementById('progress-bar');
+    const harpa     = document.getElementById('harpa');
+    const chkMute   = document.getElementById('mute-sounds');
 
-    /* ====== HARPA FALLBACK ====== */
-    window.__harpaMuted = false;
-    function playChimeFallback(){
-      if(window.__harpaMuted) return;
-      const ac = new (window.AudioContext || window.webkitAudioContext)();
-      const now = ac.currentTime;
-      const gain = ac.createGain(); gain.gain.value = 0.2; gain.connect(ac.destination);
-      const o1 = ac.createOscillator(); o1.type='sine'; o1.frequency.setValueAtTime(880,now);
-      const o2 = ac.createOscillator(); o2.type='sine'; o2.frequency.setValueAtTime(1174.66,now);
-      const g1 = ac.createGain(); g1.gain.setValueAtTime(0,now); g1.gain.linearRampToValueAtTime(1,now+0.01); g1.gain.exponentialRampToValueAtTime(0.001,now+0.4);
-      const g2 = ac.createGain(); g2.gain.setValueAtTime(0,now); g2.gain.linearRampToValueAtTime(0.8,now+0.03); g2.gain.exponentialRampToValueAtTime(0.001,now+0.6);
-      o1.connect(g1).connect(gain); o2.connect(g2).connect(gain);
-      o1.start(now); o1.stop(now+0.5); o2.start(now+0.03); o2.stop(now+0.65);
-    }
-    async function playHarp(){
-      if(window.__harpaMuted) return;
-      const harpa=document.getElementById('harpa');
-      try{ harpa.muted=false; harpa.volume=0.5; harpa.currentTime=0; await harpa.play(); }catch{ playChimeFallback(); }
-    }
-
-    function setStatus(txt,cls){
+    /* ====== Status helpers ====== */
+    function setStatus(texto, classe){
       statusEl.classList.remove('ok','err','loading');
-      if(cls) statusEl.classList.add(cls);
-      statusEl.innerHTML = txt;
+      if (classe) statusEl.classList.add(classe);
+      statusEl.innerHTML = texto;
     }
+
+    /* ====== Preferência de som ====== */
+    if (harpa) harpa.volume = 0.35;
+    const setMuted = (m)=>{harpa.muted=m;localStorage.setItem('oracao.muted',m?'1':'0');};
+    chkMute.addEventListener('change',()=>setMuted(chkMute.checked));
+    (()=>{ const m=localStorage.getItem('oracao.muted')==='1'; chkMute.checked=m; setMuted(m); })();
+
+    /* ====== Textos (em parágrafos) ====== */
     const ORACOES = {
       bencao: [
 `{{nome}}, respire fundo... Agora, receba esta oração.
@@ -111,7 +207,7 @@ O Senhor te chama pelo nome. Que a paz que excede todo entendimento preencha o t
 Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; onde houver dúvida, que se levante a fé.`,
 `Que a luz de Deus ilumine teus passos hoje e sempre.
 Que Ele te cubra com favor diante dos homens e te guie com sabedoria em cada decisão.`,
-`Seja tua vida abençoada, {{nome}}. Que a graça do Altíssimo te envolva agora e para sempre. Amém.`
+`Seja sua vida abençoada, {{nome}}. Que a graça do Altíssimo te envolva agora e para sempre. Amém.`
       ],
       gratidao: [
 `{{nome}}, hoje levantamos a nossa voz em gratidão.
@@ -149,40 +245,100 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
 `Cobre, Senhor, a vida de {{nome}} com proteção hoje e sempre. Amém.`
       ]
     };
-const TTS_CACHE_NAME='tts-audios-v1';
-    async function sha256Hex(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-    async function getFromCache(k){const c=await caches.open(TTS_CACHE_NAME);const r=await c.match(new Request(k));return r?await r.blob():null;}
-    async function putInCache(k,b){const c=await caches.open(TTS_CACHE_NAME);await c.put(new Request(k),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));}
+
+    /* ====== Cache TTS no Cache Storage ====== */
+    const TTS_CACHE_NAME='tts-audios-v1';
+    async function sha256Hex(s){
+      const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    async function getFromCache(key){const c=await caches.open(TTS_CACHE_NAME);const r=await c.match(new Request(key));return r?await r.blob():null;}
+    async function putInCache(key,b){const c=await caches.open(TTS_CACHE_NAME);await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));}
     async function getOrGenerateAudio({text,voiceId}){
       const key='/tts-cache/'+await sha256Hex(voiceId+'::'+text);
       const cached=await getFromCache(key);
-      if(cached) return{blob:cached,fromCache:true};
-      const r=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},body:JSON.stringify({text,voiceId})});
+      if(cached&&cached.size>0) return{blob:cached,fromCache:true};
+      const r=await fetch(ENDPOINT,{
+        method:'POST',mode:'cors',
+        headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},
+        body:JSON.stringify({text,voiceId})
+      });
       if(!r.ok) throw new Error(r.status);
-      const blob=await r.blob(); putInCache(key,blob); return{blob,fromCache:false};
+      const blob=await r.blob();
+      putInCache(key,blob).catch(()=>{});
+      return{blob,fromCache:false};
     }
 
+    /* ====== Gerar áudio + UI ====== */
     async function gerarAudio(){
-      const tipo=tipoSel.value, nome=(nomeInput.value||'').trim();
-      const texto=(ORACOES[tipo]||[]).map(p=>p.replace(/\{\{\s*nome\s*\}\}/gi,nome)).join('\n\n');
-      setStatus('⏳ Gerando áudio...', 'loading');
+      const tipo=document.getElementById('tipo').value;
+      const nome=(nomeInput.value||'').trim();
+
+      // junta parágrafos e personaliza {{nome}}
+      const texto = (ORACOES[tipo] || [])
+        .map(p => p.replace(/\{\{\s*nome\s*\}\}/gi, nome || ''))
+        .join('\n\n');
+
+      setStatus('🙏 Preparando a oração...', 'loading');
       progress.style.display='block'; bar.style.width='0%';
-      let pct=0; const loader=setInterval(()=>{pct=Math.min(pct+Math.random()*12,95);bar.style.width=pct+'%';},400);
+      btnOuvir.disabled=true;
+
+      // progresso “fake” enquanto o backend processa
+      let pct=0;
+      const loader=setInterval(()=>{pct=Math.min(pct+Math.random()*15,95);bar.style.width=pct+'%';},380);
+
       try{
-        const {blob}=await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});
+        const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});
         clearInterval(loader); bar.style.width='100%'; setTimeout(()=>progress.style.display='none',700);
+
         const url=URL.createObjectURL(blob);
-        player.src=url; player.play();
-        btnDownload.href=url; btnDownload.style.display='block';
-        setStatus('✨ Oração gerada com sucesso!', 'ok');
-        playHarp();
+        player.src=url; player.play().catch(()=>{});
+
+        btnDownload.href=url;
+        btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
+        btnDownload.style.display='inline-flex';
+
+        setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
+
+        // som de conclusão
+        harpa?.pause(); try{harpa.currentTime=0;}catch{}; harpa?.play().catch(()=>{});
       }catch(e){
         clearInterval(loader); progress.style.display='none';
-        setStatus('❌ Erro ao gerar áudio.', 'err');
-        console.error(e);
+        setStatus('❌ Erro ao gerar áudio. Tente novamente.', 'err');
+        console.error('[TTS] Falha:', e);
+      }finally{
+        btnOuvir.disabled=false;
       }
     }
     btnOuvir.addEventListener('click',gerarAudio);
+
+    /* ====== Compartilhamento ====== */
+    const SITE_URL = location.origin + location.pathname;
+    function montarMsg(){
+      const n=(nomeInput.value||'').trim();
+      const prefix = n ? `${n}, ` : '';
+      return `${prefix}receba esta Oração de Bênção Divina 🙏
+
+Ouça sua oração aqui:
+${SITE_URL}
+
+Que Deus ilumine seus passos hoje e sempre. Amém.`;
+    }
+    document.getElementById('btn-whats')?.addEventListener('click',()=>{
+      const msg=montarMsg();
+      if(navigator.share){ navigator.share({title:'Oração de Bênção Divina',text:msg,url:SITE_URL}).catch(()=>{}); return; }
+      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
+    });
+    document.getElementById('btn-telegram')?.addEventListener('click',()=>{
+      const msg=montarMsg();
+      const tg=`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+      window.open(tg,'_blank','noopener');
+    });
+
+    /* ====== PWA ====== */
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.register("./sw.js").catch(console.error);
+    }
   </script>
 </body>
 </html>
