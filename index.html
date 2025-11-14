@@ -1,4 +1,4 @@
-<!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (PWA + Share + Cache TTS) -->
+<!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (Voz masc/fem + Share simples) -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -13,25 +13,40 @@
     :root{
       --overlay: rgba(0,0,0,.45);
       --card: rgba(17,24,39,.72);
-      --muted:#cbd5e1; --text:#f1f5f9;
-      --primary:#a7f3d0; --accent:#fcd34d;
-      --gold:#facc15; --deepgold:#ca8a04;
+      --muted:#cbd5e1; 
+      --text:#f1f5f9;
+      --primary:#a7f3d0; 
+      --accent:#fcd34d;
+      --gold:#facc15; 
+      --deepgold:#ca8a04;
     }
     *{box-sizing:border-box}
     body{
       margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text); background:#0b1020; min-height:100vh;
     }
-    .bg{position:fixed;inset:0;background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;}
-    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));}
-    .wrap{position:relative;z-index:1;display:grid;place-items:center;min-height:100vh;padding:24px}
+    .bg{
+      position:fixed;inset:0;
+      background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+    }
+    .bg::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));
+    }
+    .wrap{
+      position:relative;z-index:1;display:grid;place-items:center;
+      min-height:100vh;padding:24px
+    }
     .card{
       width:min(860px,96vw); background:var(--card); backdrop-filter:blur(8px);
       border-radius:18px; border:1px solid rgba(255,255,255,.08); overflow:hidden;
       box-shadow:0 20px 60px rgba(0,0,0,.45);
     }
     .header{padding:26px 26px 10px}
-    .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .header-top{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;margin-bottom:8px
+    }
     .badge{
       font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px
@@ -46,6 +61,7 @@
     h1{margin:0 0 6px;font-size:28px}
     p.desc{margin:0;color:var(--muted)}
     p.desc b.highlight{color:var(--accent)}
+
     .content{padding:18px 22px 6px}
     label{display:block;margin-bottom:6px;font-weight:600}
     input,select,button{
@@ -56,7 +72,10 @@
       background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;
       color:#04140f;cursor:pointer;transition:.3s ease
     }
-    button.primary:hover{box-shadow:0 0 25px 6px rgba(52,211,153,.4);transform:scale(1.02)}
+    button.primary:hover{
+      box-shadow:0 0 25px 6px rgba(52,211,153,.4);transform:scale(1.02)
+    }
+
     .linkbtn{
       border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;
       text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.25s ease;
@@ -76,13 +95,16 @@
     /* Barra de progresso larga */
     .progress-wrap{margin:10px 0 4px}
     .progress-container{
-      width:100%;height:10px;background:rgba(255,255,255,.10);border-radius:10px;overflow:hidden;display:none
+      width:100%;height:10px;background:rgba(255,255,255,.10);
+      border-radius:10px;overflow:hidden;display:none
     }
     .progress-bar{
       height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--deepgold));
       box-shadow:0 0 12px rgba(250,204,21,.6);animation:shimmer 2s infinite linear
     }
-    @keyframes shimmer{0%{filter:brightness(1)}50%{filter:brightness(1.5)}100%{filter:brightness(1)}}
+    @keyframes shimmer{
+      0%{filter:brightness(1)}50%{filter:brightness(1.5)}100%{filter:brightness(1)}
+    }
 
     /* Status entre nome e botão */
     .status-pill{
@@ -99,7 +121,9 @@
     .status-pill.loading{
       background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#1f2937;border-color:rgba(245,158,11,.35)
     }
-    .status-pill.loading::before{content:"⏳"} .status-pill.ok::before{content:"✨"} .status-pill.err::before{content:"❌"}
+    .status-pill.loading::before{content:"⏳"} 
+    .status-pill.ok::before{content:"✨"} 
+    .status-pill.err::before{content:"❌"}
   </style>
 </head>
 
@@ -115,7 +139,7 @@
           </a>
         </div>
         <h1>Oração de Bênção Divina</h1>
-        <p class="desc">Escolha o tipo, digite o nome e clique em <b class="highlight">Ouvir Oração</b>.</p>
+        <p class="desc">Escolha a oração, o <b>nome</b> e clique em <b class="highlight">Ouvir</b>.</p>
       </div>
 
       <div class="content">
@@ -130,28 +154,34 @@
         </select>
 
         <div style="height:10px"></div>
+
         <label for="nome">Nome a receber a Benção!</label>
         <input id="nome" placeholder="Ex.: Ana Clara" />
 
-        <!-- STATUS (entre o nome e o botão) -->
-        <div id="status" class="status-pill" aria-live="polite" role="status">
-          Que DEUS te Abençoe !
-        </div>
+        <div style="height:10px"></div>
 
-        <!-- Progresso largo -->
+        <!-- Seleção de voz -->
+        <label for="voz">Voz da oração:</label>
+        <select id="voz">
+          <option value="masc">Masculina</option>
+          <option value="fem">Feminina</option>
+        </select>
+
+        <div id="status" class="status-pill">Que DEUS te Abençoe!</div>
+
         <div class="progress-wrap">
           <div class="progress-container" id="progress">
             <div class="progress-bar" id="progress-bar"></div>
           </div>
         </div>
 
-        <button id="btn-ouvir" type="button" class="primary">🎧 Ouvir oração</button>
-        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
+        <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
+        <a id="btn-download" class="linkbtn download" style="display:none">🔊 Baixar último áudio</a>
 
         <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal</a>
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal</a>
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
@@ -160,45 +190,64 @@
         </label>
       </div>
 
-      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
+      <audio id="player" controls style="width:100%"></audio>
     </div>
   </div>
 
-  <!-- Som de harpa (curtinho) -->
+  <!-- Som de harpa -->
   <audio id="harpa" preload="auto"
     src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACaQCAAQAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYQ==">
   </audio>
 
   <script>
-    /* ====== Config ====== */
+    // ===== Config =====
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
-    const DEFAULT_VOICE_ID = "4YYIPFl9wE5c4L2eu2Gb";
+    const VOICE_MASC = "4YYIPFl9wE5c4L2eu2Gb";
+    const VOICE_FEM  = "FrzKLwOr0y3qieiphjs2";
 
-    /* ====== Elos ====== */
-    const nomeInput = document.getElementById('nome');
-    const statusEl  = document.getElementById('status');
-    const player    = document.getElementById('player');
-    const btnOuvir  = document.getElementById('btn-ouvir');
+    // ===== Elementos =====
+    const nomeInput   = document.getElementById('nome');
+    const tipoSelect  = document.getElementById('tipo');
+    const vozSelect   = document.getElementById('voz');
+    const statusEl    = document.getElementById('status');
+    const player      = document.getElementById('player');
+    const btnOuvir    = document.getElementById('btn-ouvir');
     const btnDownload = document.getElementById('btn-download');
-    const progress  = document.getElementById('progress');
-    const bar       = document.getElementById('progress-bar');
-    const harpa     = document.getElementById('harpa');
-    const chkMute   = document.getElementById('mute-sounds');
+    const progress    = document.getElementById('progress');
+    const bar         = document.getElementById('progress-bar');
+    const harpa       = document.getElementById('harpa');
+    const chkMute     = document.getElementById('mute-sounds');
 
-    /* ====== Status helpers ====== */
-    function setStatus(texto, classe){
+    // ===== Status =====
+    function setStatus(msg, cls){
       statusEl.classList.remove('ok','err','loading');
-      if (classe) statusEl.classList.add(classe);
-      statusEl.innerHTML = texto;
+      if (cls) statusEl.classList.add(cls);
+      statusEl.innerHTML = msg;
     }
 
-    /* ====== Preferência de som ====== */
+    // ===== Som harpa + mute =====
     if (harpa) harpa.volume = 0.35;
-    const setMuted = (m)=>{harpa.muted=m;localStorage.setItem('oracao.muted',m?'1':'0');};
-    chkMute.addEventListener('change',()=>setMuted(chkMute.checked));
-    (()=>{ const m=localStorage.getItem('oracao.muted')==='1'; chkMute.checked=m; setMuted(m); })();
+    const setMuted = (m)=>{
+      if (harpa) harpa.muted = m;
+      localStorage.setItem('oracao.muted', m ? '1' : '0');
+    };
+    if (chkMute){
+      chkMute.addEventListener('change', ()=> setMuted(chkMute.checked));
+      const savedMute = localStorage.getItem('oracao.muted') === '1';
+      chkMute.checked = savedMute;
+      setMuted(savedMute);
+    }
 
-    /* ====== Textos (em parágrafos) ====== */
+    // ===== Salvar voz escolhida =====
+    const savedVoice = localStorage.getItem('oracao.voz');
+    if (savedVoice && (savedVoice === 'masc' || savedVoice === 'fem')){
+      vozSelect.value = savedVoice;
+    }
+    vozSelect.addEventListener('change', ()=>{
+      localStorage.setItem('oracao.voz', vozSelect.value);
+    });
+
+    // ===== Textos =====
     const ORACOES = {
       bencao: [
 `{{nome}}, respire fundo... Agora, receba esta oração.
@@ -246,76 +295,73 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
       ]
     };
 
-    /* ====== Cache TTS no Cache Storage ====== */
-    const TTS_CACHE_NAME='tts-audios-v1';
-    async function sha256Hex(s){
-      const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
-      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
-    async function getFromCache(key){const c=await caches.open(TTS_CACHE_NAME);const r=await c.match(new Request(key));return r?await r.blob():null;}
-    async function putInCache(key,b){const c=await caches.open(TTS_CACHE_NAME);await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));}
-    async function getOrGenerateAudio({text,voiceId}){
-      const key='/tts-cache/'+await sha256Hex(voiceId+'::'+text);
-      const cached=await getFromCache(key);
-      if(cached&&cached.size>0) return{blob:cached,fromCache:true};
-      const r=await fetch(ENDPOINT,{
-        method:'POST',mode:'cors',
-        headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},
-        body:JSON.stringify({text,voiceId})
-      });
-      if(!r.ok) throw new Error(r.status);
-      const blob=await r.blob();
-      putInCache(key,blob).catch(()=>{});
-      return{blob,fromCache:false};
-    }
-
-    /* ====== Gerar áudio + UI ====== */
+    // ===== Gerar áudio (sem cache, bem direto) =====
     async function gerarAudio(){
-      const tipo=document.getElementById('tipo').value;
-      const nome=(nomeInput.value||'').trim();
+      const tipo = tipoSelect.value;
+      const nome = (nomeInput.value || '').trim();
+      const vozKey = vozSelect.value === 'fem' ? 'fem' : 'masc';
+      const voiceId = (vozKey === 'fem') ? VOICE_FEM : VOICE_MASC;
 
-      // junta parágrafos e personaliza {{nome}}
-      const texto = (ORACOES[tipo] || [])
+      const partes = ORACOES[tipo] || ORACOES.bencao;
+      const texto = partes
         .map(p => p.replace(/\{\{\s*nome\s*\}\}/gi, nome || ''))
         .join('\n\n');
 
       setStatus('🙏 Preparando a oração...', 'loading');
-      progress.style.display='block'; bar.style.width='0%';
-      btnOuvir.disabled=true;
+      progress.style.display = 'block';
+      bar.style.width = '0%';
+      btnOuvir.disabled = true;
 
-      // progresso “fake” enquanto o backend processa
-      let pct=0;
-      const loader=setInterval(()=>{pct=Math.min(pct+Math.random()*15,95);bar.style.width=pct+'%';},380);
+      let pct = 0;
+      const loader = setInterval(()=>{
+        pct = Math.min(pct + Math.random()*18, 95);
+        bar.style.width = pct + '%';
+      }, 350);
 
       try{
-        const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId:DEFAULT_VOICE_ID});
-        clearInterval(loader); bar.style.width='100%'; setTimeout(()=>progress.style.display='none',700);
+        const resp = await fetch(ENDPOINT + '?t=' + Date.now(), {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ text: texto, voiceId })
+        });
+        if(!resp.ok) throw new Error('Erro ' + resp.status);
+        const blob = await resp.blob();
 
-        const url=URL.createObjectURL(blob);
-        player.src=url; player.play().catch(()=>{});
+        clearInterval(loader);
+        bar.style.width = '100%';
+        setTimeout(()=>{ progress.style.display = 'none'; }, 700);
 
-        btnDownload.href=url;
-        btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
-        btnDownload.style.display='inline-flex';
+        const url = URL.createObjectURL(blob);
+        player.src = url;
+        player.play().catch(()=>{});
 
-        setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
+        btnDownload.href = url;
+        btnDownload.download = `oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
+        btnDownload.style.display = 'inline-flex';
 
-        // som de conclusão
-        harpa?.pause(); try{harpa.currentTime=0;}catch{}; harpa?.play().catch(()=>{});
+        setStatus('✨ Oração gerada com sucesso!', 'ok');
+
+        if (harpa && !harpa.muted){
+          harpa.pause();
+          try{ harpa.currentTime = 0; }catch{}
+          harpa.play().catch(()=>{});
+        }
       }catch(e){
-        clearInterval(loader); progress.style.display='none';
+        console.error(e);
+        clearInterval(loader);
+        progress.style.display = 'none';
         setStatus('❌ Erro ao gerar áudio. Tente novamente.', 'err');
-        console.error('[TTS] Falha:', e);
       }finally{
-        btnOuvir.disabled=false;
+        btnOuvir.disabled = false;
       }
     }
-    btnOuvir.addEventListener('click',gerarAudio);
 
-    /* ====== Compartilhamento ====== */
+    btnOuvir.addEventListener('click', gerarAudio);
+
+    // ===== Compartilhamento =====
     const SITE_URL = location.origin + location.pathname;
     function montarMsg(){
-      const n=(nomeInput.value||'').trim();
+      const n = (nomeInput.value || '').trim();
       const prefix = n ? `${n}, ` : '';
       return `${prefix}receba esta Oração de Bênção Divina 🙏
 
@@ -324,18 +370,23 @@ ${SITE_URL}
 
 Que Deus ilumine seus passos hoje e sempre. Amém.`;
     }
-    document.getElementById('btn-whats')?.addEventListener('click',()=>{
-      const msg=montarMsg();
-      if(navigator.share){ navigator.share({title:'Oração de Bênção Divina',text:msg,url:SITE_URL}).catch(()=>{}); return; }
-      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
-    });
-    document.getElementById('btn-telegram')?.addEventListener('click',()=>{
-      const msg=montarMsg();
-      const tg=`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-      window.open(tg,'_blank','noopener');
+
+    document.getElementById('btn-whats').addEventListener('click', ()=>{
+      const msg = montarMsg();
+      if (navigator.share){
+        navigator.share({ title:'Oração', text: msg, url: SITE_URL }).catch(()=>{});
+      }else{
+        window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
+      }
     });
 
-    /* ====== PWA ====== */
+    document.getElementById('btn-telegram').addEventListener('click', ()=>{
+      const msg = montarMsg();
+      const url = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+      window.open(url,'_blank','noopener');
+    });
+
+    // ===== PWA (se quiser manter) =====
     if("serviceWorker" in navigator){
       navigator.serviceWorker.register("./sw.js").catch(console.error);
     }
