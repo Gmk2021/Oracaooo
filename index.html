@@ -1,4 +1,4 @@
-<!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (Voz masc/fem + Share simples) -->
+<!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (PWA + Share + Cache TTS + Vozes) -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -22,64 +22,129 @@
     }
     *{box-sizing:border-box}
     body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      color:var(--text); background:#0b1020; min-height:100vh;
+      margin:0; 
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text); 
+      background:#0b1020; 
+      min-height:100vh;
     }
     .bg{
-      position:fixed;inset:0;
+      position:fixed;
+      inset:0;
       background:#0b1020 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
     }
     .bg::after{
-      content:"";position:absolute;inset:0;
+      content:"";
+      position:absolute;
+      inset:0;
       background:linear-gradient(180deg,rgba(2,6,23,.4),rgba(2,6,23,.75));
     }
     .wrap{
-      position:relative;z-index:1;display:grid;place-items:center;
-      min-height:100vh;padding:24px
+      position:relative;
+      z-index:1;
+      display:grid;
+      place-items:center;
+      min-height:100vh;
+      padding:24px
     }
     .card{
-      width:min(860px,96vw); background:var(--card); backdrop-filter:blur(8px);
-      border-radius:18px; border:1px solid rgba(255,255,255,.08); overflow:hidden;
+      width:min(860px,96vw); 
+      background:var(--card); 
+      backdrop-filter:blur(8px);
+      border-radius:18px; 
+      border:1px solid rgba(255,255,255,.08); 
+      overflow:hidden;
       box-shadow:0 20px 60px rgba(0,0,0,.45);
     }
     .header{padding:26px 26px 10px}
     .header-top{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:12px;margin-bottom:8px
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:8px
     }
     .badge{
-      font-weight:700;color:#e2e8f0;background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:10px
+      font-weight:700;
+      color:#e2e8f0;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      padding:8px 12px;
+      border-radius:10px
     }
     .channel-icon{
-      display:inline-flex;align-items:center;gap:8px;text-decoration:none;
-      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-      padding:6px 10px;border-radius:12px;color:#e2e8f0;font-weight:600;transition:.25s ease
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;
+      border-radius:12px;
+      color:#e2e8f0;
+      font-weight:600;
+      transition:.25s ease
     }
-    .channel-icon:hover{border-color:rgba(255,255,255,.25);transform:translateY(-1px)}
-    .channel-icon img{width:48px;height:48px;border-radius:10px;display:block}
-    h1{margin:0 0 6px;font-size:28px}
-    p.desc{margin:0;color:var(--muted)}
+    .channel-icon:hover{
+      border-color:rgba(255,255,255,.25);
+      transform:translateY(-1px)
+    }
+    .channel-icon img{
+      width:48px;
+      height:48px;
+      border-radius:10px;
+      display:block
+    }
+    h1{
+      margin:0 0 6px;
+      font-size:28px
+    }
+    p.desc{
+      margin:0;
+      color:var(--muted)
+    }
     p.desc b.highlight{color:var(--accent)}
-
     .content{padding:18px 22px 6px}
-    label{display:block;margin-bottom:6px;font-weight:600}
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:600
+    }
     input,select,button{
-      width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.1);
-      background:rgba(4,6,16,.75);color:var(--text);padding:12px 14px;font-size:15px
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(4,6,16,.75);
+      color:var(--text);
+      padding:12px 14px;
+      font-size:15px
     }
     button.primary{
-      background:linear-gradient(135deg,var(--primary),#34d399);border:none;font-weight:700;
-      color:#04140f;cursor:pointer;transition:.3s ease
+      background:linear-gradient(135deg,var(--primary),#34d399);
+      border:none;
+      font-weight:700;
+      color:#04140f;
+      cursor:pointer;
+      transition:.3s ease
     }
     button.primary:hover{
-      box-shadow:0 0 25px 6px rgba(52,211,153,.4);transform:scale(1.02)
+      box-shadow:0 0 25px 6px rgba(52,211,153,.4);
+      transform:scale(1.02)
     }
-
     .linkbtn{
-      border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;text-align:center;cursor:pointer;
-      text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.25s ease;
-      width:100%;min-height:48px
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:15px;
+      font-weight:700;
+      text-align:center;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition:.25s ease;
+      width:100%;
+      min-height:48px
     }
     .linkbtn.youtube{background:linear-gradient(135deg,#ff6b6b,#ff3b3b);color:#fff}
     .linkbtn.whatsapp{background:linear-gradient(135deg,#34d399,#16a34a);color:#04140f}
@@ -87,42 +152,77 @@
     .linkbtn.telegram{background:linear-gradient(135deg,#2AABEE,#229ED9);color:#fff}
     .linkbtn.download{
       background:linear-gradient(135deg,var(--gold),var(--deepgold));
-      color:#1f1f1f;border:none;font-weight:800;gap:10px;box-shadow:0 0 15px rgba(250,204,21,.35)
+      color:#1f1f1f;
+      border:none;
+      font-weight:800;
+      gap:10px;
+      box-shadow:0 0 15px rgba(250,204,21,.35)
     }
-    .cta-grid{display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(2,1fr)}
-    @media(max-width:560px){.cta-grid{grid-template-columns:1fr}}
+    .cta-grid{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+      grid-template-columns:repeat(2,1fr)
+    }
+    @media(max-width:560px){
+      .cta-grid{grid-template-columns:1fr}
+    }
 
     /* Barra de progresso larga */
     .progress-wrap{margin:10px 0 4px}
     .progress-container{
-      width:100%;height:10px;background:rgba(255,255,255,.10);
-      border-radius:10px;overflow:hidden;display:none
+      width:100%;
+      height:10px;
+      background:rgba(255,255,255,.10);
+      border-radius:10px;
+      overflow:hidden;
+      display:none
     }
     .progress-bar{
-      height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--deepgold));
-      box-shadow:0 0 12px rgba(250,204,21,.6);animation:shimmer 2s infinite linear
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--gold),var(--deepgold));
+      box-shadow:0 0 12px rgba(250,204,21,.6);
+      animation:shimmer 2s infinite linear
     }
     @keyframes shimmer{
-      0%{filter:brightness(1)}50%{filter:brightness(1.5)}100%{filter:brightness(1)}
+      0%{filter:brightness(1)}
+      50%{filter:brightness(1.5)}
+      100%{filter:brightness(1)}
     }
 
     /* Status entre nome e botão */
     .status-pill{
-      margin:10px 0 10px;padding:12px 14px;border-radius:12px;font-weight:700;letter-spacing:.2px;
-      display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);color:#e2e8f0;box-shadow:0 8px 28px rgba(0,0,0,.25)
+      margin:10px 0 10px;
+      padding:12px 14px;
+      border-radius:12px;
+      font-weight:700;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#e2e8f0;
+      box-shadow:0 8px 28px rgba(0,0,0,.25)
     }
     .status-pill.ok{
-      background:linear-gradient(135deg,#34d399,#10b981);color:#062e28;border-color:rgba(16,185,129,.35)
+      background:linear-gradient(135deg,#34d399,#10b981);
+      color:#062e28;
+      border-color:rgba(16,185,129,.35)
     }
     .status-pill.err{
-      background:linear-gradient(135deg,#fca5a5,#ef4444);color:#3b0a0a;border-color:rgba(239,68,68,.35)
+      background:linear-gradient(135deg,#fca5a5,#ef4444);
+      color:#3b0a0a;
+      border-color:rgba(239,68,68,.35)
     }
     .status-pill.loading{
-      background:linear-gradient(135deg,#fcd34d,#f59e0b);color:#1f2937;border-color:rgba(245,158,11,.35)
+      background:linear-gradient(135deg,#fcd34d,#f59e0b);
+      color:#1f2937;
+      border-color:rgba(245,158,11,.35)
     }
-    .status-pill.loading::before{content:"⏳"} 
-    .status-pill.ok::before{content:"✨"} 
+    .status-pill.loading::before{content:"⏳"}
+    .status-pill.ok::before{content:"✨"}
     .status-pill.err::before{content:"❌"}
   </style>
 </head>
@@ -143,45 +243,56 @@
       </div>
 
       <div class="content">
+        <!-- Tipo de oração -->
         <label for="tipo">Escolha a oração:</label>
         <select id="tipo">
           <option value="bencao">Oração de Bênção Divina</option>
           <option value="gratidao">Oração de Gratidão</option>
           <option value="aniversario">Oração de Aniversário</option>
           <option value="manha">Oração da Manhã</option>
+          <option value="tarde">Oração da Tarde</option>
           <option value="noite">Oração da Noite</option>
           <option value="protecao">Oração de Proteção</option>
         </select>
 
         <div style="height:10px"></div>
 
+        <!-- Nome -->
         <label for="nome">Nome a receber a Benção!</label>
         <input id="nome" placeholder="Ex.: Ana Clara" />
 
         <div style="height:10px"></div>
 
-        <!-- Seleção de voz -->
+        <!-- Voz -->
         <label for="voz">Voz da oração:</label>
         <select id="voz">
           <option value="masc">Masculina</option>
           <option value="fem">Feminina</option>
+          <option value="girl">Infantil – Menina</option>
+          <option value="boy">Infantil – Menino</option>
         </select>
 
-        <div id="status" class="status-pill">Que DEUS te Abençoe!</div>
+        <!-- STATUS -->
+        <div id="status" class="status-pill" aria-live="polite" role="status">
+          Que DEUS te Abençoe !
+        </div>
 
+        <!-- Progresso largo -->
         <div class="progress-wrap">
           <div class="progress-container" id="progress">
             <div class="progress-bar" id="progress-bar"></div>
           </div>
         </div>
 
-        <button id="btn-ouvir" class="primary">🎧 Ouvir oração</button>
-        <a id="btn-download" class="linkbtn download" style="display:none">🔊 Baixar último áudio</a>
+        <!-- Botão principal e download -->
+        <button id="btn-ouvir" type="button" class="primary">🎧 Ouvir oração</button>
+        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
 
+        <!-- CTA -->
         <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank">▶️ Canal</a>
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal</a>
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
-          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank">📸 Instagram</a>
+          <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
@@ -190,7 +301,7 @@
         </label>
       </div>
 
-      <audio id="player" controls style="width:100%"></audio>
+      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
     </div>
   </div>
 
@@ -200,15 +311,24 @@
   </audio>
 
   <script>
-    // ===== Config =====
+    /* ====== Config ====== */
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
-    const VOICE_MASC = "4YYIPFl9wE5c4L2eu2Gb";
-    const VOICE_FEM  = "FrzKLwOr0y3qieiphjs2";
 
-    // ===== Elementos =====
+    const VOICE_MASC   = "4YYIPFl9wE5c4L2eu2Gb";      // masculina
+    const VOICE_FEM    = "FrzKLwOr0y3qieiphjs2";      // feminina
+    const VOICE_GIRL   = "ocZQ262SsZb9RIxcQBOj";      // infantil menina
+    const VOICE_BOY    = "M5t0724ORuAGCh3p3DUR";      // infantil menino
+
+    const VOICES = {
+      masc: VOICE_MASC,
+      fem:  VOICE_FEM,
+      girl: VOICE_GIRL,
+      boy:  VOICE_BOY
+    };
+
+    /* ====== Elementos ====== */
     const nomeInput   = document.getElementById('nome');
-    const tipoSelect  = document.getElementById('tipo');
-    const vozSelect   = document.getElementById('voz');
+    const vozSel      = document.getElementById('voz');
     const statusEl    = document.getElementById('status');
     const player      = document.getElementById('player');
     const btnOuvir    = document.getElementById('btn-ouvir');
@@ -218,36 +338,33 @@
     const harpa       = document.getElementById('harpa');
     const chkMute     = document.getElementById('mute-sounds');
 
-    // ===== Status =====
-    function setStatus(msg, cls){
+    /* ====== Status helper ====== */
+    function setStatus(texto, classe){
       statusEl.classList.remove('ok','err','loading');
-      if (cls) statusEl.classList.add(cls);
-      statusEl.innerHTML = msg;
+      if (classe) statusEl.classList.add(classe);
+      statusEl.innerHTML = texto;
     }
 
-    // ===== Som harpa + mute =====
+    /* ====== Som de conclusão ====== */
     if (harpa) harpa.volume = 0.35;
-    const setMuted = (m)=>{
-      if (harpa) harpa.muted = m;
-      localStorage.setItem('oracao.muted', m ? '1' : '0');
-    };
-    if (chkMute){
-      chkMute.addEventListener('change', ()=> setMuted(chkMute.checked));
-      const savedMute = localStorage.getItem('oracao.muted') === '1';
-      chkMute.checked = savedMute;
-      setMuted(savedMute);
-    }
+    const setMuted = (m)=>{harpa.muted=m;localStorage.setItem('oracao.muted',m?'1':'0');};
+    chkMute.addEventListener('change',()=>setMuted(chkMute.checked));
+    (()=>{ 
+      const m=localStorage.getItem('oracao.muted')==='1'; 
+      chkMute.checked=m; 
+      setMuted(m); 
+    })();
 
-    // ===== Salvar voz escolhida =====
-    const savedVoice = localStorage.getItem('oracao.voz');
-    if (savedVoice && (savedVoice === 'masc' || savedVoice === 'fem')){
-      vozSelect.value = savedVoice;
-    }
-    vozSelect.addEventListener('change', ()=>{
-      localStorage.setItem('oracao.voz', vozSelect.value);
+    /* ====== Preferência de voz ====== */
+    (() => {
+      const saved = localStorage.getItem('oracao.voz');
+      if (saved && VOICES[saved]) vozSel.value = saved;
+    })();
+    vozSel.addEventListener('change', () => {
+      localStorage.setItem('oracao.voz', vozSel.value);
     });
 
-    // ===== Textos =====
+    /* ====== Textos (parágrafos) ====== */
     const ORACOES = {
       bencao: [
 `{{nome}}, respire fundo... Agora, receba esta oração.
@@ -258,6 +375,7 @@ Onde houver medo, que entre a confiança; onde houver dor, que floresça cura; o
 Que Ele te cubra com favor diante dos homens e te guie com sabedoria em cada decisão.`,
 `Seja sua vida abençoada, {{nome}}. Que a graça do Altíssimo te envolva agora e para sempre. Amém.`
       ],
+
       gratidao: [
 `{{nome}}, hoje levantamos a nossa voz em gratidão.
 Pelo dom da vida, pelas pequenas alegrias, pelos livramentos que nem vimos.`,
@@ -265,6 +383,7 @@ Pelo dom da vida, pelas pequenas alegrias, pelos livramentos que nem vimos.`,
 Onde houver murmúrio, que nasça louvor; onde houver falta, que floresça provisão.`,
 `Obrigado, Senhor, por tudo que já fizeste e pelo que ainda farás na vida de {{nome}}. Amém.`
       ],
+
       aniversario: [
 `Hoje, Senhor, agradecemos pela vida de {{nome}}.
 Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e no amor.`,
@@ -272,6 +391,7 @@ Cada ano é um presente Teu, uma nova chance de florescer na fé, na sabedoria e
 Que os sonhos se renovem, que a esperança nunca se apague e que Tua luz te conduza em cada passo.`,
 `Parabéns, {{nome}}! Que a graça divina te envolva hoje e sempre. Amém.`
       ],
+
       manha: [
 `{{nome}}, ao despertar, acolhe a luz de Deus.
 Que teus pensamentos sejam guiados pela sabedoria, e tuas decisões, pela paz.`,
@@ -279,6 +399,15 @@ Que teus pensamentos sejam guiados pela sabedoria, e tuas decisões, pela paz.`,
 Senhor, abençoa o caminho de {{nome}} neste dia, e firma seus passos.`,
 `Que a Tua presença acompanhe {{nome}} desde agora e para sempre. Amém.`
       ],
+
+      tarde: [
+`{{nome}}, que esta tarde seja guiada pela presença de Deus.
+Que cada passo seja conduzido pela sabedoria e cada pensamento pelo discernimento divino.`,
+`Que o Senhor renove tuas forças, acalme tua mente e organize tudo aquilo que parecia fora do lugar.
+Que Ele abra portas certas e feche caminhos que não te pertencem.`,
+`Que esta tarde seja leve, produtiva e cheia da graça de Deus sobre a tua vida, {{nome}}. Amém.`
+      ],
+
       noite: [
 `{{nome}}, que o descanso desta noite seja guardado pelo Altíssimo.
 Que os anjos acampem ao teu redor, e toda inquietação se transforme em serenidade.`,
@@ -286,6 +415,7 @@ Que os anjos acampem ao teu redor, e toda inquietação se transforme em serenid
 Derrama, Senhor, Tua paz sobre o coração de {{nome}}.`,
 `Dorme em paz, {{nome}}. Deus vela por ti. Amém.`
       ],
+
       protecao: [
 `{{nome}}, que o Senhor seja teu escudo e a tua fortaleza.
 Que nenhum mal alcance tua morada e teus passos sejam firmados na luz.`,
@@ -295,73 +425,93 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
       ]
     };
 
-    // ===== Gerar áudio (sem cache, bem direto) =====
-    async function gerarAudio(){
-      const tipo = tipoSelect.value;
-      const nome = (nomeInput.value || '').trim();
-      const vozKey = vozSelect.value === 'fem' ? 'fem' : 'masc';
-      const voiceId = (vozKey === 'fem') ? VOICE_FEM : VOICE_MASC;
+    /* ====== Cache TTS ====== */
+    const TTS_CACHE_NAME='tts-audios-v1';
+    async function sha256Hex(s){
+      const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    async function getFromCache(key){
+      const c=await caches.open(TTS_CACHE_NAME);
+      const r=await c.match(new Request(key));
+      return r?await r.blob():null;
+    }
+    async function putInCache(key,b){
+      const c=await caches.open(TTS_CACHE_NAME);
+      await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));
+    }
+    async function getOrGenerateAudio({text,voiceId}){
+      const key='/tts-cache/'+await sha256Hex(voiceId+'::'+text);
+      const cached=await getFromCache(key);
+      if(cached && cached.size>0) return{blob:cached,fromCache:true};
 
-      const partes = ORACOES[tipo] || ORACOES.bencao;
-      const texto = partes
+      const r=await fetch(ENDPOINT,{
+        method:'POST',
+        mode:'cors',
+        headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},
+        body:JSON.stringify({text,voiceId})
+      });
+      if(!r.ok) throw new Error(r.status);
+      const blob=await r.blob();
+      putInCache(key,blob).catch(()=>{});
+      return{blob,fromCache:false};
+    }
+
+    /* ====== Gerar áudio + UI ====== */
+    async function gerarAudio(){
+      const tipo = document.getElementById('tipo').value;
+      const nome = (nomeInput.value||'').trim();
+      const voiceId = VOICES[vozSel.value] || VOICE_MASC;
+
+      const texto = (ORACOES[tipo] || [])
         .map(p => p.replace(/\{\{\s*nome\s*\}\}/gi, nome || ''))
         .join('\n\n');
 
       setStatus('🙏 Preparando a oração...', 'loading');
-      progress.style.display = 'block';
-      bar.style.width = '0%';
-      btnOuvir.disabled = true;
+      progress.style.display='block'; 
+      bar.style.width='0%';
+      btnOuvir.disabled=true;
 
-      let pct = 0;
-      const loader = setInterval(()=>{
-        pct = Math.min(pct + Math.random()*18, 95);
-        bar.style.width = pct + '%';
-      }, 350);
+      let pct=0;
+      const loader=setInterval(()=>{
+        pct=Math.min(pct+Math.random()*15,95);
+        bar.style.width=pct+'%';
+      },380);
 
       try{
-        const resp = await fetch(ENDPOINT + '?t=' + Date.now(), {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ text: texto, voiceId })
-        });
-        if(!resp.ok) throw new Error('Erro ' + resp.status);
-        const blob = await resp.blob();
+        const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId});
+        clearInterval(loader); 
+        bar.style.width='100%'; 
+        setTimeout(()=>progress.style.display='none',700);
 
-        clearInterval(loader);
-        bar.style.width = '100%';
-        setTimeout(()=>{ progress.style.display = 'none'; }, 700);
-
-        const url = URL.createObjectURL(blob);
-        player.src = url;
+        const url=URL.createObjectURL(blob);
+        player.src=url;
         player.play().catch(()=>{});
 
-        btnDownload.href = url;
-        btnDownload.download = `oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
-        btnDownload.style.display = 'inline-flex';
+        btnDownload.href=url;
+        btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
+        btnDownload.style.display='inline-flex';
 
-        setStatus('✨ Oração gerada com sucesso!', 'ok');
+        setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
 
-        if (harpa && !harpa.muted){
-          harpa.pause();
-          try{ harpa.currentTime = 0; }catch{}
-          harpa.play().catch(()=>{});
-        }
+        harpa?.pause(); 
+        try{harpa.currentTime=0;}catch{}
+        harpa?.play().catch(()=>{});
       }catch(e){
-        console.error(e);
-        clearInterval(loader);
-        progress.style.display = 'none';
+        clearInterval(loader); 
+        progress.style.display='none';
         setStatus('❌ Erro ao gerar áudio. Tente novamente.', 'err');
+        console.error('[TTS] Falha:', e);
       }finally{
-        btnOuvir.disabled = false;
+        btnOuvir.disabled=false;
       }
     }
+    btnOuvir.addEventListener('click',gerarAudio);
 
-    btnOuvir.addEventListener('click', gerarAudio);
-
-    // ===== Compartilhamento =====
+    /* ====== Compartilhamento ====== */
     const SITE_URL = location.origin + location.pathname;
     function montarMsg(){
-      const n = (nomeInput.value || '').trim();
+      const n=(nomeInput.value||'').trim();
       const prefix = n ? `${n}, ` : '';
       return `${prefix}receba esta Oração de Bênção Divina 🙏
 
@@ -370,23 +520,21 @@ ${SITE_URL}
 
 Que Deus ilumine seus passos hoje e sempre. Amém.`;
     }
-
-    document.getElementById('btn-whats').addEventListener('click', ()=>{
-      const msg = montarMsg();
-      if (navigator.share){
-        navigator.share({ title:'Oração', text: msg, url: SITE_URL }).catch(()=>{});
-      }else{
-        window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
+    document.getElementById('btn-whats')?.addEventListener('click',()=>{
+      const msg=montarMsg();
+      if(navigator.share){
+        navigator.share({title:'Oração de Bênção Divina',text:msg,url:SITE_URL}).catch(()=>{});
+        return;
       }
+      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
+    });
+    document.getElementById('btn-telegram')?.addEventListener('click',()=>{
+      const msg=montarMsg();
+      const tg=`https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
+      window.open(tg,'_blank','noopener');
     });
 
-    document.getElementById('btn-telegram').addEventListener('click', ()=>{
-      const msg = montarMsg();
-      const url = `https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(msg)}`;
-      window.open(url,'_blank','noopener');
-    });
-
-    // ===== PWA (se quiser manter) =====
+    /* ====== PWA ====== */
     if("serviceWorker" in navigator){
       navigator.serviceWorker.register("./sw.js").catch(console.error);
     }
