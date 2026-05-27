@@ -224,6 +224,24 @@
     .status-pill.loading::before{content:"⏳"}
     .status-pill.ok::before{content:"✨"}
     .status-pill.err::before{content:"❌"}
+.audio-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:14px;
+  margin-bottom:10px;
+  color:#ffffffcc;
+  font-size:14px;
+  font-weight:600;
+}
+
+.audio-toggle input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:#59e3b1;
+  cursor:pointer;
+}
   </style>
 </head>
 
@@ -246,7 +264,7 @@
 
     <div class="header">
       <div class="header-top">
-        <div class="badge">Sua Jornada Seu Destino</div>
+        <div class="badge">Your Path, Your Destiny</div>
         <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
           <img src="../icons/canal.png" alt="Canal"><span>Channel</span>
         </a>
@@ -301,7 +319,7 @@
 
         <!-- Botão principal e download -->
        <button id="btn-ouvir" type="button" class="primary">🎧 Listen to Prayer</button>
-        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
+        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Download the latest audio.</a>
 
         <!-- CTA -->
         <div class="cta-grid">
@@ -311,12 +329,17 @@
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
-          <input type="checkbox" id="mute-sounds" /> Mute
+        <div class="audio-toggle">
+           <input type="checkbox" id="silenciarHarpa">
+           <label for="silenciarHarpa">
+            Ambient music
         </label>
+        </div>  
       </div>
 
-      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
+        <div class="player">
+<audio id="player" controls style="width:100%"></audio></div>
+
     </div>
   </div>
 
@@ -349,7 +372,7 @@
     const progress    = document.getElementById('progress');
     const bar         = document.getElementById('progress-bar');
     const harpa       = document.getElementById('harpa');
-    const chkMute     = document.getElementById('mute-sounds');
+    const chkMute     = document.getElementById('silenciarHarpa');
 
     /* ====== Status helper ====== */
     function setStatus(texto, classe){
@@ -494,7 +517,7 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
         .map(p => p.replace(/\{\{\s*nome\s*\}\}/gi, nome || ''))
         .join('\n\n');
 
-      setStatus('🙏 Preparando a oração...', 'loading');
+      setStatus('🙏 Preparing your prayer...', 'loading');
       progress.style.display='block'; 
       bar.style.width='0%';
       btnOuvir.disabled=true;
@@ -519,7 +542,7 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
         btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
         btnDownload.style.display='inline-flex';
 
-        setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
+        setStatus(fromCache ? '⚡ Prayer loaded instantly!' : '✨ Prayer successfully generated!', 'ok');
 
         harpa?.pause(); 
         try{harpa.currentTime=0;}catch{}
@@ -527,7 +550,7 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
       }catch(e){
         clearInterval(loader); 
         progress.style.display='none';
-        setStatus('❌ Erro ao gerar áudio. Tente novamente.', 'err');
+        setStatus('❌ Error generating audio. Please try again.', 'err');
         console.error('[TTS] Falha:', e);
       }finally{
         btnOuvir.disabled=false;

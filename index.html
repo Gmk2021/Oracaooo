@@ -244,6 +244,26 @@
     .status-pill.loading::before{content:"⏳"}
     .status-pill.ok::before{content:"✨"}
     .status-pill.err::before{content:"❌"}
+.audio-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+
+  margin-top:14px;
+  margin-bottom:10px;
+
+  color:#ffffffcc;
+  font-size:14px;
+  font-weight:600;
+}
+
+.audio-toggle input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:#59e3b1;
+  cursor:pointer;
+}
   </style>
 </head>
 <body>
@@ -326,16 +346,20 @@
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
           <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
-        </div>
+       </div>
 
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
-          <input type="checkbox" id="mute-sounds" /> Silenciar som de conclusão
-        </label>
-      </div>
+       <div class="audio-toggle">
+       <input type="checkbox" id="silenciarHarpa">
 
-      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
+       <label for="silenciarHarpa">
+       Música ambiente
+  </label>
+ </div>
+</div>
+      <div class="player">
+<audio id="player" controls style="width:100%"></audio></div>
     </div>
-  </div>
+</div>
 
   <!-- Som de harpa -->
   <audio id="harpa" preload="auto" src="/audio/harpa.mp3"></audio>
@@ -365,7 +389,7 @@
     const progress    = document.getElementById('progress');
     const bar         = document.getElementById('progress-bar');
     const harpa       = document.getElementById('harpa');
-    const chkMute     = document.getElementById('mute-sounds');
+    const chkMute     = document.getElementById('silenciarHarpa');
 
     /* ====== Status helper ====== */
     function setStatus(texto, classe){

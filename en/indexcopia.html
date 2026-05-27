@@ -1,10 +1,10 @@
 <!-- 🕊️ Sua Jornada Seu Destino — Oração Interativa (PWA + Share + Cache TTS + Vozes) -->
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oração de Bênção Divina</title>
+  <title>Divine Blessing Prayer</title>
   <meta name="theme-color" content="#0b1020" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
@@ -224,27 +224,6 @@
     .status-pill.loading::before{content:"⏳"}
     .status-pill.ok::before{content:"✨"}
     .status-pill.err::before{content:"❌"}
-.audio-toggle{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:10px;
-
-  margin-top:14px;
-  margin-bottom:10px;
-
-  color:#ffffffcc;
-  font-size:14px;
-  font-weight:600;
-}
-
-.audio-toggle input[type="checkbox"]{
-  width:18px;
-  height:18px;
-  accent-color:#59e3b1;
-  cursor:pointer;
-}
-
   </style>
 </head>
 
@@ -267,50 +246,50 @@
 
     <div class="header">
       <div class="header-top">
-        <div class="badge">Tu camino, Tu destino </div>
+        <div class="badge">Sua Jornada Seu Destino</div>
         <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
-          <img src="../icons/canal.png" alt="Canal"><span>Canal</span>
+          <img src="../icons/canal.png" alt="Canal"><span>Channel</span>
         </a>
       </div>
 
-      <h1>Oración Bendición Divina</h1>
-      <p class="desc">Elige la oración, el <b>nombre</b> hacer clic <b class="highlight">Escuchar oración</b>.</p>
+      <h1>Divine Blessing Prayer</h1>
+      <p class="desc">Choose the prayer, the <b>name</b> and click <b class="highlight">Listen to Prayer</b>.</p>
     </div>
 
-      <div class="content">
-        <!-- Tipo de oração -->
-       <label for="tipo">Elige la oración:</label>
+    <div class="content">
+  <!-- Prayer type -->
+  <label for="tipo">Choose the prayer:</label>
 
-<select id="tipo">
-  <option value="bencao">Oración de Bendición Divina</option>
-  <option value="gratidao">Oración de Gratitud</option>
-  <option value="aniversario">Oración de Cumpleaños</option>
-  <option value="manha">Oración de la Mañana</option>
-  <option value="tarde">Oración de la Tarde</option>
-  <option value="noite">Oración de la Noche</option>
-  <option value="protecao">Oración de Protección</option>
-</select>
+  <select id="tipo">
+    <option value="bencao">Divine Blessing Prayer</option>
+    <option value="gratidao">Gratitude Prayer</option>
+    <option value="aniversario">Birthday Prayer</option>
+    <option value="manha">Morning Prayer</option>
+    <option value="tarde">Afternoon Prayer</option>
+    <option value="noite">Night Prayer</option>
+    <option value="protecao">Protection Prayer</option>
+  </select>
 
         <div style="height:10px"></div>
 
         <!-- Nome -->
-       <label for="nome">¡Nombre para recibir la Bendición!</label>
-        <input id="nome" placeholder="Ex.: Ana Clara" />
+        <label for="nome">Name to receive the Blessing!</label>
+        <input id="nome" placeholder="Ex.: John" />
 
         <div style="height:10px"></div>
 
-        <!-- Voz -->
-       <label for="voz">Voz de la oración:</label>
+      <!-- Voice -->
+<label for="voz">Prayer voice:</label>
 
 <select id="voz">
-  <option value="masc">Voz Masculina</option>
-  <option value="fem">Voz Femenina</option>
-  <option value="girl">Voz de Niña</option>
-  <option value="boy">Voz de Niño</option>
+  <option value="masc">Male Voice</option>
+  <option value="fem">Female Voice</option>
+  <option value="girl">Young Girl Voice</option>
+  <option value="boy">Young Boy Voice</option>
 </select>
         <!-- STATUS -->
         <div id="status" class="status-pill" aria-live="polite" role="status">
-          Que Dios te bendiga !
+          May God bless you.
         </div>
 
         <!-- Progresso largo -->
@@ -321,34 +300,29 @@
         </div>
 
         <!-- Botão principal e download -->
-       <button id="btn-ouvir" type="button" class="primary">
-🎧 Escuchar oración
-</button>
-        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Descarga el audio más reciente.</a>
+       <button id="btn-ouvir" type="button" class="primary">🎧 Listen to Prayer</button>
+        <a id="btn-download" class="linkbtn download" href="#" download style="display:none">🔊 Baixar último áudio</a>
 
         <!-- CTA -->
         <div class="cta-grid">
-          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Canal</a>
+          <a class="linkbtn youtube" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">▶️ Channel</a>
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
           <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
         </div>
 
-        <div class="audio-toggle">
-        <input type="checkbox" id="silenciarHarpa">
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+          <input type="checkbox" id="mute-sounds" /> Mute
+        </label>
+      </div>
 
-       <label for="silenciarHarpa">
-       Música de fondo
-  </label>
- </div>
-</div>
-      <div class="player">
-<audio id="player" controls style="width:100%"></audio></div>
+      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
     </div>
-</div>
+  </div>
 
   <!-- Som de harpa -->
   <audio id="harpa" preload="auto" src="/audio/harpa.mp3"></audio>
+
   <script>
     /* ====== Config ====== */
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
@@ -375,7 +349,7 @@
     const progress    = document.getElementById('progress');
     const bar         = document.getElementById('progress-bar');
     const harpa       = document.getElementById('harpa');
-    const chkMute     = document.getElementById('silenciarHarpa');
+    const chkMute     = document.getElementById('mute-sounds');
 
     /* ====== Status helper ====== */
     function setStatus(texto, classe){
@@ -405,75 +379,76 @@
 
     /* ====== Textos (parágrafos) ====== */
     const ORACOES = {
-      bencao: [
-`{{nome}}, respira profundamente... Ahora recibe esta oración.
+     bencao: [
+`{{nome}}, take a deep breath... Now receive this prayer.
 
-El Señor te llama por tu nombre. Que la paz que sobrepasa todo entendimiento llene tu corazón.
-Donde haya miedo, que entre la confianza; donde haya dolor, que florezca la sanidad; donde haya duda, que se levante la fe.`,
+The Lord calls you by name. May the peace that surpasses all understanding fill your heart.
+Where there is fear, let confidence enter; where there is pain, let healing flourish; where there is doubt, let faith arise.`,
 
-`Que la luz de Dios ilumine tus pasos hoy y siempre.
-Que Él te cubra con favor delante de las personas y te guíe con sabiduría en cada decisión.`,
+`May God's light guide your steps today and always.
+May He surround you with favor before people and lead you with wisdom in every decision.`,
 
-`Que tu vida sea bendecida, {{nome}}. Que la gracia del Altísimo te rodee ahora y para siempre. Amén.`
+`May your life be blessed, {{nome}}. May the grace of the Most High surround you now and forever. Amen.`
 ],
-     gratidao: [
-`{{nome}}, hoy levantamos nuestra voz en gratitud.
-Por el don de la vida, por las pequeñas alegrías y por las liberaciones que ni siquiera vimos.`,
 
-`Que tu corazón se llene de reconocimiento, y que la gratitud abra puertas de favor.
-Donde haya queja, que nazca alabanza; donde haya escasez, que florezca la provisión.`,
+  gratidao: [
+`{{nome}}, today we lift our voice in gratitude.
+For the gift of life, for the small joys, and for the deliverances we did not even see.`,
 
-`Gracias, Señor, por todo lo que ya hiciste y por todo lo que aún harás en la vida de {{nome}}. Amén.`
+`May your heart be filled with thankfulness, and may gratitude open doors of favor.
+Where there is complaint, let praise arise; where there is lack, let provision flourish.`,
+
+`Thank You, Lord, for everything You have already done and for everything You will still do in the life of {{nome}}. Amen.`
 ],
 
 aniversario: [
-`Hoy, Señor, damos gracias por la vida de {{nome}}.
-Cada año es un regalo Tuyo, una nueva oportunidad para florecer en la fe, la sabiduría y el amor.`,
+`Today, Lord, we give thanks for the life of {{nome}}.
+Each year is a gift from You, a new chance to grow in faith, wisdom, and love.`,
 
-`Bendice los caminos de {{nome}}, trayendo salud, alegría y realizaciones.
-Que los sueños se renueven, que la esperanza nunca se apague y que Tu luz guíe cada paso.`,
+`Bless the path of {{nome}}, bringing health, joy, and fulfillment.
+May dreams be renewed, may hope never fade, and may Your light guide every step.`,
 
-`¡Feliz cumpleaños, {{nome}}! Que la gracia divina te rodee hoy y siempre. Amén.`
+`Happy birthday, {{nome}}! May divine grace surround you today and always. Amen.`
 ],
 
 manha: [
-`{{nome}}, al despertar, recibe la luz de Dios.
-Que tus pensamientos sean guiados por la sabiduría, y tus decisiones por la paz.`,
+`{{nome}}, as you wake up, welcome the light of God.
+May your thoughts be guided by wisdom, and your decisions by peace.`,
 
-`Donde haya ansiedad, que reine la calma; donde haya cansancio, que venga nuevo ánimo.
-Señor, bendice el camino de {{nome}} en este día y afirma sus pasos.`,
+`Where there is anxiety, let calm reign; where there is tiredness, let new strength come.
+Lord, bless the path of {{nome}} this day, and make every step firm.`,
 
-`Que Tu presencia acompañe a {{nome}} desde ahora y para siempre. Amén.`
+`May Your presence accompany {{nome}} from now and forever. Amen.`
 ],
 
 tarde: [
-`{{nome}}, que esta tarde sea guiada por la presencia de Dios.
-Que cada paso sea conducido por la sabiduría y cada pensamiento por el discernimiento divino.`,
+`{{nome}}, may this afternoon be guided by the presence of God.
+May every step be led by wisdom and every thought by divine discernment.`,
 
-`Que el Señor renueve tus fuerzas, calme tu mente y ordene todo aquello que parecía fuera de lugar.
-Que Él abra las puertas correctas y cierre los caminos que no te pertenecen.`,
+`May the Lord renew your strength, calm your mind, and organize everything that seemed out of place.
+May He open the right doors and close the paths that do not belong to you.`,
 
-`Que esta tarde sea leve, productiva y llena de la gracia de Dios sobre tu vida, {{nome}}. Amén.`
+`May this afternoon be light, productive, and filled with the grace of God over your life, {{nome}}. Amen.`
 ],
 
 noite: [
-`{{nome}}, que el descanso de esta noche sea guardado por el Altísimo.
-Que los ángeles acampen a tu alrededor, y que toda inquietud se transforme en serenidad.`,
+`{{nome}}, may tonight’s rest be guarded by the Most High.
+May angels encamp around you, and may every worry turn into serenity.`,
 
-`Lo que fue dolor, que sea sanidad; lo que fue peso, que se transforme en aprendizaje.
-Derrama, Señor, Tu paz sobre el corazón de {{nome}}.`,
+`What was pain, may become healing; what was a burden, may become learning.
+Pour out, Lord, Your peace over the heart of {{nome}}.`,
 
-`Duerme en paz, {{nome}}. Dios vela por ti. Amén.`
+`Sleep in peace, {{nome}}. God watches over you. Amen.`
 ],
 
 protecao: [
-`{{nome}}, que el Señor sea tu escudo y tu fortaleza.
-Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
+`{{nome}}, may the Lord be your shield and your fortress.
+May no evil reach your home, and may your steps be established in the light.`,
 
-`Que la presencia de Dios aleje toda sombra y te revista de valentía.
-Ángeles del Señor, acampen alrededor de {{nome}} y sostengan su vida.`,
+`May the presence of God drive away every shadow and clothe you with courage.
+Angels of the Lord, encamp around {{nome}} and sustain this life.`,
 
-`Cubre, Señor, la vida de {{nome}} con protección hoy y siempre. Amén.`
+`Cover the life of {{nome}} with protection today and always, Lord. Amen.`
 ]
 };
 
@@ -519,7 +494,7 @@ Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
         .map(p => p.replace(/\{\{\s*nome\s*\}\}/gi, nome || ''))
         .join('\n\n');
 
-      setStatus('🙏 Preparando tu oración...', 'loading');
+      setStatus('🙏 Preparando a oração...', 'loading');
       progress.style.display='block'; 
       bar.style.width='0%';
       btnOuvir.disabled=true;
@@ -544,7 +519,7 @@ Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
         btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
         btnDownload.style.display='inline-flex';
 
-        setStatus(fromCache ? '⚡ La oración se cargó al instante!' : '✨ Oración generada con éxito.!', 'ok');
+        setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
 
         harpa?.pause(); 
         try{harpa.currentTime=0;}catch{}
@@ -552,7 +527,7 @@ Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
       }catch(e){
         clearInterval(loader); 
         progress.style.display='none';
-        setStatus('❌ Error al generar el audio. Inténtalo nuevamente.', 'err');
+        setStatus('❌ Erro ao gerar áudio. Tente novamente.', 'err');
         console.error('[TTS] Falha:', e);
       }finally{
         btnOuvir.disabled=false;
