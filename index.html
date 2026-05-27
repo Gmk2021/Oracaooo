@@ -246,51 +246,34 @@
     .status-pill.err::before{content:"❌"}
   </style>
 </head>
-
 <body>
 
-<<<<<<< HEAD
-<div class="idiomas" style="
-  position:relative;
-  z-index:9999;
-  text-align:center;
-  padding:12px;
-  background:rgba(0,0,0,0.55);
-  color:white;
-">
-  <a href="/" style="color:white;margin:0 8px;text-decoration:none;">🇧🇷 Português</a>
-  <a href="/en/" style="color:white;margin:0 8px;text-decoration:none;">🇺🇸 English</a>
-  <a href="/es/" style="color:white;margin:0 8px;text-decoration:none;">🇪🇸 Español</a>
-</div>
-
 <div class="bg"></div>
-<div class="wrap">
-<div class="idiomas">
-=======
-<div class="idiomas" style="text-align:center;padding:10px;">
->>>>>>> d6e2566d03d368bea3a45db1f09a8115bd4f5d78
-  <a href="/">🇧🇷 Português</a>
-  <a href="/en/">🇺🇸 English</a>
-  <a href="/es/">🇪🇸 Español</a>
-</div>
-<<<<<<< HEAD
 
-=======
->>>>>>> d6e2566d03d368bea3a45db1f09a8115bd4f5d78
-  <div class="bg"></div>
-  <div class="wrap">
-    <div class="card">
-      <div class="header">
-        <div class="header-top">
-          <div class="badge">Sua Jornada Seu Destino</div>
-          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
-            <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
-          </a>
-        </div>
-        <h1>Oração de Bênção Divina</h1>
-        <p class="desc">Escolha a oração, o <b>nome</b> e clique em <b class="highlight">Ouvir</b>.</p>
+<div class="wrap">
+  <div class="card">
+
+    <div class="idiomas" style="
+      text-align:right;
+      padding:18px 22px 0;
+      font-size:14px;
+    ">
+      <a href="/" style="color:white;margin-left:10px;text-decoration:none;">🇧🇷 PT</a>
+      <a href="/en/" style="color:white;margin-left:10px;text-decoration:none;">🇺🇸 EN</a>
+      <a href="/es/" style="color:white;margin-left:10px;text-decoration:none;">🇪🇸 ES</a>
+    </div>
+
+    <div class="header">
+      <div class="header-top">
+        <div class="badge">Sua Jornada Seu Destino</div>
+        <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
+          <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
+        </a>
       </div>
 
+      <h1>Oração de Benção Divina</h1>
+      <p class="desc">Escolha a Oração, o <b>nome</b> e click <b class="highlight">Ouvir oração</b>.</p>
+    </div>
       <div class="content">
         <!-- Tipo de oração -->
         <label for="tipo">Escolha a oração:</label>
@@ -355,10 +338,7 @@
   </div>
 
   <!-- Som de harpa -->
-  <audio id="harpa" preload="auto"
-    src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACaQCAAQAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYQ==">
-  </audio>
-
+  <audio id="harpa" preload="auto" src="/audio/harpa.mp3"></audio>
   <script>
     /* ====== Config ====== */
     const ENDPOINT = "https://oracaooo.onrender.com/tts";
