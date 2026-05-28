@@ -399,6 +399,28 @@
     vozSel.addEventListener('change', () => {
       localStorage.setItem('oracao.voz', vozSel.value);
     });
+function aplicarParametrosDaUrl(){
+  const params = new URLSearchParams(window.location.search);
+
+  const nome = params.get('nome');
+  const tipo = params.get('tipo');
+  const voz = params.get('voz');
+
+  if (nome) {
+    nomeInput.value = nome;
+  }
+
+  if (tipo && document.querySelector(`#tipo option[value="${tipo}"]`)) {
+    document.getElementById('tipo').value = tipo;
+  }
+
+  if (voz && VOICES[voz]) {
+    vozSel.value = voz;
+    localStorage.setItem('oracao.voz', voz);
+  }
+}
+
+window.addEventListener('load', aplicarParametrosDaUrl);
 
     /* ====== Textos (parágrafos) ====== */
     const ORACOES = {
