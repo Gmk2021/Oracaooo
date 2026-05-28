@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oração de Bênção Divina</title>
-<<<<<<< HEAD
 <script>
   (function () {
     const path = window.location.pathname;
+    const query = window.location.search;
 
     if (path.startsWith('/en') || path.startsWith('/es')) {
       return;
@@ -17,14 +17,12 @@
     const idioma = navigator.language || navigator.userLanguage || 'pt';
 
     if (idioma.startsWith('en')) {
-  window.location.href = '/en/';
-} else if (idioma.startsWith('es')) {
-  window.location.href = '/es/';
-}
+      window.location.href = '/en/' + query;
+    } else if (idioma.startsWith('es')) {
+      window.location.href = '/es/' + query;
+    }
   })();
 </script>
-=======
->>>>>>> d6e2566d03d368bea3a45db1f09a8115bd4f5d78
   <meta name="theme-color" content="#0b1020" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
