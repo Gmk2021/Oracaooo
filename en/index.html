@@ -581,21 +581,39 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
     btnOuvir.addEventListener('click',gerarAudio);
 
     /* ====== Compartilhamento ====== */
-    const SITE_URL = location.origin + location.pathname;
-    function montarMsg(){
-      const n=(nomeInput.value||'').trim();
-      const prefix = n ? `${n}, ` : '';
-      return `${prefix}receba esta Oração de Bênção Divina 🙏
+     const SITE_URL = location.origin + location.pathname;
+    function montarLinkPersonalizado(){
+  const tipo = document.getElementById('tipo').value;
+  const nome = (nomeInput.value || '').trim();
+  const voz = vozSel.value;
 
-Ouça sua oração aqui:
-${SITE_URL}
+  const params = new URLSearchParams();
 
-Que Deus ilumine seus passos hoje e sempre. Amém.`;
-    }
+  if (nome) params.set('nome', nome);
+  params.set('tipo', tipo);
+  params.set('voz', voz);
+
+  return `${location.origin}${location.pathname}?${params.toString()}`;
+}
+
+function montarMsg(){
+  const n = (nomeInput.value || '').trim();
+  const prefix = n ? `${n}, ` : '';
+
+  const linkPersonalizado = montarLinkPersonalizado();
+
+  return `${prefix}receive this Divine Blessing Prayer  🙏
+
+Listen to your prayer here:
+${linkPersonalizado}
+
+May God guide your steps today and always. Amen.`;
+}
+
     document.getElementById('btn-whats')?.addEventListener('click',()=>{
       const msg=montarMsg();
       if(navigator.share){
-        navigator.share({title:'Oração de Bênção Divina',text:msg,url:SITE_URL}).catch(()=>{});
+        navigator.share({title:'Divine Blessing Prayer',text:msg,url:SITE_URL}).catch(()=>{});
         return;
       }
       window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener');
