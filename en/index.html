@@ -552,6 +552,7 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
 
       try{
         const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId});
+        window.ultimoAudioBlob = blob;
         clearInterval(loader); 
         bar.style.width='100%'; 
         setTimeout(()=>progress.style.display='none',700);
@@ -582,7 +583,20 @@ btnDownload.download =
   `prayer-${tiposEN[tipo] || tipo}-${nomeArquivo}-${hoje}.mp3`;
 
 btnDownload.style.display = 'inline-flex';
+btnDownload.onclick = function(event) {
+  if (window.AndroidDownload && window.ultimoAudioBlob) {
+    event.preventDefault();
 
+    const reader = new FileReader();
+
+    reader.onloadend = function() {
+      const base64Audio = reader.result.split(',')[1];
+      window.AndroidDownload.saveAudio(base64Audio, btnDownload.download);
+    };
+
+    reader.readAsDataURL(window.ultimoAudioBlob);
+  }
+};
         setStatus(fromCache ? '⚡ Prayer loaded instantly!' : '✨ Prayer successfully generated!', 'ok');
 
         harpa?.pause(); 
