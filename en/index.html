@@ -562,16 +562,24 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
 
         btnDownload.href = url;
 
-const nomeArquivo = (nome || 'bencao')
+const nomeArquivo = (nome || 'blessing')
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
   .toLowerCase()
   .replace(/\s+/g, '-');
 
 const hoje = new Date().toISOString().slice(0,10);
-
+const tiposEN = {
+  bencao: "blessing",
+  gratidao: "gratitude",
+  aniversario: "birthday",
+  manha: "morning",
+  tarde: "afternoon",
+  noite: "night",
+  protecao: "protection"
+};
 btnDownload.download =
-  `prayer-${tipo}-${nomeArquivo}-${hoje}.mp3`;
+  `prayer-${tiposEN[tipo] || tipo}-${nomeArquivo}-${hoje}.mp3`;
 
 btnDownload.style.display = 'inline-flex';
 

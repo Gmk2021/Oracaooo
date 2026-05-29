@@ -563,7 +563,7 @@ Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
 
        btnDownload.href = url;
 
-const nomeArquivo = (nome || 'bencao')
+const nomeArquivo = (nome || 'bendicion')
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
   .toLowerCase()
@@ -571,8 +571,17 @@ const nomeArquivo = (nome || 'bencao')
 
 const hoje = new Date().toISOString().slice(0,10);
 
+const tiposES = {
+  bencao: "bendicion",
+  gratidao: "gratitud",
+  aniversario: "cumpleanos",
+  manha: "manana",
+  tarde: "tarde",
+  noite: "noche",
+  protecao: "proteccion"
+};
 btnDownload.download =
-  `oracion-${tipo}-${nomeArquivo}-${hoje}.mp3`;
+  `oracion-${tiposES[tipo] || tipo}-${nomeArquivo}-${hoje}.mp3`;
 
 btnDownload.style.display = 'inline-flex';
 
