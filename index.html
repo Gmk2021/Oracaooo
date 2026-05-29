@@ -561,9 +561,20 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
         player.src=url;
         player.play().catch(()=>{});
 
-        btnDownload.href=url;
-        btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
-        btnDownload.style.display='inline-flex';
+       btnDownload.href = url;
+
+const nomeArquivo = (nome || 'bencao')
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toLowerCase()
+  .replace(/\s+/g, '-');
+
+const hoje = new Date().toISOString().slice(0,10);
+
+btnDownload.download =
+  `oracao-${tipo}-${nomeArquivo}-${hoje}.mp3`;
+
+btnDownload.style.display = 'inline-flex';
 
         setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
 
