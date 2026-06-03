@@ -8,7 +8,6 @@
 <script>
   (function () {
     const path = window.location.pathname;
-    const query = window.location.search;
 
     if (path.startsWith('/en') || path.startsWith('/es')) {
       return;
@@ -17,10 +16,10 @@
     const idioma = navigator.language || navigator.userLanguage || 'pt';
 
     if (idioma.startsWith('en')) {
-      window.location.href = '/en/' + query;
-    } else if (idioma.startsWith('es')) {
-      window.location.href = '/es/' + query;
-    }
+  window.location.href = '/en/';
+} else if (idioma.startsWith('es')) {
+  window.location.href = '/es/';
+}
   })();
 </script>
   <meta name="theme-color" content="#0b1020" />
@@ -242,56 +241,48 @@
     .status-pill.loading::before{content:"⏳"}
     .status-pill.ok::before{content:"✨"}
     .status-pill.err::before{content:"❌"}
-.audio-toggle{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:10px;
-
-  margin-top:14px;
-  margin-bottom:10px;
-
-  color:#ffffffcc;
-  font-size:14px;
-  font-weight:600;
-}
-
-.audio-toggle input[type="checkbox"]{
-  width:18px;
-  height:18px;
-  accent-color:#59e3b1;
-  cursor:pointer;
-}
   </style>
 </head>
+
 <body>
 
+
+<div class="idiomas" style="
+  position:relative;
+  z-index:9999;
+  text-align:center;
+  padding:12px;
+  background:rgba(0,0,0,0.55);
+  color:white;
+">
+  <a href="/" style="color:white;margin:0 8px;text-decoration:none;">🇧🇷 Português</a>
+  <a href="/en/" style="color:white;margin:0 8px;text-decoration:none;">🇺🇸 English</a>
+  <a href="/es/" style="color:white;margin:0 8px;text-decoration:none;">🇪🇸 Español</a>
+</div>
+
 <div class="bg"></div>
-
 <div class="wrap">
-  <div class="card">
+<div class="idiomas">
+<div class="idiomas" style="text-align:center;padding:10px;">
+  <a href="/">🇧🇷 Português</a>
+  <a href="/en/">🇺🇸 English</a>
+  <a href="/es/">🇪🇸 Español</a>
+</div>
 
-    <div class="idiomas" style="
-      text-align:right;
-      padding:18px 22px 0;
-      font-size:14px;
-    ">
-      <a href="/" style="color:white;margin-left:10px;text-decoration:none;">🇧🇷 PT</a>
-      <a href="/en/" style="color:white;margin-left:10px;text-decoration:none;">🇺🇸 EN</a>
-      <a href="/es/" style="color:white;margin-left:10px;text-decoration:none;">🇪🇸 ES</a>
-    </div>
-
-    <div class="header">
-      <div class="header-top">
-        <div class="badge">Sua Jornada Seu Destino</div>
-        <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
-          <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
-        </a>
+  <div class="bg"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="header-top">
+          <div class="badge">Sua Jornada Seu Destino</div>
+          <a class="channel-icon" href="https://www.youtube.com/@suajornadaseudestino" target="_blank" rel="noopener">
+            <img src="./icons/canal.png" alt="Canal"><span>Canal</span>
+          </a>
+        </div>
+        <h1>Oração de Bênção Divina</h1>
+        <p class="desc">Escolha a oração, o <b>nome</b> e clique em <b class="highlight">Ouvir</b>.</p>
       </div>
 
-      <h1>Oração de Benção Divina</h1>
-      <p class="desc">Escolha a Oração, o <b>nome</b> e click <b class="highlight">Ouvir oração</b>.</p>
-    </div>
       <div class="content">
         <!-- Tipo de oração -->
         <label for="tipo">Escolha a oração:</label>
@@ -344,38 +335,39 @@
           <button id="btn-whats" class="linkbtn whatsapp">🟢 WhatsApp</button>
           <a class="linkbtn instagram" href="https://www.instagram.com/suajornadaseudestino/" target="_blank" rel="noopener">📸 Instagram</a>
           <button id="btn-telegram" class="linkbtn telegram">✈️ Telegram</button>
-       </div>
+        </div>
 
-       <div class="audio-toggle">
-       <input type="checkbox" id="silenciarHarpa">
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+          <input type="checkbox" id="mute-sounds" /> Silenciar som de conclusão
+        </label>
+      </div>
 
-       <label for="silenciarHarpa">
-       Música ambiente
-  </label>
- </div>
-</div>
-      <div class="player">
-<audio id="player" controls style="width:100%"></audio></div>
+      <div class="player"><audio id="player" controls style="width:100%"></audio></div>
     </div>
-</div>
+  </div>
 
   <!-- Som de harpa -->
-  <audio id="harpa" preload="auto" src="/audio/harpa.mp3"></audio>
+  <audio id="harpa" preload="auto"
+    src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACaQCAAQAAABhzdHNkAAAAAAAAAABP/////wAAAABJbmZvAAAAPAAAABAAAAEgYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYQ==">
+  </audio>
+
   <script>
     /* ====== Config ====== */
-  const ENDPOINT = "https://throw-concentrations-morris-flexible.trycloudflare.com/tts";
+    const ENDPOINT = 'http://192.168.15.10:8000/tts';
 
-  const VOICE_MASC = "pm_santa"; // masculina
-  const VOICE_FEM  = "pf_dora";  // feminina
-  const VOICE_GIRL = "pf_dora";  // menina usando feminina
-  const VOICE_BOY  = "pm_santa"; // menino usando masculina
+    const VOICE_MASC   = "4YYIPFl9wE5c4L2eu2Gb";      // masculina
+    const VOICE_FEM    = "FrzKLwOr0y3qieiphjs2";      // feminina
 
-const VOICES = {
-    masc: VOICE_MASC,
-    fem: VOICE_FEM,
-    girl: VOICE_GIRL,
-    boy: VOICE_BOY
-};
+    const VOICE_GIRL   = "hO2yZ8lxM3axUxL8OeKX";      // infantil menina
+
+    const VOICE_BOY    = "M5t0724ORuAGCh3p3DUR";      // infantil menino
+
+    const VOICES = {
+      masc: VOICE_MASC,
+      fem:  VOICE_FEM,
+      girl: VOICE_GIRL,
+      boy:  VOICE_BOY
+    };
 
     /* ====== Elementos ====== */
     const nomeInput   = document.getElementById('nome');
@@ -387,7 +379,7 @@ const VOICES = {
     const progress    = document.getElementById('progress');
     const bar         = document.getElementById('progress-bar');
     const harpa       = document.getElementById('harpa');
-    const chkMute     = document.getElementById('silenciarHarpa');
+    const chkMute     = document.getElementById('mute-sounds');
 
     /* ====== Status helper ====== */
     function setStatus(texto, classe){
@@ -414,28 +406,6 @@ const VOICES = {
     vozSel.addEventListener('change', () => {
       localStorage.setItem('oracao.voz', vozSel.value);
     });
-function aplicarParametrosDaUrl(){
-  const params = new URLSearchParams(window.location.search);
-
-  const nome = params.get('nome');
-  const tipo = params.get('tipo');
-  const voz = params.get('voz');
-
-  if (nome) {
-    nomeInput.value = nome;
-  }
-
-  if (tipo && document.querySelector(`#tipo option[value="${tipo}"]`)) {
-    document.getElementById('tipo').value = tipo;
-  }
-
-  if (voz && VOICES[voz]) {
-    vozSel.value = voz;
-    localStorage.setItem('oracao.voz', voz);
-  }
-}
-
-window.addEventListener('load', aplicarParametrosDaUrl);
 
     /* ====== Textos (parágrafos) ====== */
     const ORACOES = {
@@ -511,7 +481,7 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
     }
     async function putInCache(key,b){
       const c=await caches.open(TTS_CACHE_NAME);
-      await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/mpeg'}}));
+      await c.put(new Request(key),new Response(b,{headers:{'Content-Type':'audio/wav'}}));
     }
     async function getOrGenerateAudio({text,voiceId}){
       const key='/tts-cache/'+await sha256Hex(voiceId+'::'+text);
@@ -521,7 +491,7 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
       const r=await fetch(ENDPOINT,{
         method:'POST',
         mode:'cors',
-        headers:{'Content-Type':'application/json','Accept':'audio/mpeg'},
+        headers:{'Content-Type':'application/json','Accept':'audio/wav'},
         body:JSON.stringify({text,voiceId})
       });
       if(!r.ok) throw new Error(r.status);
@@ -553,7 +523,6 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
 
       try{
         const {blob,fromCache}=await getOrGenerateAudio({text:texto,voiceId});
-        window.ultimoAudioBlob = blob;
         clearInterval(loader); 
         bar.style.width='100%'; 
         setTimeout(()=>progress.style.display='none',700);
@@ -562,34 +531,9 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
         player.src=url;
         player.play().catch(()=>{});
 
-       btnDownload.href = url;
-
-const nomeArquivo = (nome || 'bencao')
-  .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, '')
-  .toLowerCase()
-  .replace(/\s+/g, '-');
-
-const hoje = new Date().toISOString().slice(0,10);
-
-btnDownload.download =
-  `oracao-${tipo}-${nomeArquivo}-${hoje}.mp3`;
-
-btnDownload.style.display = 'inline-flex';
-btnDownload.onclick = function(event) {
-  if (window.AndroidDownload && window.ultimoAudioBlob) {
-    event.preventDefault();
-
-    const reader = new FileReader();
-
-    reader.onloadend = function() {
-      const base64Audio = reader.result.split(',')[1];
-      window.AndroidDownload.saveAudio(base64Audio, btnDownload.download);
-    };
-
-    reader.readAsDataURL(window.ultimoAudioBlob);
-  }
-};
+        btnDownload.href=url;
+        btnDownload.download=`oracao-${tipo}-${(nome||'bencao').toLowerCase().replace(/\s+/g,'-')}.mp3`;
+        btnDownload.style.display='inline-flex';
 
         setStatus(fromCache ? '⚡ Oração carregada instantaneamente!' : '✨ Oração gerada com sucesso!', 'ok');
 
@@ -609,33 +553,16 @@ btnDownload.onclick = function(event) {
 
     /* ====== Compartilhamento ====== */
     const SITE_URL = location.origin + location.pathname;
-    function montarLinkPersonalizado(){
-  const tipo = document.getElementById('tipo').value;
-  const nome = (nomeInput.value || '').trim();
-  const voz = vozSel.value;
-
-  const params = new URLSearchParams();
-
-  if (nome) params.set('nome', nome);
-  params.set('tipo', tipo);
-  params.set('voz', voz);
-
-  return `${location.origin}${location.pathname}?${params.toString()}`;
-}
-
-function montarMsg(){
-  const n = (nomeInput.value || '').trim();
-  const prefix = n ? `${n}, ` : '';
-
-  const linkPersonalizado = montarLinkPersonalizado();
-
-  return `${prefix}receba esta Oração de Bênção Divina 🙏
+    function montarMsg(){
+      const n=(nomeInput.value||'').trim();
+      const prefix = n ? `${n}, ` : '';
+      return `${prefix}receba esta Oração de Bênção Divina 🙏
 
 Ouça sua oração aqui:
-${linkPersonalizado}
+${SITE_URL}
 
 Que Deus ilumine seus passos hoje e sempre. Amém.`;
-}
+    }
     document.getElementById('btn-whats')?.addEventListener('click',()=>{
       const msg=montarMsg();
       if(navigator.share){
