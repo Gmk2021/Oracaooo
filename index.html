@@ -318,8 +318,7 @@
         <select id="voz">
           <option value="masc">Masculina</option>
           <option value="fem">Feminina</option>
-          <option value="girl">Infantil – Menina</option>
-          <option value="boy">Infantil – Menino</option>
+        
         </select>
 
         <!-- STATUS -->
@@ -365,16 +364,13 @@
     /* ====== Config ====== */
   const ENDPOINT = "https://tts.eternallightapps.com.br/tts";
 
-  const VOICE_MASC = "pm_santa"; // masculina
-  const VOICE_FEM  = "pf_dora";  // feminina
-  const VOICE_GIRL = "pf_dora";  // menina usando feminina
-  const VOICE_BOY  = "pm_santa"; // menino usando masculina
+  const VOICE_MASC = "pm_santa";
+  const VOICE_FEM  = "pf_dora";
 
 const VOICES = {
     masc: VOICE_MASC,
     fem: VOICE_FEM,
-    girl: VOICE_GIRL,
-    boy: VOICE_BOY
+    
 };
 
     /* ====== Elementos ====== */
@@ -499,7 +495,7 @@ Anjos do Senhor, acampem ao redor de {{nome}} e sustentem sua vida.`,
     };
 
     /* ====== Cache TTS ====== */
-    const TTS_CACHE_NAME='tts-audios-v1';
+    const TTS_CACHE_NAME='tts-audios-v3';
     async function sha256Hex(s){
       const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
       return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');

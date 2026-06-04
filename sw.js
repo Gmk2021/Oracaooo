@@ -1,6 +1,6 @@
 // SERVICE WORKER – PWA estável + atualização suave
 // 👉 sempre que alterar qualquer arquivo do app, mude a versão abaixo
-const CACHE_VERSION = 'v1.1.0';
+const CACHE_VERSION = 'v2.0.0';
 const CACHE_NAME = `oracao-cache-${CACHE_VERSION}`;
 
 // arquivos essenciais do app (app shell)

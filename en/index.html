@@ -302,8 +302,7 @@
 <select id="voz">
   <option value="masc">Male Voice</option>
   <option value="fem">Female Voice</option>
-  <option value="girl">Young Girl Voice</option>
-  <option value="boy">Young Boy Voice</option>
+ 
 </select>
         <!-- STATUS -->
         <div id="status" class="status-pill" aria-live="polite" role="status">
@@ -348,18 +347,15 @@
 
   <script>
     /* ====== Config ====== */
-    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const ENDPOINT = "https://tts.eternallightapps.com.br/tts";
 
-    const VOICE_MASC   = "4YYIPFl9wE5c4L2eu2Gb";      // masculina
-    const VOICE_FEM    = "FrzKLwOr0y3qieiphjs2";      // feminina
-    const VOICE_GIRL   = "ocZQ262SsZb9RIxcQBOj";      // infantil menina
-    const VOICE_BOY    = "M5t0724ORuAGCh3p3DUR";      // infantil menino
+    const VOICE_MASC = "am_adam";
+    const VOICE_FEM  = "af_heart";
 
-    const VOICES = {
-      masc: VOICE_MASC,
-      fem:  VOICE_FEM,
-      girl: VOICE_GIRL,
-      boy:  VOICE_BOY
+const VOICES = {
+    masc: VOICE_MASC,
+    fem: VOICE_FEM,
+
     };
 
     /* ====== Elementos ====== */
@@ -498,7 +494,7 @@ Angels of the Lord, encamp around {{nome}} and sustain this life.`,
 };
 
     /* ====== Cache TTS ====== */
-    const TTS_CACHE_NAME='tts-audios-v1';
+    const TTS_CACHE_NAME='tts-audios-v3';
     async function sha256Hex(s){
       const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
       return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');

@@ -305,8 +305,7 @@
 <select id="voz">
   <option value="masc">Voz Masculina</option>
   <option value="fem">Voz Femenina</option>
-  <option value="girl">Voz de Niña</option>
-  <option value="boy">Voz de Niño</option>
+ 
 </select>
         <!-- STATUS -->
         <div id="status" class="status-pill" aria-live="polite" role="status">
@@ -351,18 +350,15 @@
   <audio id="harpa" preload="auto" src="/audio/harpa.mp3"></audio>
   <script>
     /* ====== Config ====== */
-    const ENDPOINT = "https://oracaooo.onrender.com/tts";
+    const ENDPOINT = "https://tts.eternallightapps.com.br/tts";
 
-    const VOICE_MASC   = "4YYIPFl9wE5c4L2eu2Gb";      // masculina
-    const VOICE_FEM    = "FrzKLwOr0y3qieiphjs2";      // feminina
-    const VOICE_GIRL   = "ocZQ262SsZb9RIxcQBOj";      // infantil menina
-    const VOICE_BOY    = "M5t0724ORuAGCh3p3DUR";      // infantil menino
+    const VOICE_MASC = "em_santa";
+    const VOICE_FEM  = "ef_dora";
 
-    const VOICES = {
-      masc: VOICE_MASC,
-      fem:  VOICE_FEM,
-      girl: VOICE_GIRL,
-      boy:  VOICE_BOY
+const VOICES = {
+    masc: VOICE_MASC,
+    fem: VOICE_FEM,
+
     };
 
     /* ====== Elementos ====== */
@@ -432,54 +428,54 @@ window.addEventListener('load', aplicarParametrosDaUrl);
 El Señor te llama por tu nombre. Que la paz que sobrepasa todo entendimiento llene tu corazón.
 Donde haya miedo, que entre la confianza; donde haya dolor, que florezca la sanidad; donde haya duda, que se levante la fe.`,
 
-`Que la luz de Dios ilumine tus pasos hoy y siempre.
-Que Él te cubra con favor delante de las personas y te guíe con sabiduría en cada decisión.`,
+`Que la luz de Dios ilumine tus pasos hoy i siempre.
+Que Él te cubra con favor delante de las personas i te guíe con sabiduría en cada decisión.`,
 
-`Que tu vida sea bendecida, {{nome}}. Que la gracia del Altísimo te rodee ahora y para siempre. Amén.`
+`Que tu vida sea bendecida, {{nome}}. Que la gracia del Altísimo te rodee ahora i para siempre. Amén.`
 ],
      gratidao: [
 `{{nome}}, hoy levantamos nuestra voz en gratitud.
-Por el don de la vida, por las pequeñas alegrías y por las liberaciones que ni siquiera vimos.`,
+Por el don de la vida, por las pequeñas alegrías i por las liberaciones que ni siquiera vimos.`,
 
-`Que tu corazón se llene de reconocimiento, y que la gratitud abra puertas de favor.
+`Que tu corazón se llene de reconocimiento, i que la gratitud abra puertas de favor.
 Donde haya queja, que nazca alabanza; donde haya escasez, que florezca la provisión.`,
 
-`Gracias, Señor, por todo lo que ya hiciste y por todo lo que aún harás en la vida de {{nome}}. Amén.`
+`Gracias, Señor, por todo lo que ya hiciste i por todo lo que aún harás en la vida de {{nome}}. Amén.`
 ],
 
 aniversario: [
 `Hoy, Señor, damos gracias por la vida de {{nome}}.
 Cada año es un regalo Tuyo, una nueva oportunidad para florecer en la fe, la sabiduría y el amor.`,
 
-`Bendice los caminos de {{nome}}, trayendo salud, alegría y realizaciones.
-Que los sueños se renueven, que la esperanza nunca se apague y que Tu luz guíe cada paso.`,
+`Bendice los caminos de {{nome}}, trayendo salud, alegría i realizaciones.
+Que los sueños se renueven, que la esperanza nunca se apague i que Tu luz guíe cada paso.`,
 
-`¡Feliz cumpleaños, {{nome}}! Que la gracia divina te rodee hoy y siempre. Amén.`
+`¡Feliz cumpleaños, {{nome}}! Que la gracia divina te rodee hoy i siempre. Amén.`
 ],
 
 manha: [
 `{{nome}}, al despertar, recibe la luz de Dios.
-Que tus pensamientos sean guiados por la sabiduría, y tus decisiones por la paz.`,
+Que tus pensamientos sean guiados por la sabiduría, i tus decisiones por la paz.`,
 
 `Donde haya ansiedad, que reine la calma; donde haya cansancio, que venga nuevo ánimo.
-Señor, bendice el camino de {{nome}} en este día y afirma sus pasos.`,
+Señor, bendice el camino de {{nome}} en este día i afirma sus pasos.`,
 
-`Que Tu presencia acompañe a {{nome}} desde ahora y para siempre. Amén.`
+`Que Tu presencia acompañe a {{nome}} desde ahora i para siempre. Amén.`
 ],
 
 tarde: [
 `{{nome}}, que esta tarde sea guiada por la presencia de Dios.
-Que cada paso sea conducido por la sabiduría y cada pensamiento por el discernimiento divino.`,
+Que cada paso sea conducido por la sabiduría i cada pensamiento por el discernimiento divino.`,
 
-`Que el Señor renueve tus fuerzas, calme tu mente y ordene todo aquello que parecía fuera de lugar.
-Que Él abra las puertas correctas y cierre los caminos que no te pertenecen.`,
+`Que el Señor renueve tus fuerzas, calme tu mente i ordene todo aquello que parecía fuera de lugar.
+Que Él abra las puertas correctas i cierre los caminos que no te pertenecen.`,
 
-`Que esta tarde sea leve, productiva y llena de la gracia de Dios sobre tu vida, {{nome}}. Amén.`
+`Que esta tarde sea leve, productiva i llena de la gracia de Dios sobre tu vida, {{nome}}. Amén.`
 ],
 
 noite: [
 `{{nome}}, que el descanso de esta noche sea guardado por el Altísimo.
-Que los ángeles acampen a tu alrededor, y que toda inquietud se transforme en serenidad.`,
+Que los ángeles acampen a tu alrededor, i que toda inquietud se transforme en serenidad.`,
 
 `Lo que fue dolor, que sea sanidad; lo que fue peso, que se transforme en aprendizaje.
 Derrama, Señor, Tu paz sobre el corazón de {{nome}}.`,
@@ -488,18 +484,18 @@ Derrama, Señor, Tu paz sobre el corazón de {{nome}}.`,
 ],
 
 protecao: [
-`{{nome}}, que el Señor sea tu escudo y tu fortaleza.
-Que ningún mal alcance tu hogar y que tus pasos sean firmes en la luz.`,
+`{{nome}}, que el Señor sea tu escudo i tu fortaleza.
+Que ningún mal alcance tu hogar i que tus pasos sean firmes en la luz.`,
 
-`Que la presencia de Dios aleje toda sombra y te revista de valentía.
-Ángeles del Señor, acampen alrededor de {{nome}} y sostengan su vida.`,
+`Que la presencia de Dios aleje toda sombra i te revista de valentía.
+Ángeles del Señor, acampen alrededor de {{nome}} i sostengan su vida.`,
 
-`Cubre, Señor, la vida de {{nome}} con protección hoy y siempre. Amén.`
+`Cubre, Señor, la vida de {{nome}} con protección hoy i siempre. Amén.`
 ]
 };
 
     /* ====== Cache TTS ====== */
-    const TTS_CACHE_NAME='tts-audios-v1';
+    const TTS_CACHE_NAME='tts-audios-v3';
     async function sha256Hex(s){
       const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
       return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
